@@ -1046,3 +1046,24 @@ C:\Users\Blas\Desktop\SIM_1.7 _rev60_Blas\obj\x86\Debug\SIM.FormNumerosAleatorio
 C:\Users\Blas\Desktop\SIM_1.7 _rev60_Blas\obj\x86\Debug\SIM.Formajuste.resources
 C:\Users\Blas\Desktop\SIM_1.7 _rev60_Blas\obj\x86\Debug\SIM.Properties.Resources.resources
 C:\Users\Blas\Desktop\SIM_1.7 _rev60_Blas\obj\x86\Debug\SIM_1.7.csproj.GenerateResource.Cache
+Y:\Dropbox\Development\SIM\bin\x86\Debug\SIM.exe.config
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.exe
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.pdb
+Y:\Dropbox\Development\SIM\bin\x86\Debug\SIM.exe
+Y:\Dropbox\Development\SIM\bin\x86\Debug\SIM.pdb
+Y:\Dropbox\Development\SIM\bin\x86\Debug\System.Windows.Forms.DataVisualization.xml
+Y:\Dropbox\Development\SIM\obj\x86\Debug\ResolveAssemblyReference.cache
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Form1.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Form2.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Form3.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Form4.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Form5.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.FormDatos1.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.FormDatos2.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.FormFuncionaFallaAmpliado.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.FormFuncionaFalla.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.FormNumerosAleatorios.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Formajuste.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\SIM.Properties.Resources.resources
+Y:\Dropbox\Development\SIM\obj\x86\Debug\GenerateResource.read.1.tlog
+Y:\Dropbox\Development\SIM\obj\x86\Debug\GenerateResource.write.1.tlog

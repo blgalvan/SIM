@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="SIM_1.7">
+</Property><Property Name="Archivo de la solución" Value="Y:\Dropbox\Development\SIM\SIM_1.7.sln">
+</Property><Property Name="Archivo de opciones de usuario" Value="Y:\Dropbox\Development\SIM\SIM_1.7.suo">
+</Property><Property Name="Date" Value="miércoles, 19 de octubre de 2011">
+</Property><Property Name="Time" Value="12:33">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="SIM_1.7.sln" Description="La copia Y:\Dropbox\Development\SIM\Backup\SIM_1.7.sln del archivo se ha realizado correctamente">
+</Event><Event ErrorLevel="0" Project="" Source="SIM_1.7.suo" Description="La copia Y:\Dropbox\Development\SIM\Backup\SIM_1.7.suo del archivo se ha realizado correctamente">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="SIM_1.7.csproj" Description="Se realizó correctamente la copia de seguridad del archivo de proyecto Y:\Dropbox\Development\SIM\Backup\SIM_1.7.csproj">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="SIM_1.7.csproj.user" Description="La copia de seguridad Y:\Dropbox\Development\SIM\Backup\SIM_1.7.csproj.user del archivo se ha creado correctamente">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="ChartControlGraph.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\ChartControlGraph.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Distribuciones.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Distribuciones.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Estadistica.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Estadistica.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form1.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form1.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form1.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form10.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form10.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form10.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form10.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form2.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form2.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form2.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form2.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form3.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form3.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form3.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form3.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form4.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form4.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form4.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form4.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form5.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form5.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form5.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form5.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos1.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos1.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos1.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos2.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos2.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos2.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos2.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFallaAmpliado.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFallaAmpliado.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFallaAmpliado.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFallaAmpliado.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormateoDatos.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormateoDatos.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFalla.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFalla.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFalla.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFalla.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormNumerosAleatorios.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormNumerosAleatorios.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormNumerosAleatorios.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormNumerosAleatorios.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormAjusteDistribuciones.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormAjusteDistribuciones.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormAjusteDistribuciones.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormAjusteDistribuciones.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="GeneradoresDeAleatorios.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\GeneradoresDeAleatorios.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="HistogramChartHelper.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\HistogramChartHelper.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Program.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Program.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Properties\AssemblyInfo.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Properties\Resources.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Properties\Settings.Designer.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="RepresentacionesGraficasRAMS.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\RepresentacionesGraficasRAMS.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Simuladores_Monte_Carlo.cs" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Simuladores_Monte_Carlo.cs">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Properties\Settings.settings" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form1.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form1.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form2.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form2.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form3.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form3.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form4.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form4.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Form5.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Form5.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos1.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos1.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormDatos2.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormDatos2.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFallaAmpliado.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFallaAmpliado.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormFuncionaFalla.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormFuncionaFalla.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormNumerosAleatorios.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormNumerosAleatorios.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="FormAjusteDistribuciones.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\FormAjusteDistribuciones.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="Properties\Resources.resx" Description="Se realizó correctamente la copia de seguridad del archivo Y:\Dropbox\Development\SIM\Backup\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="SIM_1.7.csproj" Description="Proyecto convertido correctamente">
+</Event><Event ErrorLevel="3" Project="SIM_1.7" Source="SIM_1.7.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="SIM_1.7.sln" Description="La solución se convirtió correctamente">
+</Event><Event ErrorLevel="3" Project="" Source="SIM_1.7.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="SIM_1.7" Source="SIM_1.7.csproj" Description="Examen completo: no es necesario actualizar los archivos de proyecto.">
+</Event></UpgradeLog>
