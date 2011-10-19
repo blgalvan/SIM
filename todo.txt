@@ -1,0 +1,11 @@
+Modificaciones interfaz
+
+- Cambiar interfaz según dibujo. 
+- Valor por defecto en los selectbox.
+- En las gráfica cambiar botón atrás por cerrar
+- Añadir tipo de gráfica como entrada.
+- Modular cálculos en función del tipo de gráfica. Añadir clase CalculoGraficas.
+
+  CalculoGraficas.disponibilidad()
+
+
