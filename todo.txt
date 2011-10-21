@@ -9,3 +9,7 @@ Modificaciones interfaz
   CalculoGraficas.disponibilidad()
 
 
+Para nota:
+- Mirar si se pueden detener los eventos de un widget.
+- Mirar si se puede sobrecargar las clases.
+
