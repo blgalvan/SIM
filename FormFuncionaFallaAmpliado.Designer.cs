@@ -91,13 +91,14 @@
             this.label28 = new System.Windows.Forms.Label();
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
+            this.label29 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(385, 420);
+            this.label17.Location = new System.Drawing.Point(33, 412);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(261, 13);
             this.label17.TabIndex = 141;
@@ -105,9 +106,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(386, 381);
+            this.progressBar1.Location = new System.Drawing.Point(172, 344);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(459, 21);
+            this.progressBar1.Size = new System.Drawing.Size(147, 25);
             this.progressBar1.TabIndex = 140;
             // 
             // pictureBox1
@@ -122,7 +123,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(37, 175);
+            this.label20.Location = new System.Drawing.Point(34, 183);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(50, 13);
             this.label20.TabIndex = 132;
@@ -139,7 +140,7 @@
             "Weibull2P",
             "Normal",
             "Desglose de Costes"});
-            this.comboBox4.Location = new System.Drawing.Point(147, 168);
+            this.comboBox4.Location = new System.Drawing.Point(144, 176);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(175, 21);
             this.comboBox4.TabIndex = 127;
@@ -148,7 +149,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(37, 147);
+            this.label13.Location = new System.Drawing.Point(34, 155);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(92, 13);
             this.label13.TabIndex = 118;
@@ -164,7 +165,7 @@
             "Línea recta",
             "Exponencial",
             "Weibull2P"});
-            this.comboBox3.Location = new System.Drawing.Point(147, 140);
+            this.comboBox3.Location = new System.Drawing.Point(144, 148);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(175, 21);
             this.comboBox3.TabIndex = 117;
@@ -172,25 +173,25 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(630, 320);
+            this.textBox10.Location = new System.Drawing.Point(144, 297);
             this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(119, 20);
+            this.textBox10.Size = new System.Drawing.Size(67, 20);
             this.textBox10.TabIndex = 116;
             this.textBox10.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumerosSinComa);
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(390, 328);
+            this.label16.Location = new System.Drawing.Point(34, 300);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(209, 13);
+            this.label16.Size = new System.Drawing.Size(109, 13);
             this.label16.TabIndex = 115;
-            this.label16.Text = "Tiempo a simular .......................................:";
+            this.label16.Text = "TIEMPO A SIMULAR";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(37, 113);
+            this.label6.Location = new System.Drawing.Point(34, 121);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(103, 13);
             this.label6.TabIndex = 110;
@@ -206,7 +207,7 @@
             "Normal",
             "Uniforme",
             "Desglose de Fallos"});
-            this.comboBox2.Location = new System.Drawing.Point(147, 110);
+            this.comboBox2.Location = new System.Drawing.Point(144, 118);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(175, 21);
             this.comboBox2.TabIndex = 109;
@@ -215,7 +216,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(37, 85);
+            this.label12.Location = new System.Drawing.Point(34, 93);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(104, 13);
             this.label12.TabIndex = 100;
@@ -224,7 +225,7 @@
             // textBox5
             // 
             this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(386, 439);
+            this.textBox5.Location = new System.Drawing.Point(34, 431);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
             this.textBox5.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -233,9 +234,9 @@
             // 
             // button_Reset
             // 
-            this.button_Reset.Location = new System.Drawing.Point(755, 318);
+            this.button_Reset.Location = new System.Drawing.Point(105, 344);
             this.button_Reset.Name = "button_Reset";
-            this.button_Reset.Size = new System.Drawing.Size(90, 23);
+            this.button_Reset.Size = new System.Drawing.Size(61, 25);
             this.button_Reset.TabIndex = 97;
             this.button_Reset.Text = "Reset";
             this.button_Reset.UseVisualStyleBackColor = true;
@@ -243,9 +244,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(386, 348);
+            this.button4.Location = new System.Drawing.Point(36, 344);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(214, 25);
+            this.button4.Size = new System.Drawing.Size(63, 25);
             this.button4.TabIndex = 96;
             this.button4.Text = "Simular";
             this.button4.UseVisualStyleBackColor = true;
@@ -259,7 +260,7 @@
             "Exponencial",
             "Weibull2P",
             "Uniforme"});
-            this.comboBox1.Location = new System.Drawing.Point(147, 82);
+            this.comboBox1.Location = new System.Drawing.Point(144, 90);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(175, 21);
             this.comboBox1.TabIndex = 95;
@@ -297,7 +298,7 @@
             // textBox11
             // 
             this.textBox11.Enabled = false;
-            this.textBox11.Location = new System.Drawing.Point(36, 362);
+            this.textBox11.Location = new System.Drawing.Point(517, 355);
             this.textBox11.Multiline = true;
             this.textBox11.Name = "textBox11";
             this.textBox11.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -332,7 +333,7 @@
             // 
             // button_Parametros
             // 
-            this.button_Parametros.Location = new System.Drawing.Point(93, 328);
+            this.button_Parametros.Location = new System.Drawing.Point(574, 314);
             this.button_Parametros.Name = "button_Parametros";
             this.button_Parametros.Size = new System.Drawing.Size(229, 28);
             this.button_Parametros.TabIndex = 146;
@@ -742,7 +743,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(37, 328);
+            this.button3.Location = new System.Drawing.Point(517, 314);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(50, 28);
             this.button3.TabIndex = 182;
@@ -753,7 +754,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(37, 201);
+            this.label15.Location = new System.Drawing.Point(34, 209);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(76, 13);
             this.label15.TabIndex = 183;
@@ -766,7 +767,7 @@
             "No activado",
             "Fijo por tiempo",
             "Por Disponibilidad"});
-            this.comboBox5.Location = new System.Drawing.Point(147, 197);
+            this.comboBox5.Location = new System.Drawing.Point(144, 205);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(174, 21);
             this.comboBox5.TabIndex = 184;
@@ -783,7 +784,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox6.Location = new System.Drawing.Point(147, 226);
+            this.comboBox6.Location = new System.Drawing.Point(144, 234);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(175, 21);
             this.comboBox6.TabIndex = 185;
@@ -792,7 +793,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(37, 230);
+            this.label28.Location = new System.Drawing.Point(34, 238);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(95, 13);
             this.label28.TabIndex = 186;
@@ -814,11 +815,11 @@
             "Ratio t_Preventivo/t_total_Mto",
             "Coste Acumulado Rec/Rep",
             "Coste Medio de Recuperacion"});
-            this.comboBox7.Location = new System.Drawing.Point(680, 413);
+            this.comboBox7.Location = new System.Drawing.Point(144, 266);
             this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(166, 21);
+            this.comboBox7.Size = new System.Drawing.Size(175, 21);
             this.comboBox7.TabIndex = 187;
-            this.comboBox7.Text = "Ver gráficos de resultados";
+            this.comboBox7.Text = "Elegir gráfico";
             this.comboBox7.SelectedIndexChanged += new System.EventHandler(this.comboBox7_SelectedIndexChanged);
             // 
             // comboBox8
@@ -835,18 +836,28 @@
             "Caso8",
             "Caso9",
             "Caso10"});
-            this.comboBox8.Location = new System.Drawing.Point(630, 349);
+            this.comboBox8.Location = new System.Drawing.Point(37, 60);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(214, 21);
             this.comboBox8.TabIndex = 188;
             this.comboBox8.Text = "Casos prácticos predefinidos";
             this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
             // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(33, 274);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(54, 13);
+            this.label29.TabIndex = 189;
+            this.label29.Text = "GRÁFICO";
+            // 
             // FormFuncionaFallaAmpliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 568);
+            this.Controls.Add(this.label29);
             this.Controls.Add(this.comboBox8);
             this.Controls.Add(this.comboBox7);
             this.Controls.Add(this.label28);
@@ -982,5 +993,6 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.ComboBox comboBox7;
         private System.Windows.Forms.ComboBox comboBox8;
+        private System.Windows.Forms.Label label29;
     }
 }

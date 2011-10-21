@@ -49,6 +49,14 @@ namespace SIM
         List<PointF> Lista_Numero_de_Fallos = new List<PointF>();
         List<PointF> Lista_Numero_de_Preventivos = new List<PointF>();
 
+        // Control de eventos
+        bool comboBox1StopEvents;
+        bool comboBox2StopEvents;
+        bool comboBox3StopEvents;
+        bool comboBox4StopEvents;
+        bool comboBox5StopEvents;
+        bool comboBox6StopEvents;
+
         public FormFuncionaFallaAmpliado()
         {
             InitializeComponent();
@@ -982,15 +990,7 @@ namespace SIM
         }
 
         //RESET DE DATOS
-        private void button_Reset_Click(object sender, EventArgs e)
-        {
-            //TextBox de resultados
-            textBox5.Text = "";
-            textBox5.Enabled = false;
-
-            //TextBox de valores seleccionados
-            textBox11.Text = "";
-            textBox11.Enabled = false;
+        private void reset() {
             
             //Funcionamiento
             comboBox1.Text = "";
@@ -1007,6 +1007,22 @@ namespace SIM
             //Costes
             comboBox4.Text = "";
             comboBox4.Enabled = true;
+
+            //Preventivo
+            comboBox5.Text = "";
+            comboBox5.Enabled = true;
+
+            //Eficiencia
+            comboBox6.Text = "";
+            comboBox6.Enabled = true;
+
+            //TextBox de resultados
+            textBox5.Text = "";
+            textBox5.Enabled = false;
+
+            //TextBox de valores seleccionados
+            textBox11.Text = "";
+            textBox11.Enabled = false;
 
             //Desglose Fallos
             comboBox_T_Rec.Text = "";
@@ -1026,7 +1042,11 @@ namespace SIM
             //Limpiar los diccionarios
             parametros.Clear();
             nombres.Clear();
+        }
 
+        private void button_Reset_Click(object sender, EventArgs e)
+        {
+            reset();
         }
 
         /*** Eventos para el formateo de datos ****/
@@ -1520,6 +1540,8 @@ namespace SIM
         //Entradas de usuario sobre la Ley de Funcionamiento
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox1StopEvents)
+                return;
             string Ambito = "FUNCIONAMIENTO: ";
             string palabra_clave = "Funcionamiento";
             string sufijo2 = "func";
@@ -1531,6 +1553,8 @@ namespace SIM
         //Entradas de usuario sobre la Ley de Parada
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox2StopEvents)
+                return;
             HacerInvisibleDesgloseTiempoFallo();
             DeshabilitarComboBoxDesgloseTiempoFallo();
 
@@ -1545,6 +1569,8 @@ namespace SIM
         //Captura de indicaciones de usuario sobre ley de reparación/recuperacion
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox3StopEvents)
+                return;
             string Ambito = "REPARACIÓN/RECUPERACIÓN: ";
             string palabra_clave = "Recuperación";
             string sufijo2 = "recu";
@@ -1556,6 +1582,8 @@ namespace SIM
         //Captura de indicaciones de usuario sobre ley de COSTES
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox4StopEvents)
+                return;
             //HacerInvisibleDesgloseCoste()
             HacerInvisibleDesgloseCoste();
             DeshabilitarComboBoxDesgloseCoste();
@@ -1769,6 +1797,8 @@ namespace SIM
 
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox5StopEvents)
+                return;
             if (comboBox5.Text == "No activado")
             {
                 nombres["preventivo"] = "No activado";
@@ -1805,6 +1835,8 @@ namespace SIM
 
         private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBox6StopEvents)
+                return;
             string Ambito = "EFICIENCIA DEL MANTENIMIENTO: ";
             string palabra_clave = "% de Eficiencia del Mto.";
             string sufijo2 = "eficiencia_mto";
@@ -2115,8 +2147,10 @@ namespace SIM
             }  
         }
 
+        
         private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
+            reset();
             if (comboBox8.Text == "Caso1")
             {
                 nombres["ley_func"] = "Exponencial";
@@ -2486,8 +2520,40 @@ namespace SIM
                 }  
 
             }
+            comboBox1StopEvents = true;
+            comboBox1.Text = nombres["ley_func"];
+            comboBox1StopEvents = false;
 
-        }        
+            comboBox2StopEvents = true;
+            comboBox2.Text = nombres["ley_paro"];
+            comboBox2StopEvents = false;
+
+            comboBox3StopEvents = true;
+            comboBox3.Text = nombres["ley_recu"];
+            comboBox3StopEvents = false;
+            
+            if (nombres.ContainsKey("ley_coste"))
+            {
+                comboBox4StopEvents = true;
+                comboBox4.Text = nombres["ley_coste"];
+                comboBox4StopEvents = false;
+            }
+
+            if (nombres.ContainsKey("preventivo"))
+            {
+                comboBox5StopEvents = true;
+                comboBox5.Text = nombres["preventivo"];
+                comboBox5StopEvents = false;
+            }
+
+            if (nombres.ContainsKey("ley_eficiencia_mto"))
+            {
+                comboBox6StopEvents = true;
+                comboBox6.Text = nombres["ley_eficiencia_mto"];
+                comboBox6StopEvents = false;
+            }
+        }
+        
  
     }
 }
