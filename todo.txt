@@ -1,13 +1,19 @@
 Modificaciones interfaz
 
-- Cambiar interfaz según dibujo. 
-- Valor por defecto en los selectbox.
-- En las gráfica cambiar botón atrás por cerrar
-- Añadir tipo de gráfica como entrada.
+x Cambiar interfaz según dibujo. 
+x Valor por defecto en los selectbox.
+x En las gráfica cambiar botón atrás por cerrar
+x Añadir tipo de gráfica como entrada.
 - Modular cálculos en función del tipo de gráfica. Añadir clase CalculoGraficas.
 
   CalculoGraficas.disponibilidad()
 
+
+x Poner elección de gráfica sobre progressbar y mostrar uno u otro según estado de la simulación.
+- Desactivar inputs al darle a simular y activar cuando termina.
+- Poner botones para ver los valores de los comboBox que muestran valores en otra ventana.
+- Crear clase FuncionaFallaAmpliado y método simular().
+- Corregir nombres de diccionarios, inputs y métodos. (refactorizar)
 
 Para nota:
 - Mirar si se pueden detener los eventos de un widget.
