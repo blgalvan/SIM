@@ -13,6 +13,7 @@ namespace SIM
     public partial class FormFuncionaFallaAmpliado : Form
     {
 
+        /** Attributes **/
         public double DiponibilidadOperacionalFinal;
         public double CosteRecuperacionFinal;
 
@@ -30,7 +31,7 @@ namespace SIM
 
         /// <summary>
         /// Este Diccionario contiene los terminos a eliminar de cualquiera de los diccionarios
-        /// el primer sting contiene el nombre del diccionario
+        /// el primer string contiene el nombre del diccionario
         /// el segundo string contiene el término a eliminar
         /// </summary>
         Dictionary<string, string> terminos_a_eliminar_en_diccionarios = new Dictionary<string, string>();
@@ -49,14 +50,10 @@ namespace SIM
         List<PointF> Lista_Numero_de_Fallos = new List<PointF>();
         List<PointF> Lista_Numero_de_Preventivos = new List<PointF>();
 
-        // Control de eventos
-        bool comboBox1StopEvents;
-        bool comboBox2StopEvents;
-        bool comboBox3StopEvents;
-        bool comboBox4StopEvents;
-        bool comboBox5StopEvents;
-        bool comboBox6StopEvents;
+        private bool _silentMode;
 
+
+        // Constructor
         public FormFuncionaFallaAmpliado()
         {
             InitializeComponent();
@@ -64,57 +61,54 @@ namespace SIM
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
         }
 
+        // Load event
+        private void FormFuncionaFallaAmpliado_Load(object sender, EventArgs e)
+        {
+            reset();
+        }
 
+
+        /** Buttons **/
+
+        // Botón cerrar
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
-        /// <summary>
-        /// Este método permite eliminar términos contenidos en los diccionarios "nombres" y "parametros"
-        /// para ello usa el diccionario denominado "terminos_a_eliminar_en_diccionarios" que contiene
-        /// parejas <string1,string2>.
-        /// 
-        /// "string2" indica del nombre del diccionario pudiera encontrarse el contenido a eliminar, en
-        /// este caso "string2" solo puede contener "nombres" o "parametros" que son los nombres de los
-        /// dos diccionarios que podría ser necesario limpiar
-        /// 
-        /// "string1" indica la clave (key) que identifica al termino a eliminar
-        /// 
-        /// NOTA: la clave indicada en "string1" pudiera no estar en el diccionario
-        /// NOTA: seria ideal poder generalizar el los diccionarios, puede que para ello sea necesario
-        /// usar a su vez un "diccionario de nombres de diccionarios", pero eso se ha dejado para una
-        /// siguiente versión
-        /// </summary>
-        private void limpiar_diccionarios()
+        
+        // Botón reset
+        private void button_Reset_Click(object sender, EventArgs e)
         {
-            string auxi1;
-            string auxi2;
-            foreach (string key in terminos_a_eliminar_en_diccionarios.Keys)
-            {
-                auxi1 = key; //Extrae el nombre del término a eliminar
-                auxi2 = terminos_a_eliminar_en_diccionarios[key];  //Extrae la key que indica si el nombre del diccionario sobre el que se actuará 
-               
-                switch (auxi2)
-                {
-                    case  "nombres":
-                        nombres.Remove(auxi1);
-                        break;
+            reset();
+        }
 
-                    case "parametros":
-                        parametros.Remove(auxi1);
-                        break;
-                }   
+        // Botón PARA VER LOS PARAMETROS ESCOGIDOS 
+        private void button_Parametros_Click(object sender, EventArgs e)
+        {
+
+            textBox11.Enabled = true;
+            foreach (string key in nombres.Keys)
+            {
+                textBox11.Text += "\r\n" + "nombres[¡" + key + "¡] = " + "¡" + nombres[key].ToString() + "¡" + ";";
             }
 
-            //limpiar el diccionario de terminos a eliminar pues ya han sido eliminados
-            terminos_a_eliminar_en_diccionarios.Clear();
+            textBox11.Text += "\r\n";
+            foreach (string key in parametros.Keys)
+            {
+                textBox11.Text += "\r\n" + "parametros[¡" + key + "¡] = " + parametros[key].ToString("0.#######") + ";";
+            }
 
         }
-        
-        //SIMULAR
+
+        // Botón simular
         private void button4_Click(object sender, EventArgs e)
         {
+            // Se resetea selector de gráfica
+            ResetComboBox7();
+            // Se deshabilitan botones hasta que termine la simulación
+            button4.Enabled = false;
+            button_Reset.Enabled = false;
+
             //Inicializar el Generador de Aleatorios con semilla-reloj
             Random r = new Random(DateTime.Now.Millisecond);
 
@@ -151,36 +145,36 @@ namespace SIM
             double IntensidadFallos = 0;
             double TiempoDelCiclo = 0;
             double Tiempo_A_Simular = 0;
-            double t_paro_recon=0;
-            double t_paro_diag=0;
-            double t_paro_prep=0;
-            double t_paro_desm=0;
-            double t_paro_repa=0;
-            double t_paro_ensam=0;
-            double t_paro_verif=0;
-            double t_paro_serv=0;
+            double t_paro_recon = 0;
+            double t_paro_diag = 0;
+            double t_paro_prep = 0;
+            double t_paro_desm = 0;
+            double t_paro_repa = 0;
+            double t_paro_ensam = 0;
+            double t_paro_verif = 0;
+            double t_paro_serv = 0;
             string clave;
             double coste_recon = 0;
-            double coste_diag=0;
-            double coste_prep=0;
-            double coste_desm=0;
-            double coste_repa=0;
-            double coste_ensam=0;
-            double coste_verif=0;
-            double coste_serv=0;
-            double coste_prod_recon=0;
-            double coste_prod_diag=0;
-            double coste_prod_prep=0;
-            double coste_prod_desm=0;
-            double coste_prod_repa=0;
-            double coste_prod_ensam=0;
-            double coste_prod_verif=0;
-            double coste_prod_serv=0;
+            double coste_diag = 0;
+            double coste_prep = 0;
+            double coste_desm = 0;
+            double coste_repa = 0;
+            double coste_ensam = 0;
+            double coste_verif = 0;
+            double coste_serv = 0;
+            double coste_prod_recon = 0;
+            double coste_prod_diag = 0;
+            double coste_prod_prep = 0;
+            double coste_prod_desm = 0;
+            double coste_prod_repa = 0;
+            double coste_prod_ensam = 0;
+            double coste_prod_verif = 0;
+            double coste_prod_serv = 0;
 
             double Ratio_Correctivo_vs_Total = 0;
             double Ratio_Preventivo_vs_Total = 0;
             double TiempoHastaSiguientePreventivo = 0;
-            double EficienciaMto=100;
+            double EficienciaMto = 100;
 
             double rnd1;
 
@@ -199,7 +193,7 @@ namespace SIM
             Lista_RatioMTTR_vs_MTTR_SinLog.Clear();
             Lista_Numero_de_Fallos.Clear();
             Lista_Numero_de_Preventivos.Clear();
-            
+
             //Añadir un primer punto ficticio aleatorio a todas las listas para que no de error el graficador si todos los valores a grafica son iguales
             rnd1 = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(0.0001, 0.001, r);
             Lista_Disponibilidad.Add(new PointF((float)0.0, (float)rnd1));
@@ -219,7 +213,7 @@ namespace SIM
             rnd1 = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(0.0001, 0.001, r);
             Lista_CosteMedioRecuperacion.Add(new PointF((float)0.0, (float)rnd1));
 
-            rnd1=GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(0.0001, 0.001, r);
+            rnd1 = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(0.0001, 0.001, r);
             Lista_RatioCorrectivo_vs_total.Add(new PointF((float)0.0, (float)rnd1));
 
             rnd1 = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(0.0001, 0.001, r);
@@ -243,10 +237,10 @@ namespace SIM
 
             //Captura del tiempo a simular indicado por el usuario
             double auxi9 = Convert.ToDouble(textBox10.Text);
-            if (auxi9 >0 ) Tiempo_A_Simular = auxi9;
+            if (auxi9 > 0) Tiempo_A_Simular = auxi9;
 
             //Fijar el tamaño máximo de la barra de seguimiento y ponerla a cero
-            progressBar1.Maximum=100;
+            progressBar1.Maximum = 100;
             progressBar1.Value = 0;
 
             //Borrar el contenido del textbox de salida de resultados y encabezarlo con los datos de partida
@@ -270,8 +264,11 @@ namespace SIM
             textBox5.Text += "\r\n";
             textBox5.Enabled = false;
 
+            //TODO Hacer que se deshabiliten todos los inputs.
             //Deshabilitar el combobox de ver gráficas hasta que finalicen los cálculos
             DeshabilitarComboBoxVerGraficas();
+            progressBar1.Visible = true;
+            comboBox7.Visible = false;
 
             //Poner aqui el umbral de disponibilidad si esta activado el preventivo por disponibilidad
             if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
@@ -286,676 +283,633 @@ namespace SIM
             //GRAN BUCLE QUE REALIZA la SIMULACIÓN
             do
             {
-                 //Por defecto se supone que el mantenimiento a realizar en el ciclo actual es "Correctivo" 
+                //Por defecto se supone que el mantenimiento a realizar en el ciclo actual es "Correctivo" 
                 tipo_mto_este_ciclo = "Correctivo";
-                
-                 //Incrementar el contador de ciclos funciona-para
-                 ContadorCiclosFuncionaPara += 1;
 
-                 //A)GENERAR TIEMPO DE FUNCIONAMIENTO, TRATARLO Y ACUMULARLO
-                 //Puntos inicial y final de la subida a funcionamiento
-                 Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)minimoY));
-                 Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)maximoY));
+                //Incrementar el contador de ciclos funciona-para
+                ContadorCiclosFuncionaPara += 1;
 
-                 //Generar tiempo funcionando, controlar su validez y acumularlo
-                 switch (nombres["ley_func"])
-                 {
-                     case "Uniforme":
-                         t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_func"], parametros["Maximo_func"], r);
-                         break;
-                     case "Exponencial":
-                         t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_func_param1"], 1 / parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
-                         break;
-                     case "Weibull2P":
-                         t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
-                         break;
-                     case "Normal":
-                         t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
-                         break;
-                 } 
+                //A)GENERAR TIEMPO DE FUNCIONAMIENTO, TRATARLO Y ACUMULARLO
+                //Puntos inicial y final de la subida a funcionamiento
+                Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)minimoY));
+                Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)maximoY));
 
-                 //En caso de estar activado el Mto Preventivo fijo por tiempo controlar si el tiempo de funcionamiento de este ciclo excede al tiempo restante para el siguiente Mto preventivo
-                 if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                 {
-                     if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
-                     {
-                         t = TiempoHastaSiguientePreventivo;
-                         tipo_mto_este_ciclo = "Preventivo";
-                         TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
-                     }
-                 }
-                
-                 //bajada de disponibilidad durante el periodo de funcionamiento, solo Exponencial y Weubull tienen sentido
-                 //Para las otras leyes se opta por no bajar la disponibilidad
-                 switch (nombres["ley_func"])
-                 {
-                     case "Exponencial":
-                         PuntoFinalBajadaDisponibilidad = Math.Exp(-parametros["ley_func_param2"] * t) - 1 + maximoY;
-                         break;
-                     case "Weibull2P":
-                         PuntoFinalBajadaDisponibilidad = Math.Exp(-Math.Pow(t / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
-                         break;
-                     case "Uniforme":
-                     case "Normal":
-                         PuntoFinalBajadaDisponibilidad = maximoY;
-                         break;
-                 }
+                //Generar tiempo funcionando, controlar su validez y acumularlo
+                switch (nombres["ley_func"])
+                {
+                    case "Uniforme":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        break;
+                    case "Exponencial":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_func_param1"], 1 / parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        break;
+                    case "Weibull2P":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        break;
+                    case "Normal":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        break;
+                    //TODO Ojo, que pasa si se elige la poción Ninguna Ley.
+                }
 
-                 //Controlar la validez de t ==> encontrar el t que hace cero la disponibilidad (si procede)
-                 ContadorTiempoDisponibilidadPositiva = 0;
-                 if (PuntoFinalBajadaDisponibilidad <= DisponibilidadMinimaAdmisible)
-                 {
-                      double DisponibilidadInstantanea = -1000;
-                      for (int j = 1; j <= t; j++)
-                      {
-                           if (nombres["ley_func"] == "Exponencial") DisponibilidadInstantanea = Math.Exp(-parametros["ley_func_param2"] * j) - 1 + maximoY;
-                           else if (nombres["ley_func"] == "Weibull2P") DisponibilidadInstantanea = Math.Exp(-Math.Pow(j / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
-                           if (DisponibilidadInstantanea <= DisponibilidadMinimaAdmisible) break;
-                           ContadorTiempoDisponibilidadPositiva += 1;
-                      }
-                      PuntoFinalBajadaDisponibilidad = DisponibilidadMinimaAdmisible;
-                      t = ContadorTiempoDisponibilidadPositiva;
-                      if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                      {
-                          if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Por Disponibilidad") tipo_mto_este_ciclo = "Preventivo";
-                      }
-                  }
+                //En caso de estar activado el Mto Preventivo fijo por tiempo controlar si el tiempo de funcionamiento de este ciclo excede al tiempo restante para el siguiente Mto preventivo
+                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                {
+                    if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
+                    {
+                        t = TiempoHastaSiguientePreventivo;
+                        tipo_mto_este_ciclo = "Preventivo";
+                        TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
+                    }
+                }
 
-                  //Acumular tiempos funcionando
-                  TiempoFuncionandoAcumulado += t;
-                  TiempoParcialFuncionando = t;
+                //bajada de disponibilidad durante el periodo de funcionamiento, solo Exponencial y Weubull tienen sentido
+                //Para las otras leyes se opta por no bajar la disponibilidad
+                switch (nombres["ley_func"])
+                {
+                    case "Exponencial":
+                        PuntoFinalBajadaDisponibilidad = Math.Exp(-parametros["ley_func_param2"] * t) - 1 + maximoY;
+                        break;
+                    case "Weibull2P":
+                        PuntoFinalBajadaDisponibilidad = Math.Exp(-Math.Pow(t / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                        break;
+                    case "Uniforme":
+                    case "Normal":
+                        PuntoFinalBajadaDisponibilidad = maximoY;
+                        break;
+                }
 
-                  //Acumular el tiempo de funcionamiento al tiempo total simulado o "tiempo transcurrido"
-                  TiempoTranscurrido += t;
+                //Controlar la validez de t ==> encontrar el t que hace cero la disponibilidad (si procede)
+                ContadorTiempoDisponibilidadPositiva = 0;
+                if (PuntoFinalBajadaDisponibilidad <= DisponibilidadMinimaAdmisible)
+                {
+                    double DisponibilidadInstantanea = -1000;
+                    for (int j = 1; j <= t; j++)
+                    {
+                        if (nombres["ley_func"] == "Exponencial") DisponibilidadInstantanea = Math.Exp(-parametros["ley_func_param2"] * j) - 1 + maximoY;
+                        else if (nombres["ley_func"] == "Weibull2P") DisponibilidadInstantanea = Math.Exp(-Math.Pow(j / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                        if (DisponibilidadInstantanea <= DisponibilidadMinimaAdmisible) break;
+                        ContadorTiempoDisponibilidadPositiva += 1;
+                    }
+                    PuntoFinalBajadaDisponibilidad = DisponibilidadMinimaAdmisible;
+                    t = ContadorTiempoDisponibilidadPositiva;
+                    if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                    {
+                        if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Por Disponibilidad") tipo_mto_este_ciclo = "Preventivo";
+                    }
+                }
 
-                  //Si el mantenimiento en este ciclo es correctivo pero el preventivo Fijo por Tiempo está activado, decrementar el tiempo restante hasta el siguiente preventivo
-                  if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                  {
-                      if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo -= t;
-                  }
+                //Acumular tiempos funcionando
+                TiempoFuncionandoAcumulado += t;
+                TiempoParcialFuncionando = t;
+
+                //Acumular el tiempo de funcionamiento al tiempo total simulado o "tiempo transcurrido"
+                TiempoTranscurrido += t;
+
+                //Si el mantenimiento en este ciclo es correctivo pero el preventivo Fijo por Tiempo está activado, decrementar el tiempo restante hasta el siguiente preventivo
+                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                {
+                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo -= t;
+                }
 
 
-                  //Dibujar puntos intermedios para mejorar el aspecto de la gráfica
-                  if (PuntoFinalBajadaDisponibilidad >= 0)
-                  {
-                      double TiempoIntermedio = 0;
-                      double maxY_new = 0;
-                      if (nombres["ley_func"] == "Exponencial" || nombres["ley_func"] == "Weibull2P")
-                      {
-                           for (int j = 1; j <= 9; j++)
-                           {
-                                //TiempoIntermedio = (TiempoTranscurrido - t) + j * (t / 10);
-                                TiempoIntermedio = j * (t / 10);
+                //Dibujar puntos intermedios para mejorar el aspecto de la gráfica
+                if (PuntoFinalBajadaDisponibilidad >= 0)
+                {
+                    double TiempoIntermedio = 0;
+                    double maxY_new = 0;
+                    if (nombres["ley_func"] == "Exponencial" || nombres["ley_func"] == "Weibull2P")
+                    {
+                        for (int j = 1; j <= 9; j++)
+                        {
+                            //TiempoIntermedio = (TiempoTranscurrido - t) + j * (t / 10);
+                            TiempoIntermedio = j * (t / 10);
 
-                                if (nombres["ley_func"] == "Exponencial") maxY_new = Math.Exp(-parametros["ley_func_param2"] * TiempoIntermedio) - 1 + maximoY;
-                                else if (nombres["ley_func"] == "Weibull2P") maxY_new = Math.Exp(-Math.Pow(TiempoIntermedio / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
-                                Lista_Disponibilidad.Add(new PointF((float)(TiempoTranscurrido - t + TiempoIntermedio), (float)maxY_new));
+                            if (nombres["ley_func"] == "Exponencial") maxY_new = Math.Exp(-parametros["ley_func_param2"] * TiempoIntermedio) - 1 + maximoY;
+                            else if (nombres["ley_func"] == "Weibull2P") maxY_new = Math.Exp(-Math.Pow(TiempoIntermedio / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                            Lista_Disponibilidad.Add(new PointF((float)(TiempoTranscurrido - t + TiempoIntermedio), (float)maxY_new));
+                        }
+                    }
+                }
+
+                //Dibujar Punto final de la bajada de Disponibilidad (inicial de la bajada al fallo) (depende de la lay de Confiabilidad y no del maximoY)
+                Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)PuntoFinalBajadaDisponibilidad));
+
+                //Punto final de la bajada a fallo
+                Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)minimoY));
+
+
+                //B)GENERAR TIEMPO DE FALLO/PARO, TRATARLO, ALMACENARLO Y ACUMULARLO
+                //------------------------------------------------------------------ 
+                switch (nombres["ley_paro"])
+                {
+                    //B.1.-Generar tiempo de fallo/paro en el caso en que no exista desglose de tiempos de fallos/paradas
+
+                    case "Uniforme":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        break;
+                    case "Exponencial":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_paro_param1"], 1 / parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        break;
+                    case "Weibull2P":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        break;
+                    case "Normal":
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        break;
+
+                    //B.2.-Generar tiempo de fallo/paro en el caso en que exista desglose de tiempos
+                    case "Desglose de Fallos":
+                        //Reconocimiento 
+                        clave = "recon";
+                        t_paro_recon = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Diagnostico 
+                        clave = "diag";
+                        t_paro_diag = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Preparacion 
+                        clave = "prep";
+                        t_paro_prep = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Desmantelamiento 
+                        clave = "desm";
+                        t_paro_desm = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Reparacion 
+                        clave = "repa";
+                        t_paro_repa = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Ensamblaje 
+                        clave = "ensam";
+                        t_paro_ensam = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Verificacion 
+                        clave = "verif";
+                        t_paro_verif = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Puesta en servicio 
+                        clave = "serv";
+                        t_paro_serv = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
+
+                        //Se calcula ahora el tiempo fallado/parado como la suma de los tiempos del desglose
+                        t = t_paro_recon + t_paro_diag + t_paro_prep + t_paro_desm + t_paro_repa + t_paro_ensam + t_paro_verif + t_paro_serv;
+
+                        //Se calcula ahora el tiempo de Logistica identificado aqui como el tiempo de preparacion
+                        TiempoDeLogistica = t_paro_prep;
+                        break;
+                }
+
+                //B.3.-Decidir si el Mantenimiento es "Correctivo" ó "Preventivo" en función de t (de fall/paro) y datos de entrada
+                //Si está activado el Preventivo por Disponibilidad no corresponde hacer nada aqui
+                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                {
+                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
+                    {
+                        tipo_mto_este_ciclo = "Preventivo";
+                        TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
+                    }
+                }
+
+                //B.4.-Corregir el "Tiempo hasta el siguiente preventivo" en caso de que el mto de este ciclo sea correctivo pero esté activado el preventivo "Fijo por Tiempo"
+                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                {
+                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo > t) TiempoHastaSiguientePreventivo -= t;
+                }
+
+                //B.5.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo sin desglose de tiempos
+                if (nombres.ContainsKey("ley_paro") && tipo_mto_este_ciclo == "Preventivo")
+                {
+                    if (nombres["ley_paro"] != "Desglose de Fallos" && parametros.ContainsKey("paro_Reduccion_si_Preventivo")) t = (100 - parametros["paro_Reduccion_si_Preventivo"]) * t / 100;
+                    //OJO FALTA POR ARREGLAR QUE ESTE CARGADO EL parametros["paro_Reduccion_si_Preventivo"] EN EL CASO DE NO DESGLOSE DEL TIEMPO DE PARO, EL FORMULARIO NO LO PREGUNTA
+
+                    //B.6.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo con desglose de tiempos
+                    else if (nombres["ley_paro"] == "Desglose de Fallos")
+                    {
+                        if (parametros.ContainsKey("paro_recon_Reduccion_si_Preventivo")) t_paro_recon = (100 - parametros["paro_recon_Reduccion_si_Preventivo"]) * t_paro_recon / 100;
+                        if (parametros.ContainsKey("paro_diag_Reduccion_si_Preventivo")) t_paro_diag = (100 - parametros["paro_diag_Reduccion_si_Preventivo"]) * t_paro_diag / 100;
+                        if (parametros.ContainsKey("paro_prep_Reduccion_si_Preventivo")) t_paro_prep = (100 - parametros["paro_prep_Reduccion_si_Preventivo"]) * t_paro_prep / 100;
+                        if (parametros.ContainsKey("paro_desm_Reduccion_si_Preventivo")) t_paro_desm = (100 - parametros["paro_desm_Reduccion_si_Preventivo"]) * t_paro_desm / 100;
+                        if (parametros.ContainsKey("paro_repa_Reduccion_si_Preventivo")) t_paro_repa = (100 - parametros["paro_repa_Reduccion_si_Preventivo"]) * t_paro_repa / 100;
+                        if (parametros.ContainsKey("paro_ensam_Reduccion_si_Preventivo")) t_paro_ensam = (100 - parametros["paro_ensam_Reduccion_si_Preventivo"]) * t_paro_ensam / 100;
+                        if (parametros.ContainsKey("paro_verif_Reduccion_si_Preventivo")) t_paro_verif = (100 - parametros["paro_verif_Reduccion_si_Preventivo"]) * t_paro_verif / 100;
+                        if (parametros.ContainsKey("paro_serv_Reduccion_si_Preventivo")) t_paro_serv = (100 - parametros["paro_serv_Reduccion_si_Preventivo"]) * t_paro_serv / 100;
+
+                        //Se recalcula ahora el tiempo fallado/parado como la suma de los tiempos del desglose modificados
+                        t = t_paro_recon + t_paro_diag + t_paro_prep + t_paro_desm + t_paro_repa + t_paro_ensam + t_paro_verif + t_paro_serv;
+                    }
+                }
+
+                //B.7.-Acumular tiempos en las diferentes variables
+                //Acumular y guardar          
+                TiempoParadoAcumulado += t;
+                TiempoParadoParcial = t;
+
+                //Actualizacion del tiempo total transcurrido en la simulación
+                TiempoTranscurrido += t;
+
+                //Calcular el tiempo del ciclo (tiempo que dura el ciclo)
+                TiempoDelCiclo = TiempoParadoParcial + TiempoParcialFuncionando;
+
+                //Acumular tiempo de Mantenimiento a Correctivo o a Preventivo
+                if (tipo_mto_este_ciclo == "Preventivo") TiempoPreventivoAcumulado += t;
+                else if (tipo_mto_este_ciclo == "Correctivo") TiempoCorrectivoAcumulado += t;
+
+
+
+                //C)ESTABLECER EL VALOR DE LA RECUPERACIÓN EN CASO DE QUE PROCEDA, TRATARLO Y USARLO
+                //Establecer el valor de la máxima recuperacion posible dado por la Ley de Recuperación
+                if (nombres.ContainsKey("ley_recu"))
+                {
+                    switch (nombres["ley_recu"])
+                    {
+                        case "Siempre a Nuevo (GAN)":
+                        case "Ninguna Ley":
+                            maximoY = 1;
+                            break;
+                        case "Según tiempo (BAO)":
+                            if (nombres.ContainsKey("ley_func"))
+                            {
+                                if (nombres["ley_func"] == "Exponencial") maximoY = Math.Exp(-parametros["ley_func_param2"] * (TiempoTranscurrido - parametros["ley_func_param1"]));
+                                else if (nombres["ley_func"] == "Weibull2P") maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_func_param2"], parametros["ley_func_param1"]));
                             }
-                       }
-                   }
-                
-                   //Dibujar Punto final de la bajada de Disponibilidad (inicial de la bajada al fallo) (depende de la lay de Confiabilidad y no del maximoY)
-                   Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)PuntoFinalBajadaDisponibilidad));
-
-                   //Punto final de la bajada a fallo
-                   Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)minimoY));                
-                
-
-                   //B)GENERAR TIEMPO DE FALLO/PARO, TRATARLO, ALMACENARLO Y ACUMULARLO
-                   //------------------------------------------------------------------ 
-                   switch(nombres["ley_paro"])
-                   {
-                       //B.1.-Generar tiempo de fallo/paro en el caso en que no exista desglose de tiempos de fallos/paradas
-
-                       case "Uniforme":
-                           t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_paro"], parametros["Maximo_paro"], r);
-                           break;
-                       case "Exponencial":
-                           t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_paro_param1"], 1 / parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
-                           break;
-                       case "Weibull2P":
-                           t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
-                           break;
-                       case "Normal":
-                           t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
-                           break;
-
-                       //B.2.-Generar tiempo de fallo/paro en el caso en que exista desglose de tiempos
-                       case "Desglose de Fallos":
-                           //Reconocimiento 
-                           clave = "recon";
-                           t_paro_recon = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Diagnostico 
-                           clave = "diag";
-                           t_paro_diag = GenerarValor(TiempoTranscurrido, "ley_paro_"+clave, "ley_paro_"+clave+"_param1", "ley_paro_"+clave+"_param2", "Maximo_paro_"+clave, "Minimo_paro_"+clave, "X1_paro_"+clave, "Y1_paro_"+clave, "X2_paro_"+clave, "Y2_paro_"+clave, 1, r);
-
-                           //Preparacion 
-                           clave = "prep";
-                           t_paro_prep = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Desmantelamiento 
-                           clave = "desm";
-                           t_paro_desm = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Reparacion 
-                           clave = "repa";
-                           t_paro_repa = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Ensamblaje 
-                           clave = "ensam";
-                           t_paro_ensam = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Verificacion 
-                           clave = "verif";
-                           t_paro_verif = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-
-                           //Puesta en servicio 
-                           clave = "serv";
-                           t_paro_serv = GenerarValor(TiempoTranscurrido, "ley_paro_" + clave, "ley_paro_" + clave + "_param1", "ley_paro_" + clave + "_param2", "Maximo_paro_" + clave, "Minimo_paro_" + clave, "X1_paro_" + clave, "Y1_paro_" + clave, "X2_paro_" + clave, "Y2_paro_" + clave, 1, r);
-                                              
-                           //Se calcula ahora el tiempo fallado/parado como la suma de los tiempos del desglose
-                           t = t_paro_recon + t_paro_diag + t_paro_prep + t_paro_desm + t_paro_repa + t_paro_ensam + t_paro_verif + t_paro_serv;
-
-                           //Se calcula ahora el tiempo de Logistica identificado aqui como el tiempo de preparacion
-                           TiempoDeLogistica = t_paro_prep;
-                           break;
-                   }
-
-                   //B.3.-Decidir si el Mantenimiento es "Correctivo" ó "Preventivo" en función de t (de fall/paro) y datos de entrada
-                   //Si está activado el Preventivo por Disponibilidad no corresponde hacer nada aqui
-                   if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                   {
-                       if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
-                       {
-                           tipo_mto_este_ciclo = "Preventivo";
-                           TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
-                       }
-                   }
- 
-                   //B.4.-Corregir el "Tiempo hasta el siguiente preventivo" en caso de que el mto de este ciclo sea correctivo pero esté activado el preventivo "Fijo por Tiempo"
-                   if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                   {
-                       if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo > t) TiempoHastaSiguientePreventivo -= t;
-                   }
-
-                   //B.5.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo sin desglose de tiempos
-                   if (nombres.ContainsKey("ley_paro") && tipo_mto_este_ciclo == "Preventivo")
-                   {
-                       if (nombres["ley_paro"] != "Desglose de Fallos" && parametros.ContainsKey("paro_Reduccion_si_Preventivo")) t = (100 - parametros["paro_Reduccion_si_Preventivo"]) * t / 100;
-                       //OJO FALTA POR ARREGLAR QUE ESTE CARGADO EL parametros["paro_Reduccion_si_Preventivo"] EN EL CASO DE NO DESGLOSE DEL TIEMPO DE PARO, EL FORMULARIO NO LO PREGUNTA
-
-                       //B.6.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo con desglose de tiempos
-                       else if (nombres["ley_paro"] == "Desglose de Fallos")
-                       {
-                           if (parametros.ContainsKey("paro_recon_Reduccion_si_Preventivo")) t_paro_recon = (100 - parametros["paro_recon_Reduccion_si_Preventivo"]) * t_paro_recon / 100;
-                           if (parametros.ContainsKey("paro_diag_Reduccion_si_Preventivo")) t_paro_diag = (100 - parametros["paro_diag_Reduccion_si_Preventivo"]) * t_paro_diag / 100;
-                           if (parametros.ContainsKey("paro_prep_Reduccion_si_Preventivo")) t_paro_prep = (100 - parametros["paro_prep_Reduccion_si_Preventivo"]) * t_paro_prep / 100;
-                           if (parametros.ContainsKey("paro_desm_Reduccion_si_Preventivo")) t_paro_desm = (100 - parametros["paro_desm_Reduccion_si_Preventivo"]) * t_paro_desm / 100;
-                           if (parametros.ContainsKey("paro_repa_Reduccion_si_Preventivo")) t_paro_repa = (100 - parametros["paro_repa_Reduccion_si_Preventivo"]) * t_paro_repa / 100;
-                           if (parametros.ContainsKey("paro_ensam_Reduccion_si_Preventivo")) t_paro_ensam = (100 - parametros["paro_ensam_Reduccion_si_Preventivo"]) * t_paro_ensam / 100;
-                           if (parametros.ContainsKey("paro_verif_Reduccion_si_Preventivo")) t_paro_verif = (100 - parametros["paro_verif_Reduccion_si_Preventivo"]) * t_paro_verif / 100;
-                           if (parametros.ContainsKey("paro_serv_Reduccion_si_Preventivo")) t_paro_serv = (100 - parametros["paro_serv_Reduccion_si_Preventivo"]) * t_paro_serv / 100;
-
-                           //Se recalcula ahora el tiempo fallado/parado como la suma de los tiempos del desglose modificados
-                           t = t_paro_recon + t_paro_diag + t_paro_prep + t_paro_desm + t_paro_repa + t_paro_ensam + t_paro_verif + t_paro_serv;
-                       }
-                   } 
-                  
-                   //B.7.-Acumular tiempos en las diferentes variables
-                   //Acumular y guardar          
-                   TiempoParadoAcumulado += t;
-                   TiempoParadoParcial = t;
-
-                   //Actualizacion del tiempo total transcurrido en la simulación
-                   TiempoTranscurrido += t;
-
-                   //Calcular el tiempo del ciclo (tiempo que dura el ciclo)
-                   TiempoDelCiclo = TiempoParadoParcial + TiempoParcialFuncionando;
-
-                   //Acumular tiempo de Mantenimiento a Correctivo o a Preventivo
-                   if (tipo_mto_este_ciclo == "Preventivo") TiempoPreventivoAcumulado += t;
-                   else if (tipo_mto_este_ciclo == "Correctivo") TiempoCorrectivoAcumulado += t;
-                  
-                   
-                
-                   //C)ESTABLECER EL VALOR DE LA RECUPERACIÓN EN CASO DE QUE PROCEDA, TRATARLO Y USARLO
-                   //Establecer el valor de la máxima recuperacion posible dado por la Ley de Recuperación
-                   if (nombres.ContainsKey("ley_recu"))
-                   {
-                       switch (nombres["ley_recu"])
-                       {
-                           case "Siempre a Nuevo (GAN)":
-                           case "Ninguna Ley":
-                               maximoY = 1;
-                               break;
-                           case "Según tiempo (BAO)":
-                               if(nombres.ContainsKey("ley_func"))
-                               {
-                                   if (nombres["ley_func"] == "Exponencial") maximoY = Math.Exp(-parametros["ley_func_param2"] * (TiempoTranscurrido - parametros["ley_func_param1"]));
-                                   else if (nombres["ley_func"] == "Weibull2P") maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_func_param2"], parametros["ley_func_param1"]));
-                               }
-                               break;
-                           case "Exponencial":
-                               maximoY = Math.Exp(-parametros["ley_recu_param2"] * (TiempoTranscurrido - parametros["ley_recu_param1"]));
-                               break;
-                           case "Weibull2P":
-                               maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_recu_param2"], parametros["ley_recu_param1"]));
-                               break;
-                           case "Línea recta":
-                               maximoY = parametros["Y1_recu"] + (parametros["Y2_recu"] - parametros["Y1_recu"]) * (TiempoTranscurrido - parametros["X1_recu"]) / (parametros["X2_recu"] - parametros["X1_recu"]);
-                               break;
-                       }
-                       if (maximoY > 1) maximoY = 1;
-                   }
-                     
-                   //Modificar el valor de la maxima recuperación si se usa el "% de eficiencia del Mantenimiento"
-                   EficienciaMto = 100;
-                   if (nombres.ContainsKey("ley_eficiencia_mto"))
-                   {
-                       switch (nombres["ley_eficiencia_mto"])
-                       {
-                           //A)Determinación del parametro "EficienciaMto"
-                           case "Fijo":
-                               EficienciaMto = parametros["ley_eficiencia_mto_param1"];
-                               break;
-                           case "Uniforme":
-                               EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
-                               break;
-                           case "Exponencial":
-                               EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_eficiencia_mto_param1"], 1 / parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
-                               break;
-                           case "Weibull2P":
-                               EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
-                               break;
-                           case "Línea recta":
-                               EficienciaMto = parametros["Y1_eficiencia_mto"] + (parametros["Y2_eficiencia_mto"] - parametros["Y1_eficiencia_mto"]) * (TiempoTranscurrido - parametros["X1_eficiencia_mto"]) / (parametros["X2_eficiencia_mto"] - parametros["X1_eficiencia_mto"]);
-                               break;
-                           case "Normal":
-                               EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
-                               break;
-
-                           //B)Modificación de la variable que contiene el maximo de recuperación 
-                           if (EficienciaMto > 0 && EficienciaMto <= 100) maximoY = maximoY * EficienciaMto / 100;
-                       }
-                   }
-                
-
-                   //Generar los costes de la recuperacion y de pérdida de producción
-                   if (nombres.ContainsKey("ley_coste"))
-                   {
-                       switch(nombres["ley_coste"])
-                       {
-                           case "Fijo por tiempo":
-                               CosteEsteMantenimiento = parametros["ley_coste_param1"] * t;
-
-                               //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                               if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
-
-                               CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
-                               break;
-                           case "Fijo por intervención":
-                               CosteEsteMantenimiento = parametros["ley_coste_param1"];
-
-                               //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
-                               if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
-
-                               CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
-                               break;
-                           case "Weibull2P":
-                               CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
-
-                               //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                               if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
-
-                               CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
-                               break;
-                           case "Normal":
-                               CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
-
-                               //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                               if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
-
-                               CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
-                               break;
-                           case "Lineal creciente":
-                               CosteEsteMantenimiento = (parametros["Y1_coste"] + (parametros["Y2_coste"] - parametros["Y1_coste"]) * (TiempoTranscurrido - parametros["X1_coste"]) / (parametros["X2_coste"] - parametros["X1_coste"])) * t;
-
-                               //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
-                               if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
-
-                               CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
-                               break;
-                           case "Desglose de Costes":
-                               //Reconocimiento 
-                               clave = "recon";
-                               coste_recon = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_recon, r);
-
-                               //Diagnostico 
-                               clave = "diag";
-                               coste_diag = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_diag, r);
-
-                               //Preparacion 
-                               clave = "prep";
-                               coste_prep = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_prep, r);
-
-                               //Desmantelamiento
-                               clave = "desm";
-                               coste_desm = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_desm, r);
-
-                               //Reparacion 
-                               clave = "repa";
-                               coste_repa = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_repa, r);
-
-                               //Ensamblaje 
-                               clave = "ensam";
-                               coste_ensam = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_ensam, r);
-
-                               //Verificacion 
-                               clave = "verif";
-                               coste_verif = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_verif, r);
-
-                               //Puesta en servicio 
-                               clave = "serv";
-                               coste_serv = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_serv, r);
-
-                               //Corrección si se está realizando Mantenimiento Preventivo
-                               if (tipo_mto_este_ciclo == "Preventivo")
-                               {
-                                    if (parametros.ContainsKey("coste_recon_Reduccion_si_Preventivo")) coste_recon = (100 - parametros["coste_recon_Reduccion_si_Preventivo"]) * coste_recon / 100;
-                                    if (parametros.ContainsKey("coste_diag_Reduccion_si_Preventivo")) coste_diag = (100 - parametros["coste_diag_Reduccion_si_Preventivo"]) * coste_diag / 100;
-                                    if (parametros.ContainsKey("coste_prep_Reduccion_si_Preventivo")) coste_prep = (100 - parametros["coste_prep_Reduccion_si_Preventivo"]) * coste_prep / 100;
-                                    if (parametros.ContainsKey("coste_desm_Reduccion_si_Preventivo")) coste_desm = (100 - parametros["coste_desm_Reduccion_si_Preventivo"]) * coste_desm / 100;
-                                    if (parametros.ContainsKey("coste_repa_Reduccion_si_Preventivo")) coste_repa = (100 - parametros["coste_repa_Reduccion_si_Preventivo"]) * coste_repa / 100;
-                                    if (parametros.ContainsKey("coste_ensam_Reduccion_si_Preventivo")) coste_ensam = (100 - parametros["coste_ensam_Reduccion_si_Preventivo"]) * coste_ensam / 100;
-                                    if (parametros.ContainsKey("coste_verif_Reduccion_si_Preventivo")) coste_verif = (100 - parametros["coste_verif_Reduccion_si_Preventivo"]) * coste_verif / 100;
-                                    if (parametros.ContainsKey("coste_serv_Reduccion_si_Preventivo")) coste_serv = (100 - parametros["coste_serv_Reduccion_si_Preventivo"]) * coste_serv / 100;
-                               }
-
-                               //Se calcula ahora el coste de parada como la suma de los costes del desglose
-                               CosteEsteMantenimiento = coste_recon + coste_diag + coste_prep + coste_desm + coste_repa + coste_ensam + coste_verif + coste_serv;
-
-
-                               //Calculo de los costes desglosados de perdida de producción
-                               if (parametros.ContainsKey("coste_recon_Perdida_Prod_por_Ud_tiempo")) coste_prod_recon = parametros["coste_recon_Perdida_Prod_por_Ud_tiempo"] * t_paro_recon;
-                               if (parametros.ContainsKey("coste_diag_Perdida_Prod_por_Ud_tiempo")) coste_prod_diag = parametros["coste_diag_Perdida_Prod_por_Ud_tiempo"] * t_paro_diag;
-                               if (parametros.ContainsKey("coste_prep_Perdida_Prod_por_Ud_tiempo")) coste_prod_prep = parametros["coste_prep_Perdida_Prod_por_Ud_tiempo"] * t_paro_prep;
-                               if (parametros.ContainsKey("coste_desm_Perdida_Prod_por_Ud_tiempo")) coste_prod_desm = parametros["coste_desm_Perdida_Prod_por_Ud_tiempo"] * t_paro_desm;
-                               if (parametros.ContainsKey("coste_repa_Perdida_Prod_por_Ud_tiempo")) coste_prod_repa = parametros["coste_repa_Perdida_Prod_por_Ud_tiempo"] * t_paro_repa;
-                               if (parametros.ContainsKey("coste_ensam_Perdida_Prod_por_Ud_tiempo")) coste_prod_ensam = parametros["coste_ensam_Perdida_Prod_por_Ud_tiempo"] * t_paro_ensam;
-                               if (parametros.ContainsKey("coste_verif_Perdida_Prod_por_Ud_tiempo")) coste_prod_verif = parametros["coste_verif_Perdida_Prod_por_Ud_tiempo"] * t_paro_verif;
-                               if (parametros.ContainsKey("coste_serv_Perdida_Prod_por_Ud_tiempo")) coste_prod_serv = parametros["coste_serv_Perdida_Prod_por_Ud_tiempo"] * t_paro_serv;
-
-                               //Calculo del coste total de perdida de produccion como suma de los costes desglosados de perdida de producción
-                               CosteEstaPerdidaDeProduccion = coste_prod_recon + coste_prod_diag + coste_prod_prep + coste_prod_desm + coste_prod_repa + coste_prod_ensam + coste_prod_verif + coste_prod_serv;
-                               break;
-                       }
-
-                       //Acumular costes derivados del paro/fallo
-                       CosteTotalMantenimiento += CosteEsteMantenimiento;
-                       CosteTotalPerdidaProduccion += CosteEstaPerdidaDeProduccion;
-                   }
-
-                   //Almacenar programa de Mantenimiento preventivo si procede e Incrementar los contadores de Preventivo o correctivo según proceda
-                   if (tipo_mto_este_ciclo == "Preventivo")
-                   {
-                       programa_mto_preventivo[TiempoTranscurrido] = t;
-                       Numero_de_Preventivos += 1;
-                   }
-
-                   else if (tipo_mto_este_ciclo == "Correctivo") Numero_de_Correctivos += 1;
-
-                   //CALCULO DE INDICADORES (SACAR A GRAFICAS TODOS LOS INDICADORES)
-                   //---------------------------------------------------------------
-
-                   //Calcular Disponibilidad
-                   Disponibilidad = TiempoFuncionandoAcumulado / (TiempoFuncionandoAcumulado + TiempoParadoAcumulado);
-
-                   //Indicador Tiempo Medio Entre Fallos (MTBF)
-                   AcumuladorTiemposEntreFallos += TiempoParadoParcial + TiempoParcialFuncionando;
-                   MTBF = AcumuladorTiemposEntreFallos / ContadorCiclosFuncionaPara;
-                   Lista_MTBF.Add(new PointF((float)TiempoTranscurrido, (float)MTBF));
-
-                   //Indicador "Numero de Fallos"
-                   Lista_Numero_de_Fallos.Add(new PointF((float)TiempoTranscurrido, (float)Numero_de_Correctivos));
-
-                   //Indicador "Numero de Preventivos"
-                   Lista_Numero_de_Preventivos.Add(new PointF((float)TiempoTranscurrido, (float)Numero_de_Preventivos));
-
-                   //Indicador Tiempo Medio de Reparacion (MTTR)
-                   MTTR = TiempoParadoAcumulado / ContadorCiclosFuncionaPara;
-                   Lista_MTTR.Add(new PointF((float)TiempoTranscurrido, (float)MTTR));
-
-                   //Indicador Tiempo Medio de Reparacion sin tiempo de Logística (MTTR)
-                   MTTR_SinLog = (TiempoParadoAcumulado-TiempoDeLogistica) / ContadorCiclosFuncionaPara;
-                   Lista_MTTR_SinLog.Add(new PointF((float)TiempoTranscurrido, (float)MTTR_SinLog));
-
-                   //Indicador  RatioMTTR_vs_MTTR_SinLog
-                   RatioMTTR_vs_MTTR_SinLog = MTTR / MTTR_SinLog;
-                   Lista_RatioMTTR_vs_MTTR_SinLog.Add(new PointF((float)TiempoTranscurrido, (float)RatioMTTR_vs_MTTR_SinLog));                
-                
-                   //Indicador Intensidad de Fallos (IntensidadFallos)
-                   IntensidadFallos = ContadorCiclosFuncionaPara / TiempoTranscurrido;
-                   Lista_IntensidadFallos.Add(new PointF((float)TiempoTranscurrido, (float)IntensidadFallos));
-
-                   //Indicador Coste Acumulado de Recuperacion (Mto+Perdida de produccion)
-                   CosteAcumuladoRecuperacion = CosteTotalMantenimiento + CosteTotalPerdidaProduccion;
-                   Lista_CosteAcumuladoRecuperacion.Add(new PointF((float)TiempoTranscurrido, (float)CosteAcumuladoRecuperacion));
-
-                   //Indicador Coste Medio de Recuperacion (CosteMedioRecuperacion)
-                   CosteMedioRecuperacion = (CosteEsteMantenimiento + CosteEstaPerdidaDeProduccion) / ContadorCiclosFuncionaPara;
-                   Lista_CosteMedioRecuperacion.Add(new PointF((float)TiempoTranscurrido, (float)CosteMedioRecuperacion));
-                   
-                   //Indicador Ratio Correctivo vs tiempo Total de reparación/recuperación
-                   Ratio_Correctivo_vs_Total = TiempoCorrectivoAcumulado / TiempoParadoAcumulado;
-                   Lista_RatioCorrectivo_vs_total.Add(new PointF((float)TiempoTranscurrido, (float)Ratio_Correctivo_vs_Total));
-                   
-                   //Indicador ratio Preventivo vs tiempo Total de reparación/recuperación
-                   Ratio_Preventivo_vs_Total = TiempoPreventivoAcumulado / TiempoParadoAcumulado;
-                   Lista_RatioPreventivo_vs_total.Add(new PointF((float)TiempoTranscurrido, (float)Ratio_Preventivo_vs_Total));
-                
-                   //FIN DEL CALCULO DE INDICADORES
-                   //-------------------------------
-
-
-                   //Presentar los resultados numéricos en el TextBox de pantalla
-                   textBox5.Enabled = true;
-                   textBox5.Text += "  " + "\r\n";
-                   textBox5.Text += " Ciclo número: " + ContadorCiclosFuncionaPara.ToString("0.") + "\r\n";
-                   textBox5.Text += " -------------------------------------------------------------------------------------------------------------------------------------------------" + "\r\n";
-                   textBox5.Text += " t funcionando este ciclo = " + TiempoParcialFuncionando.ToString("0.##") + "\r\n";
-                   textBox5.Text += " t parado/fallado este ciclo = " + TiempoParadoParcial.ToString("0.##") + "\r\n"; 
-                   textBox5.Text += " t total del ciclo = " + TiempoDelCiclo.ToString("0.##") + "\r\n";
-                   if (nombres["ley_paro"] == "Desglose de Fallos")
-                   {
-                       textBox5.Text += "Desglose de Tiempos de Parada/Fallo" + "\r\n";
-                       textBox5.Text += "........................................................." + "\r\n";
-                       textBox5.Text += " Tiempo de Reconocimiento          = " + t_paro_recon.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Diagnóstico             = " + t_paro_diag.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Preparación             = " + t_paro_prep.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Desmantelamiento        = " + t_paro_desm.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Recuperación/Reparación = " + t_paro_repa.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Ensamblaje              = " + t_paro_ensam.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Verificación            = " + t_paro_verif.ToString("0.##") + "\r\n";
-                       textBox5.Text += " Tiempo de Puesta en servicio      = " + t_paro_serv.ToString("0.##") + "\r\n";
-                   }
-                   textBox5.Text += " Tiempo Medio Entre Fallos (MTBF)= " + MTBF.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Tiempo total simulado = " + TiempoTranscurrido.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Tiempo total funcionando =  " + TiempoFuncionandoAcumulado.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Disponibilidad Maxima Alcanzada en el Ciclo = " + maximoY.ToString("0.######") + "\r\n";
-                   textBox5.Text += " Disponibilidad Operacional= " + Disponibilidad.ToString("0.######") + "\r\n";
-                   textBox5.Text += " Intensidad de Fallos = " + IntensidadFallos.ToString("0.##########") + "\r\n";
-                   textBox5.Text += " Tipo de Mto este ciclo = " + tipo_mto_este_ciclo + "\r\n";
-                   textBox5.Text += " Eficiencia del Mto este ciclo = " + EficienciaMto.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Tiempo Medio de Reparacion/Recuperación (MTTR) = " + MTTR.ToString("0.##") + "\r\n";                
-                   textBox5.Text += " Tiempo Acumulado en Mto. Correctivo = " + TiempoCorrectivoAcumulado.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Tiempo Acumulado en Mto. Preventivo = = " + TiempoPreventivoAcumulado.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Tiempo Acumulado en Mto. (Preventivo + Correctivo) = = " + TiempoParadoAcumulado.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Ratio t_Correctivo/t_Total_Mto = " + Ratio_Correctivo_vs_Total.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Ratio t_Preventivo/t_Total_Mto = " + Ratio_Preventivo_vs_Total.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Coste Mto este ciclo = " + CosteEsteMantenimiento.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Coste acumulado Recuperación (Mto+PérdidaProd) = " + CosteAcumuladoRecuperacion.ToString("0.##") + "\r\n";
-                   textBox5.Text += " Coste Medio de Recuperacion = " + CosteMedioRecuperacion.ToString("0.##") + "\r\n";
-                   if (nombres.ContainsKey("ley_coste"))
-                   {
-                       if (nombres["ley_coste"] == "Desglose de Costes")
-                       {
-                           textBox5.Text += "Desglose de Costes de Parada/Fallo" + "\r\n";
-                           textBox5.Text += "........................................................." + "\r\n";
-                           textBox5.Text += " Coste de Reconocimiento          = " + coste_recon.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Diagnóstico             = " + coste_diag.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Preparación             = " + coste_prep.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Desmantelamiento        = " + coste_desm.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Recuperación/Reparación = " + coste_repa.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Ensamblaje              = " + coste_ensam.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Verificación            = " + coste_verif.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Puesta en servicio      = " + coste_serv.ToString("0.##") + "\r\n";
-                       }
-                       textBox5.Text += " Coste Perdida de producción este ciclo = " + CosteEstaPerdidaDeProduccion.ToString("0.##") + "\r\n";
-                       if (nombres["ley_coste"] == "Desglose de Costes")
-                       {
-                           textBox5.Text += "Desglose de Costes Producción Perdida durante la Parada/Fallo" + "\r\n";
-                           textBox5.Text += "........................................................................" + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Reconocimiento          = " + coste_prod_recon.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Diagnóstico             = " + coste_prod_diag.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Preparación             = " + coste_prod_prep.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Desmantelamiento        = " + coste_prod_desm.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Recuperación/Reparación = " + coste_prod_repa.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Ensamblaje              = " + coste_prod_ensam.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Verificación            = " + coste_prod_verif.ToString("0.##") + "\r\n";
-                           textBox5.Text += " Coste de Producción Perdida en Puesta en servicio      = " + coste_prod_serv.ToString("0.##") + "\r\n";
-                       }
-                   }
-
-                   if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
-                   {
-                       if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo")
-                       {
-                           textBox5.Text += " Tiempo hasta el siguiente preventivo   = " + TiempoHastaSiguientePreventivo.ToString("0.##") + "\r\n";
-                       }
-                   }
-
-                   textBox5.Text += "  " + "\r\n";
-                   textBox5.Text += "  " + "\r\n";
-
-                   //Estimar el tamaño a rellenar de la barra de calculos y rellenarlo
-                   double PorcentajeDeSimulacionRealizadoEnEsteCiclo = (TiempoDelCiclo/Tiempo_A_Simular)*100;
-                   int IncrementoBarraDeCalculo = Convert.ToInt32(PorcentajeDeSimulacionRealizadoEnEsteCiclo);   
-                   progressBar1.Increment(IncrementoBarraDeCalculo);
-             
-              } while (TiempoFuncionandoAcumulado + TiempoParadoAcumulado <= Tiempo_A_Simular); //Fin del gran bucle de simulación
-
-
-
-              //Guardar Resultados de la Simulación
-              resultados["Disponibilidad"] = Disponibilidad;
-              resultados["MTBF"] = MTBF;
-              resultados["MTTR"] = MTTR;
-              resultados["Numero_de_Fallos"] = Numero_de_Correctivos;
-              resultados["IntensidadFallos"] = IntensidadFallos;
-              resultados["Numero de Ciclos funciona_para simulados = "] = ContadorCiclosFuncionaPara;
-              resultados["Numero_de_Correctivos"] = Numero_de_Correctivos;
-              resultados["Numero_de_Preventivos"] = Numero_de_Preventivos;
-              resultados["Tiempo_Empleado_en_Mto_Correctivo"] = TiempoCorrectivoAcumulado;
-              resultados["Tiempo_Empleado_en_Mto_Preventivo"] = TiempoPreventivoAcumulado;
-              resultados["Tiempo Total Acumulado en Mto.(Preventivo + Correctivo)"] = TiempoParadoAcumulado;
-              resultados["MTTR_SinLog"] = MTTR_SinLog;
-              resultados["ratio MTTR/MTTR_sinlog"] = RatioMTTR_vs_MTTR_SinLog;
-              resultados["Ratio t_Correctivo/t_Total_Mto"] = Ratio_Correctivo_vs_Total;
-              resultados["Ratio t_Preventivo/t_Total_Mto"] = Ratio_Preventivo_vs_Total;
-              resultados["CosteTotalMantenimiento"] = CosteTotalMantenimiento;
-              resultados["CosteTotalPerdidaProduccion"] = CosteTotalPerdidaProduccion;
-              resultados["Coste Medio de Recuperacion"] = CosteMedioRecuperacion;
-
-              textBox5.Text += "RESULTADOS FINALES DE LA SIMULACIÓN" + "\r\n";
-              textBox5.Text += "--------------------------------------------------------" + "\r\n";
-              foreach(string key in resultados.Keys)
-              {
-                  textBox5.Text += key + " = " + resultados[key].ToString("0.##########") + "\r\n";
-              }
-        
-              //Imprimir el programa de Mantenimiento Preventivo si procede
-              if (programa_mto_preventivo.Count > 0)
-              {
-                  textBox5.Text += "Programa de Mantenimiento Preventivo" + "\r\n";
-                  textBox5.Text += "...................................." + "\r\n";
-                  foreach (double key in programa_mto_preventivo.Keys)
-                  {
-                      textBox5.Text += "\r\n" + "Mto. Preventivo en el tiempo = " + key.ToString("0.##") + " con duración = " + programa_mto_preventivo[key].ToString("0.##");
-                  }
-              }
-            
-              //Habilitar el ComboBox de Ver Gráficas
-              HabilitarComboBoxVerGraficas();
-
-              //Terminar de rellenar la barra de progreso de los calculos
-              progressBar1.Value = progressBar1.Maximum;
-
-              //linea = Formato(t,4,12) +" ";
-              //linea = string.Format("{0,15}", t.ToString("F4")) + " ";                 
-              //linea += string.Format("{0,15}", t.ToString("F4")) + " ";                  
-              //linea += TiempoFuncionandoAcumulado.ToString("F4") + " ";
-              //linea += string.Format("{0,15}", TiempoFuncionandoAcumulado.ToString("F4")) + " ";
-              //linea += Convert.ToString(TiempoParadoAcumulado) + " ";
-              //linea += string.Format("{0,15}", TiempoParadoAcumulado.ToString("F4")) + " ";                    
-              //linea += Convert.ToString(TiempoFuncionandoAcumulado + TiempoParadoAcumulado)+ " ";
-              //linea += string.Format("{0,15}", (TiempoFuncionandoAcumulado + TiempoParadoAcumulado).ToString("F4")) + " ";           
-
-
-        }
-
-
-
-        /// <summary>
-        /// Este método genera un valor en función de lo que venga especificado en la string "tipo_ley"
-        /// El diccionario global "parametros" del tipo <string,double> contiene los valores asociados a cada nombre de variable de entrada
-        /// si "tipo_ley" contiene "Ninguna Ley" se genera un cero
-        /// si "tipo_ley" contiene "Fijo" se genera el valor almacenado en "parametros[param1]"
-        /// si "tipo_ley" contiene "Uniforme" se genera un aleatorio uniforme entre "parametros[minimo]" y "parametros[maximo]"
-        /// si "tipo_ley" contiene "Exponencial" se genera un aleatorio Exponencial con gamma=parametros[param1]y mu= 1 / parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]        
-        /// si "tipo_ley" contiene "Weibull2P" se genera un aleatorio Weibull de dos parametros con beta=parametros[param1] y eta= parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]
-        /// si "tipo_ley" contiene "Normal" se genera un aleatorio Normal con media=parametros[param1] y desv._tipica=parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]
-        /// si "tipo_ley" contiene "línea recta" se genera un valor no aleatorio obtenido de la ecuacion de la recta que pasa por los puntos A(parametros[X1],(parametros[Y1]) y B(parametros[X2],(parametros[Y2])
-        /// si "tipo_ley" contiene cualquier otra cadena de caracteres se genera u valor cero a la salida
-        /// </summary>
-        /// <param name="r"> contiene aleatorio</param>
-        /// <param name="variable"> contiene el tiempo total transcurrido en la simulacion actual, o valor asimilable al eje de X</param>
-        /// <param name="tipo_ley"> contiene el tipo de ley, por ejemplo: ley_paro_recon</param>
-        /// <param name="nombre_ley"> contiene el nombre de una distribucion o forma de generar, por ejemplo: Uniforme</param>
-        /// <param name="param1"> el primer parametro o el único</param>
-        /// <param name="param2"> contiene el segundo parametro</param>
-        /// <param name="minimo"> contiene el limite minimo admisible para el valor a generar</param>
-        /// <param name="maximo"> contiene el limite maximo admisible para el valor a generar</param>
-        /// <param name="X1"> la x del primer punto de la recta a usar</param>
-        /// <param name="Y1"> la y del primer punto de la recta a usar</param>
-        /// <param name="X2"> la x del segundo punto de la recta a usar</param>
-        /// <param name="Y2"> la y del segundo punto de la recta a usar</param>
-        /// <returns></returns>
-        private double GenerarValor(double variable, string tipo_ley, string param1, string param2, string maximo, string minimo, string X1, string Y1, string X2, string Y2, double tiempo, Random r )
-        {
-            double valor_generado = 0;
-            string auxi1;
-            if (nombres.ContainsKey(tipo_ley))
+                            break;
+                        case "Exponencial":
+                            maximoY = Math.Exp(-parametros["ley_recu_param2"] * (TiempoTranscurrido - parametros["ley_recu_param1"]));
+                            break;
+                        case "Weibull2P":
+                            maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_recu_param2"], parametros["ley_recu_param1"]));
+                            break;
+                        case "Línea recta":
+                            maximoY = parametros["Y1_recu"] + (parametros["Y2_recu"] - parametros["Y1_recu"]) * (TiempoTranscurrido - parametros["X1_recu"]) / (parametros["X2_recu"] - parametros["X1_recu"]);
+                            break;
+                    }
+                    if (maximoY > 1) maximoY = 1;
+                }
+
+                //Modificar el valor de la maxima recuperación si se usa el "% de eficiencia del Mantenimiento"
+                EficienciaMto = 100;
+                if (nombres.ContainsKey("ley_eficiencia_mto"))
+                {
+                    switch (nombres["ley_eficiencia_mto"])
+                    {
+                        //A)Determinación del parametro "EficienciaMto"
+                        case "Fijo":
+                            EficienciaMto = parametros["ley_eficiencia_mto_param1"];
+                            break;
+                        case "Uniforme":
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            break;
+                        case "Exponencial":
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_eficiencia_mto_param1"], 1 / parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            break;
+                        case "Weibull2P":
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            break;
+                        case "Línea recta":
+                            EficienciaMto = parametros["Y1_eficiencia_mto"] + (parametros["Y2_eficiencia_mto"] - parametros["Y1_eficiencia_mto"]) * (TiempoTranscurrido - parametros["X1_eficiencia_mto"]) / (parametros["X2_eficiencia_mto"] - parametros["X1_eficiencia_mto"]);
+                            break;
+                        case "Normal":
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            break;
+
+                            //B)Modificación de la variable que contiene el maximo de recuperación 
+                            if (EficienciaMto > 0 && EficienciaMto <= 100) maximoY = maximoY * EficienciaMto / 100;
+                    }
+                }
+
+
+                //Generar los costes de la recuperacion y de pérdida de producción
+                if (nombres.ContainsKey("ley_coste"))
+                {
+                    switch (nombres["ley_coste"])
+                    {
+                        case "Fijo por tiempo":
+                            CosteEsteMantenimiento = parametros["ley_coste_param1"] * t;
+
+                            //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
+                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+
+                            CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
+                            break;
+                        case "Fijo por intervención":
+                            CosteEsteMantenimiento = parametros["ley_coste_param1"];
+
+                            //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
+                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+
+                            CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
+                            break;
+                        case "Weibull2P":
+                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
+
+                            //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
+                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+
+                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            break;
+                        case "Normal":
+                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
+
+                            //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
+                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+
+                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            break;
+                        case "Lineal creciente":
+                            CosteEsteMantenimiento = (parametros["Y1_coste"] + (parametros["Y2_coste"] - parametros["Y1_coste"]) * (TiempoTranscurrido - parametros["X1_coste"]) / (parametros["X2_coste"] - parametros["X1_coste"])) * t;
+
+                            //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
+                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+
+                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            break;
+                        case "Desglose de Costes":
+                            //Reconocimiento 
+                            clave = "recon";
+                            coste_recon = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_recon, r);
+
+                            //Diagnostico 
+                            clave = "diag";
+                            coste_diag = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_diag, r);
+
+                            //Preparacion 
+                            clave = "prep";
+                            coste_prep = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_prep, r);
+
+                            //Desmantelamiento
+                            clave = "desm";
+                            coste_desm = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_desm, r);
+
+                            //Reparacion 
+                            clave = "repa";
+                            coste_repa = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_repa, r);
+
+                            //Ensamblaje 
+                            clave = "ensam";
+                            coste_ensam = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_ensam, r);
+
+                            //Verificacion 
+                            clave = "verif";
+                            coste_verif = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_verif, r);
+
+                            //Puesta en servicio 
+                            clave = "serv";
+                            coste_serv = GenerarValor(TiempoTranscurrido, "ley_coste_" + clave, "ley_coste_" + clave + "_param1", "ley_coste_" + clave + "_param2", "Maximo_coste_" + clave, "Minimo_coste_" + clave, "X1_coste_" + clave, "Y1_coste_" + clave, "X2_coste_" + clave, "Y2_coste_" + clave, t_paro_serv, r);
+
+                            //Corrección si se está realizando Mantenimiento Preventivo
+                            if (tipo_mto_este_ciclo == "Preventivo")
+                            {
+                                if (parametros.ContainsKey("coste_recon_Reduccion_si_Preventivo")) coste_recon = (100 - parametros["coste_recon_Reduccion_si_Preventivo"]) * coste_recon / 100;
+                                if (parametros.ContainsKey("coste_diag_Reduccion_si_Preventivo")) coste_diag = (100 - parametros["coste_diag_Reduccion_si_Preventivo"]) * coste_diag / 100;
+                                if (parametros.ContainsKey("coste_prep_Reduccion_si_Preventivo")) coste_prep = (100 - parametros["coste_prep_Reduccion_si_Preventivo"]) * coste_prep / 100;
+                                if (parametros.ContainsKey("coste_desm_Reduccion_si_Preventivo")) coste_desm = (100 - parametros["coste_desm_Reduccion_si_Preventivo"]) * coste_desm / 100;
+                                if (parametros.ContainsKey("coste_repa_Reduccion_si_Preventivo")) coste_repa = (100 - parametros["coste_repa_Reduccion_si_Preventivo"]) * coste_repa / 100;
+                                if (parametros.ContainsKey("coste_ensam_Reduccion_si_Preventivo")) coste_ensam = (100 - parametros["coste_ensam_Reduccion_si_Preventivo"]) * coste_ensam / 100;
+                                if (parametros.ContainsKey("coste_verif_Reduccion_si_Preventivo")) coste_verif = (100 - parametros["coste_verif_Reduccion_si_Preventivo"]) * coste_verif / 100;
+                                if (parametros.ContainsKey("coste_serv_Reduccion_si_Preventivo")) coste_serv = (100 - parametros["coste_serv_Reduccion_si_Preventivo"]) * coste_serv / 100;
+                            }
+
+                            //Se calcula ahora el coste de parada como la suma de los costes del desglose
+                            CosteEsteMantenimiento = coste_recon + coste_diag + coste_prep + coste_desm + coste_repa + coste_ensam + coste_verif + coste_serv;
+
+
+                            //Calculo de los costes desglosados de perdida de producción
+                            if (parametros.ContainsKey("coste_recon_Perdida_Prod_por_Ud_tiempo")) coste_prod_recon = parametros["coste_recon_Perdida_Prod_por_Ud_tiempo"] * t_paro_recon;
+                            if (parametros.ContainsKey("coste_diag_Perdida_Prod_por_Ud_tiempo")) coste_prod_diag = parametros["coste_diag_Perdida_Prod_por_Ud_tiempo"] * t_paro_diag;
+                            if (parametros.ContainsKey("coste_prep_Perdida_Prod_por_Ud_tiempo")) coste_prod_prep = parametros["coste_prep_Perdida_Prod_por_Ud_tiempo"] * t_paro_prep;
+                            if (parametros.ContainsKey("coste_desm_Perdida_Prod_por_Ud_tiempo")) coste_prod_desm = parametros["coste_desm_Perdida_Prod_por_Ud_tiempo"] * t_paro_desm;
+                            if (parametros.ContainsKey("coste_repa_Perdida_Prod_por_Ud_tiempo")) coste_prod_repa = parametros["coste_repa_Perdida_Prod_por_Ud_tiempo"] * t_paro_repa;
+                            if (parametros.ContainsKey("coste_ensam_Perdida_Prod_por_Ud_tiempo")) coste_prod_ensam = parametros["coste_ensam_Perdida_Prod_por_Ud_tiempo"] * t_paro_ensam;
+                            if (parametros.ContainsKey("coste_verif_Perdida_Prod_por_Ud_tiempo")) coste_prod_verif = parametros["coste_verif_Perdida_Prod_por_Ud_tiempo"] * t_paro_verif;
+                            if (parametros.ContainsKey("coste_serv_Perdida_Prod_por_Ud_tiempo")) coste_prod_serv = parametros["coste_serv_Perdida_Prod_por_Ud_tiempo"] * t_paro_serv;
+
+                            //Calculo del coste total de perdida de produccion como suma de los costes desglosados de perdida de producción
+                            CosteEstaPerdidaDeProduccion = coste_prod_recon + coste_prod_diag + coste_prod_prep + coste_prod_desm + coste_prod_repa + coste_prod_ensam + coste_prod_verif + coste_prod_serv;
+                            break;
+                    }
+
+                    //Acumular costes derivados del paro/fallo
+                    CosteTotalMantenimiento += CosteEsteMantenimiento;
+                    CosteTotalPerdidaProduccion += CosteEstaPerdidaDeProduccion;
+                }
+
+                //Almacenar programa de Mantenimiento preventivo si procede e Incrementar los contadores de Preventivo o correctivo según proceda
+                if (tipo_mto_este_ciclo == "Preventivo")
+                {
+                    programa_mto_preventivo[TiempoTranscurrido] = t;
+                    Numero_de_Preventivos += 1;
+                }
+
+                else if (tipo_mto_este_ciclo == "Correctivo") Numero_de_Correctivos += 1;
+
+                //CALCULO DE INDICADORES (SACAR A GRAFICAS TODOS LOS INDICADORES)
+                //---------------------------------------------------------------
+
+                //Calcular Disponibilidad
+                Disponibilidad = TiempoFuncionandoAcumulado / (TiempoFuncionandoAcumulado + TiempoParadoAcumulado);
+
+                //Indicador Tiempo Medio Entre Fallos (MTBF)
+                AcumuladorTiemposEntreFallos += TiempoParadoParcial + TiempoParcialFuncionando;
+                MTBF = AcumuladorTiemposEntreFallos / ContadorCiclosFuncionaPara;
+                Lista_MTBF.Add(new PointF((float)TiempoTranscurrido, (float)MTBF));
+
+                //Indicador "Numero de Fallos"
+                Lista_Numero_de_Fallos.Add(new PointF((float)TiempoTranscurrido, (float)Numero_de_Correctivos));
+
+                //Indicador "Numero de Preventivos"
+                Lista_Numero_de_Preventivos.Add(new PointF((float)TiempoTranscurrido, (float)Numero_de_Preventivos));
+
+                //Indicador Tiempo Medio de Reparacion (MTTR)
+                MTTR = TiempoParadoAcumulado / ContadorCiclosFuncionaPara;
+                Lista_MTTR.Add(new PointF((float)TiempoTranscurrido, (float)MTTR));
+
+                //Indicador Tiempo Medio de Reparacion sin tiempo de Logística (MTTR)
+                MTTR_SinLog = (TiempoParadoAcumulado - TiempoDeLogistica) / ContadorCiclosFuncionaPara;
+                Lista_MTTR_SinLog.Add(new PointF((float)TiempoTranscurrido, (float)MTTR_SinLog));
+
+                //Indicador  RatioMTTR_vs_MTTR_SinLog
+                RatioMTTR_vs_MTTR_SinLog = MTTR / MTTR_SinLog;
+                Lista_RatioMTTR_vs_MTTR_SinLog.Add(new PointF((float)TiempoTranscurrido, (float)RatioMTTR_vs_MTTR_SinLog));
+
+                //Indicador Intensidad de Fallos (IntensidadFallos)
+                IntensidadFallos = ContadorCiclosFuncionaPara / TiempoTranscurrido;
+                Lista_IntensidadFallos.Add(new PointF((float)TiempoTranscurrido, (float)IntensidadFallos));
+
+                //Indicador Coste Acumulado de Recuperacion (Mto+Perdida de produccion)
+                CosteAcumuladoRecuperacion = CosteTotalMantenimiento + CosteTotalPerdidaProduccion;
+                Lista_CosteAcumuladoRecuperacion.Add(new PointF((float)TiempoTranscurrido, (float)CosteAcumuladoRecuperacion));
+
+                //Indicador Coste Medio de Recuperacion (CosteMedioRecuperacion)
+                CosteMedioRecuperacion = (CosteEsteMantenimiento + CosteEstaPerdidaDeProduccion) / ContadorCiclosFuncionaPara;
+                Lista_CosteMedioRecuperacion.Add(new PointF((float)TiempoTranscurrido, (float)CosteMedioRecuperacion));
+
+                //Indicador Ratio Correctivo vs tiempo Total de reparación/recuperación
+                Ratio_Correctivo_vs_Total = TiempoCorrectivoAcumulado / TiempoParadoAcumulado;
+                Lista_RatioCorrectivo_vs_total.Add(new PointF((float)TiempoTranscurrido, (float)Ratio_Correctivo_vs_Total));
+
+                //Indicador ratio Preventivo vs tiempo Total de reparación/recuperación
+                Ratio_Preventivo_vs_Total = TiempoPreventivoAcumulado / TiempoParadoAcumulado;
+                Lista_RatioPreventivo_vs_total.Add(new PointF((float)TiempoTranscurrido, (float)Ratio_Preventivo_vs_Total));
+
+                //FIN DEL CALCULO DE INDICADORES
+                //-------------------------------
+
+
+                //Presentar los resultados numéricos en el TextBox de pantalla
+                textBox5.Enabled = true;
+                textBox5.Text += "  " + "\r\n";
+                textBox5.Text += " Ciclo número: " + ContadorCiclosFuncionaPara.ToString("0.") + "\r\n";
+                textBox5.Text += " -------------------------------------------------------------------------------------------------------------------------------------------------" + "\r\n";
+                textBox5.Text += " t funcionando este ciclo = " + TiempoParcialFuncionando.ToString("0.##") + "\r\n";
+                textBox5.Text += " t parado/fallado este ciclo = " + TiempoParadoParcial.ToString("0.##") + "\r\n";
+                textBox5.Text += " t total del ciclo = " + TiempoDelCiclo.ToString("0.##") + "\r\n";
+                if (nombres["ley_paro"] == "Desglose de Fallos")
+                {
+                    textBox5.Text += "Desglose de Tiempos de Parada/Fallo" + "\r\n";
+                    textBox5.Text += "........................................................." + "\r\n";
+                    textBox5.Text += " Tiempo de Reconocimiento          = " + t_paro_recon.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Diagnóstico             = " + t_paro_diag.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Preparación             = " + t_paro_prep.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Desmantelamiento        = " + t_paro_desm.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Recuperación/Reparación = " + t_paro_repa.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Ensamblaje              = " + t_paro_ensam.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Verificación            = " + t_paro_verif.ToString("0.##") + "\r\n";
+                    textBox5.Text += " Tiempo de Puesta en servicio      = " + t_paro_serv.ToString("0.##") + "\r\n";
+                }
+                textBox5.Text += " Tiempo Medio Entre Fallos (MTBF)= " + MTBF.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo total simulado = " + TiempoTranscurrido.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo total funcionando =  " + TiempoFuncionandoAcumulado.ToString("0.##") + "\r\n";
+                textBox5.Text += " Disponibilidad Maxima Alcanzada en el Ciclo = " + maximoY.ToString("0.######") + "\r\n";
+                textBox5.Text += " Disponibilidad Operacional= " + Disponibilidad.ToString("0.######") + "\r\n";
+                textBox5.Text += " Intensidad de Fallos = " + IntensidadFallos.ToString("0.##########") + "\r\n";
+                textBox5.Text += " Tipo de Mto este ciclo = " + tipo_mto_este_ciclo + "\r\n";
+                textBox5.Text += " Eficiencia del Mto este ciclo = " + EficienciaMto.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo Medio de Reparacion/Recuperación (MTTR) = " + MTTR.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo Acumulado en Mto. Correctivo = " + TiempoCorrectivoAcumulado.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo Acumulado en Mto. Preventivo = = " + TiempoPreventivoAcumulado.ToString("0.##") + "\r\n";
+                textBox5.Text += " Tiempo Acumulado en Mto. (Preventivo + Correctivo) = = " + TiempoParadoAcumulado.ToString("0.##") + "\r\n";
+                textBox5.Text += " Ratio t_Correctivo/t_Total_Mto = " + Ratio_Correctivo_vs_Total.ToString("0.##") + "\r\n";
+                textBox5.Text += " Ratio t_Preventivo/t_Total_Mto = " + Ratio_Preventivo_vs_Total.ToString("0.##") + "\r\n";
+                textBox5.Text += " Coste Mto este ciclo = " + CosteEsteMantenimiento.ToString("0.##") + "\r\n";
+                textBox5.Text += " Coste acumulado Recuperación (Mto+PérdidaProd) = " + CosteAcumuladoRecuperacion.ToString("0.##") + "\r\n";
+                textBox5.Text += " Coste Medio de Recuperacion = " + CosteMedioRecuperacion.ToString("0.##") + "\r\n";
+                if (nombres.ContainsKey("ley_coste"))
+                {
+                    if (nombres["ley_coste"] == "Desglose de Costes")
+                    {
+                        textBox5.Text += "Desglose de Costes de Parada/Fallo" + "\r\n";
+                        textBox5.Text += "........................................................." + "\r\n";
+                        textBox5.Text += " Coste de Reconocimiento          = " + coste_recon.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Diagnóstico             = " + coste_diag.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Preparación             = " + coste_prep.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Desmantelamiento        = " + coste_desm.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Recuperación/Reparación = " + coste_repa.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Ensamblaje              = " + coste_ensam.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Verificación            = " + coste_verif.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Puesta en servicio      = " + coste_serv.ToString("0.##") + "\r\n";
+                    }
+                    textBox5.Text += " Coste Perdida de producción este ciclo = " + CosteEstaPerdidaDeProduccion.ToString("0.##") + "\r\n";
+                    if (nombres["ley_coste"] == "Desglose de Costes")
+                    {
+                        textBox5.Text += "Desglose de Costes Producción Perdida durante la Parada/Fallo" + "\r\n";
+                        textBox5.Text += "........................................................................" + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Reconocimiento          = " + coste_prod_recon.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Diagnóstico             = " + coste_prod_diag.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Preparación             = " + coste_prod_prep.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Desmantelamiento        = " + coste_prod_desm.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Recuperación/Reparación = " + coste_prod_repa.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Ensamblaje              = " + coste_prod_ensam.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Verificación            = " + coste_prod_verif.ToString("0.##") + "\r\n";
+                        textBox5.Text += " Coste de Producción Perdida en Puesta en servicio      = " + coste_prod_serv.ToString("0.##") + "\r\n";
+                    }
+                }
+
+                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                {
+                    if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo")
+                    {
+                        textBox5.Text += " Tiempo hasta el siguiente preventivo   = " + TiempoHastaSiguientePreventivo.ToString("0.##") + "\r\n";
+                    }
+                }
+
+                textBox5.Text += "  " + "\r\n";
+                textBox5.Text += "  " + "\r\n";
+
+                //Estimar el tamaño a rellenar de la barra de calculos y rellenarlo
+                double PorcentajeDeSimulacionRealizadoEnEsteCiclo = (TiempoDelCiclo / Tiempo_A_Simular) * 100;
+                int IncrementoBarraDeCalculo = Convert.ToInt32(PorcentajeDeSimulacionRealizadoEnEsteCiclo);
+                progressBar1.Increment(IncrementoBarraDeCalculo);
+
+            } while (TiempoFuncionandoAcumulado + TiempoParadoAcumulado <= Tiempo_A_Simular); //Fin del gran bucle de simulación
+
+
+
+            //Guardar Resultados de la Simulación
+            resultados["Disponibilidad"] = Disponibilidad;
+            resultados["MTBF"] = MTBF;
+            resultados["MTTR"] = MTTR;
+            resultados["Numero_de_Fallos"] = Numero_de_Correctivos;
+            resultados["IntensidadFallos"] = IntensidadFallos;
+            resultados["Numero de Ciclos funciona_para simulados = "] = ContadorCiclosFuncionaPara;
+            resultados["Numero_de_Correctivos"] = Numero_de_Correctivos;
+            resultados["Numero_de_Preventivos"] = Numero_de_Preventivos;
+            resultados["Tiempo_Empleado_en_Mto_Correctivo"] = TiempoCorrectivoAcumulado;
+            resultados["Tiempo_Empleado_en_Mto_Preventivo"] = TiempoPreventivoAcumulado;
+            resultados["Tiempo Total Acumulado en Mto.(Preventivo + Correctivo)"] = TiempoParadoAcumulado;
+            resultados["MTTR_SinLog"] = MTTR_SinLog;
+            resultados["ratio MTTR/MTTR_sinlog"] = RatioMTTR_vs_MTTR_SinLog;
+            resultados["Ratio t_Correctivo/t_Total_Mto"] = Ratio_Correctivo_vs_Total;
+            resultados["Ratio t_Preventivo/t_Total_Mto"] = Ratio_Preventivo_vs_Total;
+            resultados["CosteTotalMantenimiento"] = CosteTotalMantenimiento;
+            resultados["CosteTotalPerdidaProduccion"] = CosteTotalPerdidaProduccion;
+            resultados["Coste Medio de Recuperacion"] = CosteMedioRecuperacion;
+
+            textBox5.Text += "RESULTADOS FINALES DE LA SIMULACIÓN" + "\r\n";
+            textBox5.Text += "--------------------------------------------------------" + "\r\n";
+            foreach (string key in resultados.Keys)
             {
-                auxi1 = nombres[tipo_ley];
-                if (auxi1 == "Ninguna Ley") valor_generado = 0;
-                if (auxi1 == "Fijo por tiempo") valor_generado = parametros[param1]*tiempo;
-                if (auxi1 == "Fijo por intervención") valor_generado = parametros[param1];
-                if (auxi1 == "Fijo") valor_generado = parametros[param1];
-                if (auxi1 == "Uniforme") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Exponencial") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros[param1], 1 / parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Weibull2P") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Normal") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Línea recta") valor_generado = parametros[Y1] + (parametros[Y2] - parametros[Y1]) * (variable - parametros[X1]) / (parametros[X2] - parametros[X1]) * tiempo;
+                textBox5.Text += key + " = " + resultados[key].ToString("0.##########") + "\r\n";
             }
 
-            return valor_generado;
+            //Imprimir el programa de Mantenimiento Preventivo si procede
+            if (programa_mto_preventivo.Count > 0)
+            {
+                textBox5.Text += "Programa de Mantenimiento Preventivo" + "\r\n";
+                textBox5.Text += "...................................." + "\r\n";
+                foreach (double key in programa_mto_preventivo.Keys)
+                {
+                    textBox5.Text += "\r\n" + "Mto. Preventivo en el tiempo = " + key.ToString("0.##") + " con duración = " + programa_mto_preventivo[key].ToString("0.##");
+                }
+            }
+
+            // Habilitar el ComboBox de Ver Gráficas
+            HabilitarComboBoxVerGraficas();
+
+            // Terminar de rellenar la barra de progreso de los calculos
+            progressBar1.Value = progressBar1.Maximum;
+            progressBar1.Visible = false;
+            comboBox7.Visible = true;
+            // Se vuelve a habilitar los botones
+            button4.Enabled = true;
+            button_Reset.Enabled = true;
+
+            //linea = Formato(t,4,12) +" ";
+            //linea = string.Format("{0,15}", t.ToString("F4")) + " ";                 
+            //linea += string.Format("{0,15}", t.ToString("F4")) + " ";                  
+            //linea += TiempoFuncionandoAcumulado.ToString("F4") + " ";
+            //linea += string.Format("{0,15}", TiempoFuncionandoAcumulado.ToString("F4")) + " ";
+            //linea += Convert.ToString(TiempoParadoAcumulado) + " ";
+            //linea += string.Format("{0,15}", TiempoParadoAcumulado.ToString("F4")) + " ";                    
+            //linea += Convert.ToString(TiempoFuncionandoAcumulado + TiempoParadoAcumulado)+ " ";
+            //linea += string.Format("{0,15}", (TiempoFuncionandoAcumulado + TiempoParadoAcumulado).ToString("F4")) + " ";           
+
+
         }
 
-
-        //CARGAR EJEMPLO
+        // ?? CARGAR EJEMPLO
         private void button_Ejemplo_Click(object sender, EventArgs e)
-        {         
+        {
             nombres["ley_func"] = "Exponencial";
             nombres["ley_paro"] = "Normal";
             nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
@@ -986,562 +940,101 @@ namespace SIM
             foreach (string key in parametros.Keys)
             {
                 textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
-            }           
+            }
         }
 
-        //RESET DE DATOS
-        private void reset() {
-            
-            //Funcionamiento
-            comboBox1.Text = "";
-            comboBox1.Enabled = true;
-
-            //Parada-fallo
-            comboBox2.Text = "";
-            comboBox2.Enabled = true;
-
-            //Recuperacion
-            comboBox3.Text = "";
-            comboBox3.Enabled = true;
-
-            //Costes
-            comboBox4.Text = "";
-            comboBox4.Enabled = true;
-
-            //Preventivo
-            comboBox5.Text = "";
-            comboBox5.Enabled = true;
-
-            //Eficiencia
-            comboBox6.Text = "";
-            comboBox6.Enabled = true;
-
-            //TextBox de resultados
-            textBox5.Text = "";
-            textBox5.Enabled = false;
-
-            //TextBox de valores seleccionados
+        // Botón resetear log
+        private void button3_Click(object sender, EventArgs e)
+        {
             textBox11.Text = "";
-            textBox11.Enabled = false;
-
-            //Desglose Fallos
-            comboBox_T_Rec.Text = "";
-            comboBox_T_Rec.Enabled = false;
-
-            //Tiempo a simular y repeticiones de la simulación
-            textBox10.Text = "";
-            textBox10.Enabled = true;
-            button4.Enabled = true;
-            progressBar1.Value = 0;
-
-            //cargar_ejemplo = false;
-            //Desabilitamos las opciones de desglose de Fallo y Coste
-            DeshabilitarComboBoxDesgloseTiempoFallo();
-            DeshabilitarComboBoxDesgloseCoste();
-
-            //Limpiar los diccionarios
-            parametros.Clear();
-            nombres.Clear();
         }
 
-        private void button_Reset_Click(object sender, EventArgs e)
+        //??
+        private void button2_Click(object sender, EventArgs e)
         {
-            reset();
-        }
+            nombres["ley_func"] = "Exponencial";
+            nombres["ley_paro"] = "Desglose de Fallos";
+            nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
+            nombres["ley_coste"] = "Ninguna Ley";
+            nombres["preventivo"] = "No activado";
+            nombres["ley_eficiencia_mto"] = "Ninguna Ley";
+            nombres["ley_paro_recon"] = "Fijo";
+            nombres["ley_paro_diag"] = "Uniforme";
+            nombres["ley_paro_prep"] = "Exponencial";
+            nombres["ley_paro_desm"] = "Weibull2P";
+            nombres["ley_paro_repa"] = "Normal";
+            nombres["ley_paro_ensam"] = "Línea recta";
+            nombres["ley_paro_verif"] = "Fijo";
+            nombres["ley_paro_serv"] = "Uniforme";
 
-        /*** Eventos para el formateo de datos ****/
-        private void NumerosConComa(object sender, KeyPressEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            Debug.Assert(tb != null, "sender no es de tipo textBox");
-            if (tb != null)
-            {
-                FormateoDatos.numOcoma(e, tb);
-            }
-        }
-        private void NumerosSinComa(object sender, KeyPressEventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            Debug.Assert(tb != null, "sender no es de tipo textBox");
-            if (tb != null)
-            {
-                FormateoDatos.soloNum(e, tb);
-            }
-        }
-
-        //EVENTO PARA VER LOS PARAMETROS ESCOGIDOS 
-        private void button_Parametros_Click(object sender, EventArgs e)
-        {
+            parametros["ley_func_param1"] = 0;
+            parametros["ley_func_param2"] = 0.001;
+            parametros["Minimo_func"] = 100;
+            parametros["Maximo_func"] = 10000;
+            parametros["Maximo_paro_diag"] = 40;
+            parametros["Minimo_paro_diag"] = 20;
+            parametros["paro_recon_Reduccion_si_Preventivo"] = 50;
+            parametros["ley_paro_recon_param1"] = 30;
+            parametros["paro_Reduccion_si_Preventivo"] = 20;
+            parametros["paro_diag_Reduccion_si_Preventivo"] = 50;
+            parametros["ley_paro_prep_param1"] = 10;
+            parametros["ley_paro_prep_param2"] = 0.01;
+            parametros["Minimo_paro_prep"] = 10;
+            parametros["Maximo_paro_prep"] = 1000;
+            parametros["paro_prep_Reduccion_si_Preventivo"] = 50;
+            parametros["ley_paro_desm_param1"] = 1.5;
+            parametros["ley_paro_desm_param2"] = 400;
+            parametros["Minimo_paro_desm"] = 50;
+            parametros["Maximo_paro_desm"] = 700;
+            parametros["paro_desm_Reduccion_si_Preventivo"] = 50;
+            parametros["ley_paro_repa_param1"] = 30;
+            parametros["ley_paro_repa_param2"] = 3;
+            parametros["Minimo_paro_repa"] = 15;
+            parametros["Maximo_paro_repa"] = 45;
+            parametros["paro_repa_Reduccion_si_Preventivo"] = 50;
+            parametros["X1_paro_ensam"] = 0;
+            parametros["Y1_paro_ensam"] = 20;
+            parametros["X2_paro_ensam"] = 60000;
+            parametros["Y2_paro_ensam"] = 50;
+            parametros["paro_ensam_Reduccion_si_Preventivo"] = 50;
+            parametros["ley_paro_verif_param1"] = 30;
+            parametros["paro_verif_Reduccion_si_Preventivo"] = 50;
+            parametros["Minimo_paro_serv"] = 20;
+            parametros["Maximo_paro_serv"] = 40;
+            parametros["paro_serv_Reduccion_si_Preventivo"] = 50;
 
             textBox11.Enabled = true;
+
+            textBox10.Text = "20000";
+
             foreach (string key in nombres.Keys)
             {
-                textBox11.Text += "\r\n" + "nombres[¡"+ key + "¡] = " + "¡" + nombres[key].ToString()+ "¡" + ";";
-            } 
+                textBox11.Text += "\r\n" + key + " = " + nombres[key].ToString();
+            }
 
             textBox11.Text += "\r\n";
+
             foreach (string key in parametros.Keys)
             {
-                textBox11.Text += "\r\n" + "parametros[¡" + key + "¡] = " + parametros[key].ToString("0.#######") + ";";
-            }
-
-        }
-
-        private void DeshabilitarComboBoxVerGraficas()
-        {
-            comboBox7.Enabled = false;
-        }
-
-        private void HabilitarComboBoxVerGraficas()
-        {
-            comboBox7.Enabled = true;
-        }
-
-
-
-        private void DeshabilitarComboBoxDesgloseTiempoFallo()
-        {
-            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = false;
-            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = false;
-            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = false;
-            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = false;
-            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = false;
-            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = false;
-            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = false;
-            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = false;
-        }
-
-        private void HacerInvisibleDesgloseTiempoFallo()
-        {
-            label3.Visible = false;
-            label4.Visible = false;
-            label5.Visible = false;
-            label7.Visible = false;
-            label8.Visible = false;
-            label9.Visible = false;
-            label10.Visible = false;
-            label11.Visible = false;
-            label14.Visible = false;
-            comboBox_T_Rec.Visible = false;
-            comboBox_T_Diag.Visible = false;
-            comboBox_T_Prep.Visible = false;
-            comboBox_T_Desm.Visible = false;
-            comboBox_T_Rep.Visible = false;
-            comboBox_T_Ensam.Visible = false;
-            comboBox_T_Verif.Visible = false;
-            comboBox_T_Serv.Visible = false;
-        }
-
-        private void HacerVisibleDesgloseTiempoFallo()
-        {
-            label3.Visible = true;
-            label4.Visible = true;
-            label5.Visible = true;
-            label7.Visible = true;
-            label8.Visible = true;
-            label9.Visible = true;
-            label10.Visible = true;
-            label11.Visible = true;
-            label14.Visible = true;
-            comboBox_T_Rec.Visible = true;
-            comboBox_T_Diag.Visible = true;
-            comboBox_T_Prep.Visible = true;
-            comboBox_T_Desm.Visible = true;
-            comboBox_T_Rep.Visible = true;
-            comboBox_T_Ensam.Visible = true;
-            comboBox_T_Verif.Visible = true;
-            comboBox_T_Serv.Visible = true;
-        }
-
-        private void DeshabilitarComboBoxDesgloseCoste()
-        {
-            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = false;
-            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = false;
-            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = false;
-            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = false;
-            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = false;
-            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = false;
-            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = false;
-            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = false;
-        }
-
-        private void HacerInvisibleDesgloseCoste()
-        {
-            label27.Visible = false;
-            label26.Visible = false;
-            label25.Visible = false;
-            label24.Visible = false;
-            label23.Visible = false;
-            label22.Visible = false;
-            label21.Visible = false;
-            label19.Visible = false;
-            label18.Visible = false;
-            comboBox_C_Rec.Visible = false;
-            comboBox_C_Diag.Visible = false;
-            comboBox_C_Prep.Visible = false;
-            comboBox_C_Desm.Visible = false;
-            comboBox_C_Rep.Visible = false;
-            comboBox_C_Ensam.Visible = false;
-            comboBox_C_Verif.Visible = false;
-            comboBox_C_Serv.Visible = false;
-        }
-
-        private void HacerVisibleDesgloseCoste()
-        {
-            label27.Visible = true;
-            label26.Visible = true;
-            label25.Visible = true;
-            label24.Visible = true;
-            label23.Visible = true;
-            label22.Visible = true;
-            label21.Visible = true;
-            label19.Visible = true;
-            label18.Visible = true;
-            comboBox_C_Rec.Visible = true;
-            comboBox_C_Diag.Visible = true;
-            comboBox_C_Prep.Visible = true;
-            comboBox_C_Desm.Visible = true;
-            comboBox_C_Rep.Visible = true;
-            comboBox_C_Ensam.Visible = true;
-            comboBox_C_Verif.Visible = true;
-            comboBox_C_Serv.Visible = true;
-        }
-
-        private void HabilitarComboBoxDesgloseTiempoFallo()
-        {
-            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = true;
-            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = true;
-            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = true;
-            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = true;
-            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = true;
-            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = true;
-            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = true;
-            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = true;
-        }
-       
-        private void HabilitarComboBoxDesgloseCoste()
-        {
-            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = true;
-            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = true;
-            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = true;
-            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = true;
-            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = true;
-            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = true;
-            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = true;
-            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = true;
-        }
-
-
-
-
-        private void SolicitarDatos(FormDatos1 frm, string Ambito_Op, string Ley, string titulo_del_Formulario, string Rotulo_del_Parametro1,
-                                    string Rotulo_del_Parametro2, string Rotulo_del_Parametro3,
-                                    string Rotulo_del_Parametro4, string Rotulo_del_Parametro5,
-                                    string Nombre_Parametro1, string Nombre_Parametro2,
-                                    string Nombre_Parametro3, string Nombre_Parametro4, string Nombre_Parametro5, string Rotulo_del_Parametro6, string Nombre_Parametro6)
-        {
-            //Dar contenidos a las variables del formulario de captura de indicaciones de usuario
-            frm.TituloDelFormulario = titulo_del_Formulario;
-            frm.Text = Ambito_Op;
-            frm.Rotulo_Parametro1 = Rotulo_del_Parametro1;
-            frm.Rotulo_Parametro2 = Rotulo_del_Parametro2;
-            frm.Rotulo_Parametro3 = Rotulo_del_Parametro3;
-            frm.Rotulo_Parametro4 = Rotulo_del_Parametro4;
-            frm.Rotulo_Parametro5 = Rotulo_del_Parametro5;
-            frm.Rotulo_Parametro6 = Rotulo_del_Parametro6;
-
-            //Llamar al formulario de captura de indicaciones de usuario
-            frm.ShowDialog();
-
-            //dar valores a las variables de este formulario en base a las indicaciones de usuario
-            if (frm.DialogResult == DialogResult.OK)
-            {
-                limpiar_diccionarios();
-                
-                if (Rotulo_del_Parametro1 != "") parametros[Nombre_Parametro1] = Convert.ToDouble(frm.parametro1);
-                if (Rotulo_del_Parametro2 != "") parametros[Nombre_Parametro2] = Convert.ToDouble(frm.parametro2);
-                if (Rotulo_del_Parametro3 != "") parametros[Nombre_Parametro3] = Convert.ToDouble(frm.parametro3);
-                if (Rotulo_del_Parametro4 != "") parametros[Nombre_Parametro4] = Convert.ToDouble(frm.parametro4);
-                if (Rotulo_del_Parametro5 != "") parametros[Nombre_Parametro5] = Convert.ToDouble(frm.parametro5);
-                if (Rotulo_del_Parametro6 != "") parametros[Nombre_Parametro6] = Convert.ToDouble(frm.parametro6);
-
-
-                //Alimentar el Textbox de las opciones elegidas por el usuario
-                if ((Rotulo_del_Parametro1 != "") || (Rotulo_del_Parametro2 != "") || (Rotulo_del_Parametro3 != "") || (Rotulo_del_Parametro4 != "") || (Rotulo_del_Parametro5 != "") || (Rotulo_del_Parametro6 != ""))
-                {
-                    textBox11.Enabled = true;
-                    textBox11.Text += "\r\n" + "\b " + Ambito_Op + titulo_del_Formulario + "\r\n";
-                    if (Rotulo_del_Parametro1 != "") textBox11.Text += "   " + Rotulo_del_Parametro1 + "= " + Convert.ToString(parametros[Nombre_Parametro1]) + "\r\n";
-                    if (Rotulo_del_Parametro2 != "") textBox11.Text += "   " + Rotulo_del_Parametro2 + "= " + Convert.ToString(parametros[Nombre_Parametro2]) + "\r\n";
-                    if (Rotulo_del_Parametro3 != "") textBox11.Text += "   " + Rotulo_del_Parametro3 + "= " + Convert.ToString(parametros[Nombre_Parametro3]) + "\r\n";
-                    if (Rotulo_del_Parametro4 != "") textBox11.Text += "   " + Rotulo_del_Parametro4 + "= " + Convert.ToString(parametros[Nombre_Parametro4]) + "\r\n";
-                    if (Rotulo_del_Parametro5 != "") textBox11.Text += "   " + Rotulo_del_Parametro5 + "= " + Convert.ToString(parametros[Nombre_Parametro5]) + "\r\n";
-                    if (Rotulo_del_Parametro6 != "") textBox11.Text += "   " + Rotulo_del_Parametro6 + "= " + Convert.ToString(parametros[Nombre_Parametro6]) + "\r\n";
-                    textBox11.Text += "             " + "\r\n";
-                }
-
+                textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
             }
         }
 
-        private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box)
-        {
-
-                terminos_a_eliminar_en_diccionarios[sufijo2 + "_Mantenimiento_Ud_Tiempo"] = "parametros";
-                terminos_a_eliminar_en_diccionarios[sufijo2 + "_Perdida_Prod_por_Ud_tiempo"] = "parametros";
-                terminos_a_eliminar_en_diccionarios[sufijo2 + "_MantenimientoCadaIntervencion"]="parametros";
-                terminos_a_eliminar_en_diccionarios["X1_" + sufijo2]="parametros";
-                terminos_a_eliminar_en_diccionarios["Y1_" + sufijo2]="parametros";
-                terminos_a_eliminar_en_diccionarios["X2_" + sufijo2]="parametros";
-                terminos_a_eliminar_en_diccionarios["Y2_" + sufijo2]="parametros";
-                terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param1"]="parametros";
-                terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param2"]="parametros";
-                terminos_a_eliminar_en_diccionarios["Minimo_" + sufijo2]="parametros";
-                terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";               
-                terminos_a_eliminar_en_diccionarios["ley_" + sufijo2]="parametros";
-                //terminos_a_eliminar_en_diccionarios["ley_coste_" + sufijo2 + "_param1"]="parametros";
-                //terminos_a_eliminar_en_diccionarios["ley_coste_" + sufijo2 + "_param2"]="parametros";
-                //terminos_a_eliminar_en_diccionarios["Minimo_" + sufijo2]="parametros";
-                //terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";
-
-
-                
-            
-            FormDatos1 frm = new FormDatos1();
-
-            if (nombre_de_campo_y_combo_Box == "Ninguna Ley")
-            {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Siempre a Nuevo (GAN)")
-            {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Según tiempo (BAO)")
-            {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
-            }
-                        
-            if (nombre_de_campo_y_combo_Box == "Desglose de Costes")
-            {
-                limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                
-                //Se hacen visibles y habilitan las opciones de desglose de Coste
-                HacerVisibleDesgloseCoste();
-                HabilitarComboBoxDesgloseCoste();
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Desglose de Fallos")
-            {
-                limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-
-                //Se habilitan las opciones de desglose de Fallo
-                HacerVisibleDesgloseTiempoFallo();
-                HabilitarComboBoxDesgloseTiempoFallo();
-            }
-                       
-            //el siguiente if es solo aplicable a captura de datos de coste
-            if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
-                                    "", "","ley_" + sufijo2 +"_param1", "ley_" + sufijo2 + "_param2",
-                                    "", "", "","% reducción si Preventivo",sufijo2 +"_Reduccion_si_Preventivo");
-            }
-
-            //el siguiente if es solo aplicable a captura de datos de coste
-            if (nombre_de_campo_y_combo_Box == "Fijo por intervención")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
-                    "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
-            }           
-            
-            if (nombre_de_campo_y_combo_Box == "Fijo")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1="";
-                string auxi2="";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-                
-                string auxi3="";
-                string auxi4="";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-                string auxi5 = "Tiempo de ";
-                if (Ambito == "EFICIENCIA DEL MANTENIMIENTO: ") auxi5 = " "; ;
-
-              
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Fija de " + palabra_clave, auxi5 + palabra_clave, "", "",
-                                    "", auxi1, "ley_" + sufijo2 + "_param1", "",
-                                    "", "", sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Uniforme")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
 
 
 
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "", "",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
+        /** ComboBoxes **/
 
-            if (nombre_de_campo_y_combo_Box == "Línea recta")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
-                                    "Final t " + palabra_clave, auxi1, "X1_" + sufijo2, "Y1_" + sufijo2,
-                                     "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Exponencial")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Weibull2P")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Normal")
-            {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                string auxi1="";
-                string auxi2="";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: "  || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);               
-            }
-        }
-
+        // Comboboxes del formulario principal
 
         //Entradas de usuario sobre la Ley de Funcionamiento
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1StopEvents)
-                return;
+            comboBox1Actions();
+        }
+
+        private void comboBox1Actions()
+        {
             string Ambito = "FUNCIONAMIENTO: ";
             string palabra_clave = "Funcionamiento";
             string sufijo2 = "func";
@@ -1553,9 +1046,11 @@ namespace SIM
         //Entradas de usuario sobre la Ley de Parada
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2StopEvents)
-                return;
-            HacerInvisibleDesgloseTiempoFallo();
+            comboBox2Actions();
+        }
+
+        private void comboBox2Actions()
+        {           
             DeshabilitarComboBoxDesgloseTiempoFallo();
 
             string Ambito = "FALLO/PARADA: ";
@@ -1564,13 +1059,17 @@ namespace SIM
             string nombre_de_ley = "ley_paro";
             string nombre_de_campo_y_combo_Box = comboBox2.Text;
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+
         }
 
         //Captura de indicaciones de usuario sobre ley de reparación/recuperacion
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox3StopEvents)
-                return;
+            comboBox3Actions();
+        }
+
+        private void comboBox3Actions()
+        {
             string Ambito = "REPARACIÓN/RECUPERACIÓN: ";
             string palabra_clave = "Recuperación";
             string sufijo2 = "recu";
@@ -1582,10 +1081,11 @@ namespace SIM
         //Captura de indicaciones de usuario sobre ley de COSTES
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox4StopEvents)
-                return;
-            //HacerInvisibleDesgloseCoste()
-            HacerInvisibleDesgloseCoste();
+            comboBox4Actions();
+        }
+
+        private void comboBox4Actions() {
+         
             DeshabilitarComboBoxDesgloseCoste();
 
             string Ambito = "COSTE SIN DESGLOSE: ";
@@ -1595,7 +1095,36 @@ namespace SIM
             string nombre_de_campo_y_combo_Box = comboBox4.Text;
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
         }
-       
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox5Actions();
+        }
+
+        private void comboBox5Actions() {
+            string Ambito = "";
+            string palabra_clave = "";
+            string sufijo2 = "";
+            string nombre_de_ley = "preventivo";
+            string nombre_de_campo_y_combo_Box = comboBox5.Text;
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+        }
+
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox6Actions();
+        }
+
+        private void comboBox6Actions() {
+            string Ambito = "EFICIENCIA DEL MANTENIMIENTO: ";
+            string palabra_clave = "% de Eficiencia del Mto.";
+            string sufijo2 = "eficiencia_mto";
+            string nombre_de_ley = "ley_eficiencia_mto";
+            string nombre_de_campo_y_combo_Box = comboBox6.Text;
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+        }
+
+
         //SELECCION DE LAS OPCIONES DE DESGLOSE DE TIEMPO DE FALLO/PARADA
         private void comboBox_T_Rec_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1684,7 +1213,6 @@ namespace SIM
             string nombre_de_campo_y_combo_Box = comboBox_T_Serv.Text;
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);       
         }
-
 
         
         //SELECCION DE LAS OPCIONES DE DESGLOSE DE COSTE
@@ -1776,79 +1304,10 @@ namespace SIM
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
         }
 
-        private void FormFuncionaFallaAmpliado_Load(object sender, EventArgs e)
-        {
-            //Hacemos Invisibles las opciones de desglose de Fallo y Coste
-            HacerInvisibleDesgloseTiempoFallo();
-            HacerInvisibleDesgloseCoste();
-
-            //Desabilitamos las opciones de desglose de Fallo y Coste
-            DeshabilitarComboBoxDesgloseTiempoFallo();
-            DeshabilitarComboBoxDesgloseCoste();
-
-            //Deshabilitar el combobox de Ver Graficas
-            DeshabilitarComboBoxVerGraficas();
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            textBox11.Text = "";
-        }
-
-        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox5StopEvents)
-                return;
-            if (comboBox5.Text == "No activado")
-            {
-                nombres["preventivo"] = "No activado";
-                nombres.Remove("tipo_de_preventivo");
-                parametros.Remove("tiempo_entre_preventivos");
-                parametros.Remove("disponibilidad_minima_admisible");
-            }
-
-            if (comboBox5.Text == "Fijo por tiempo")
-            {
-                FormDatos1 frm = new FormDatos1();
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Fijo por tiempo";
-                parametros.Remove("disponibilidad_minima_admisible");
-                SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
-                                    "", "","", "","tiempo_entre_preventivos", "","", "", "", "", "");
-            }
-
-            if (comboBox5.Text == "Por Disponibilidad")
-            {
-                
-                //parametros["disponibilidad_minima_admisible"]=100;
-                
-                FormDatos1 frm = new FormDatos1();
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Por Disponibilidad";
-                parametros.Remove("tiempo_entre_preventivos");
-                SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
-                                    "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", "");
-               
-            }
-
-        }
-
-        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox6StopEvents)
-                return;
-            string Ambito = "EFICIENCIA DEL MANTENIMIENTO: ";
-            string palabra_clave = "% de Eficiencia del Mto.";
-            string sufijo2 = "eficiencia_mto";
-            string nombre_de_ley = "ley_eficiencia_mto";
-            string nombre_de_campo_y_combo_Box = comboBox6.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);           
-
-        }
-
+        
+        // Selección de gráfica
         private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             if (comboBox7.Text == "Disponibilidad")
             {
                 //Gráfica de Disponibilidad
@@ -2068,89 +1527,16 @@ namespace SIM
                     frm6.Show();
                 }
             }
-            
-          
-            if (comboBox7.Text == "     ")
-            {
-
-            }
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            nombres["ley_func"] = "Exponencial";
-            nombres["ley_paro"] = "Desglose de Fallos";
-            nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-            nombres["ley_coste"] = "Ninguna Ley";
-            nombres["preventivo"] = "No activado";
-            nombres["ley_eficiencia_mto"] = "Ninguna Ley";
-            nombres["ley_paro_recon"] = "Fijo";
-            nombres["ley_paro_diag"] = "Uniforme";
-            nombres["ley_paro_prep"] = "Exponencial";
-            nombres["ley_paro_desm"] = "Weibull2P";
-            nombres["ley_paro_repa"] = "Normal";
-            nombres["ley_paro_ensam"] = "Línea recta";
-            nombres["ley_paro_verif"] = "Fijo";
-            nombres["ley_paro_serv"] = "Uniforme";
 
-            parametros["ley_func_param1"] = 0;
-            parametros["ley_func_param2"] = 0.001;
-            parametros["Minimo_func"] = 100;
-            parametros["Maximo_func"] = 10000;
-            parametros["Maximo_paro_diag"] = 40;
-            parametros["Minimo_paro_diag"] = 20;
-            parametros["paro_recon_Reduccion_si_Preventivo"] = 50;
-            parametros["ley_paro_recon_param1"] = 30;
-            parametros["paro_Reduccion_si_Preventivo"] = 20;
-            parametros["paro_diag_Reduccion_si_Preventivo"] = 50;
-            parametros["ley_paro_prep_param1"] = 10;
-            parametros["ley_paro_prep_param2"] = 0.01;
-            parametros["Minimo_paro_prep"] = 10;
-            parametros["Maximo_paro_prep"] = 1000;
-            parametros["paro_prep_Reduccion_si_Preventivo"] = 50;
-            parametros["ley_paro_desm_param1"] = 1.5;
-            parametros["ley_paro_desm_param2"] = 400;
-            parametros["Minimo_paro_desm"] = 50;
-            parametros["Maximo_paro_desm"] = 700;
-            parametros["paro_desm_Reduccion_si_Preventivo"] = 50;
-            parametros["ley_paro_repa_param1"] = 30;
-            parametros["ley_paro_repa_param2"] = 3;
-            parametros["Minimo_paro_repa"] = 15;
-            parametros["Maximo_paro_repa"] = 45;
-            parametros["paro_repa_Reduccion_si_Preventivo"] = 50;
-            parametros["X1_paro_ensam"] = 0;
-            parametros["Y1_paro_ensam"] = 20;
-            parametros["X2_paro_ensam"] = 60000;
-            parametros["Y2_paro_ensam"] = 50;
-            parametros["paro_ensam_Reduccion_si_Preventivo"] = 50;
-            parametros["ley_paro_verif_param1"] = 30;
-            parametros["paro_verif_Reduccion_si_Preventivo"] = 50;
-            parametros["Minimo_paro_serv"] = 20;
-            parametros["Maximo_paro_serv"] = 40;
-            parametros["paro_serv_Reduccion_si_Preventivo"] = 50;
-
-            textBox11.Enabled = true;
-
-            textBox10.Text = "20000";
-
-            foreach (string key in nombres.Keys)
-            {
-                textBox11.Text += "\r\n" + key + " = " + nombres[key].ToString();
-            }
-
-            textBox11.Text += "\r\n";
-
-            foreach (string key in parametros.Keys)
-            {
-                textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
-            }  
-        }
-
-        
+        // Selección de casos
         private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            reset();
+            parametros.Clear();
+            nombres.Clear();
+
             if (comboBox8.Text == "Caso1")
             {
                 nombres["ley_func"] = "Exponencial";
@@ -2518,43 +1904,604 @@ namespace SIM
                 {
                     textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
                 }  
-
-            }
-            comboBox1StopEvents = true;
-            comboBox1.Text = nombres["ley_func"];
-            comboBox1StopEvents = false;
-
-            comboBox2StopEvents = true;
-            comboBox2.Text = nombres["ley_paro"];
-            comboBox2StopEvents = false;
-
-            comboBox3StopEvents = true;
-            comboBox3.Text = nombres["ley_recu"];
-            comboBox3StopEvents = false;
-            
-            if (nombres.ContainsKey("ley_coste"))
-            {
-                comboBox4StopEvents = true;
-                comboBox4.Text = nombres["ley_coste"];
-                comboBox4StopEvents = false;
             }
 
-            if (nombres.ContainsKey("preventivo"))
-            {
-                comboBox5StopEvents = true;
-                comboBox5.Text = nombres["preventivo"];
-                comboBox5StopEvents = false;
-            }
+            FieldsCoherency();
+        }
 
-            if (nombres.ContainsKey("ley_eficiencia_mto"))
+
+        /** Métodos privados **/
+
+
+        private void StartSilentMode()
+        {
+            SilentMode = true;
+        }
+
+        private void StopSilentMode()
+        {
+            SilentMode = false;
+        }
+
+        private bool SilentMode
+        {
+            get 
             {
-                comboBox6StopEvents = true;
-                comboBox6.Text = nombres["ley_eficiencia_mto"];
-                comboBox6StopEvents = false;
+                return this._silentMode;
+            }
+            set
+            {
+                this._silentMode = value;
             }
         }
         
- 
+        // Rellena los inputs en función de los valores de nombres y parametros
+        private void FieldsCoherency(bool inSilentMode = true)
+        {
+            if (inSilentMode) StartSilentMode();
+            comboBox1.Text = nombres.ContainsKey("ley_func") ? nombres["ley_func"] : "Ninguna Ley";
+            comboBox2.Text = nombres.ContainsKey("ley_paro") ? nombres["ley_paro"] : "Ninguna Ley";
+            comboBox3.Text = nombres.ContainsKey("ley_recu") ? nombres["ley_recu"] : "Ninguna Ley";
+            comboBox4.Text = nombres.ContainsKey("ley_coste") ? nombres["ley_coste"] : "Ninguna Ley";
+            comboBox5.Text = nombres.ContainsKey("preventivo") ? nombres["preventivo"] : "No activado";
+            comboBox6.Text = nombres.ContainsKey("ley_eficiencia_mto") ? nombres["ley_eficiencia_mto"] : "Ninguna Ley";
+            //TODO añadir incialización y habilitar combos de la derecha si está seleccionada la opción correspondiente de los combos de la izquierda.
+            if (inSilentMode) StopSilentMode();
+        }
+
+
+        // Reset
+        private void reset()
+        {
+            // Limpiar los diccionarios
+            parametros.Clear();
+            nombres.Clear();
+
+            List<ComboBox> comboBoxes = new List<ComboBox> { comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6 };
+            foreach (ComboBox comboBox in comboBoxes) {
+                comboBox.Enabled = true;
+            }
+
+            FieldsCoherency(inSilentMode: false);
+
+            //TextBox de resultados
+            textBox5.Text = "";
+            textBox5.Enabled = false;
+
+            //TextBox de valores seleccionados
+            textBox11.Text = "";
+            textBox11.Enabled = false;
+
+            //Desglose Fallos
+            comboBox_T_Rec.Text = "";
+            comboBox_T_Rec.Enabled = false;
+
+            //Tiempo a simular y repeticiones de la simulación
+            textBox10.Text = "";
+            textBox10.Enabled = true;
+            button4.Enabled = true;
+
+            // Progressbar y selección de gráfica
+            progressBar1.Visible = false;
+            ResetComboBox7();
+            
+            // Selección de casos predefinidos
+            comboBox8.Text = "Casos prácticos predefinidos";
+
+            //Desabilitamos las opciones de desglose de Fallo y Coste
+            DeshabilitarComboBoxDesgloseTiempoFallo();
+            DeshabilitarComboBoxDesgloseCoste();
+        }
+
+        // Reset selección de gráfica
+        private void ResetComboBox7()
+        {
+            comboBox7.Visible = false;
+            comboBox7.Text = "Elegir gráfico";
+        }
+
+        // Habilitar/deshabilitar groupboxes
+        private void DeshabilitarComboBoxDesgloseTiempoFallo()
+        {
+            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = false;
+            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = false;
+            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = false;
+            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = false;
+            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = false;
+            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = false;
+            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = false;
+            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = false;
+        }
+
+        private void HabilitarComboBoxDesgloseTiempoFallo()
+        {
+            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = true;
+            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = true;
+            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = true;
+            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = true;
+            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = true;
+            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = true;
+            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = true;
+            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = true;
+        }
+
+        private void DeshabilitarComboBoxDesgloseCoste()
+        {
+            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = false;
+            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = false;
+            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = false;
+            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = false;
+            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = false;
+            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = false;
+            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = false;
+            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = false;
+        }
+
+        private void HabilitarComboBoxDesgloseCoste()
+        {
+            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = true;
+            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = true;
+            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = true;
+            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = true;
+            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = true;
+            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = true;
+            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = true;
+            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = true;
+        }
+
+        private void DeshabilitarComboBoxVerGraficas()
+        {
+            comboBox7.Enabled = false;
+        }
+
+        private void HabilitarComboBoxVerGraficas()
+        {
+            comboBox7.Enabled = true;
+        }
+
+
+        // Se asigna valores a nombres y parametros
+        private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box)
+        {
+            if (SilentMode) return;
+
+            terminos_a_eliminar_en_diccionarios[sufijo2 + "_Mantenimiento_Ud_Tiempo"] = "parametros";
+            terminos_a_eliminar_en_diccionarios[sufijo2 + "_Perdida_Prod_por_Ud_tiempo"] = "parametros";
+            terminos_a_eliminar_en_diccionarios[sufijo2 + "_MantenimientoCadaIntervencion"] = "parametros";
+            terminos_a_eliminar_en_diccionarios["X1_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["Y1_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["X2_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["Y2_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param1"] = "parametros";
+            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param2"] = "parametros";
+            terminos_a_eliminar_en_diccionarios["Minimo_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";
+            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2] = "parametros";
+
+            FormDatos1 frm = new FormDatos1();
+
+            if (nombre_de_campo_y_combo_Box == "Ninguna Ley")
+            {
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                limpiar_diccionarios();
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Siempre a Nuevo (GAN)")
+            {
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                limpiar_diccionarios();
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Según tiempo (BAO)")
+            {
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                limpiar_diccionarios();
+            }
+
+            // Caso particular del combo 'preventivo'
+            if (nombre_de_ley == "preventivo")
+            {
+                terminos_a_eliminar_en_diccionarios.Clear();
+
+                if (nombre_de_campo_y_combo_Box == "No activado")
+                {
+                    nombres[nombre_de_ley] = "No activado";
+                    nombres.Remove("tipo_de_preventivo");
+                    parametros.Remove("tiempo_entre_preventivos");
+                    parametros.Remove("disponibilidad_minima_admisible");
+                }
+
+                if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
+                {
+                    nombres[nombre_de_ley] = "Activado";
+                    nombres["tipo_de_preventivo"] = "Fijo por tiempo";
+                    parametros.Remove("disponibilidad_minima_admisible");
+                    SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
+                                        "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", "");
+                }
+
+                if (nombre_de_campo_y_combo_Box == "Por Disponibilidad")
+                {
+                    nombres[nombre_de_ley] = "Activado";
+                    nombres["tipo_de_preventivo"] = "Por Disponibilidad";
+                    parametros.Remove("tiempo_entre_preventivos");
+                    SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
+                                        "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", "");
+
+                }
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Desglose de Costes")
+            {
+                limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+
+                //Se habilitan las opciones de desglose de Coste
+                HabilitarComboBoxDesgloseCoste();
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Desglose de Fallos")
+            {
+                limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+
+                //Se habilitan las opciones de desglose de Fallo
+                HabilitarComboBoxDesgloseTiempoFallo();
+            }
+
+            //el siguiente if es solo aplicable a captura de datos de coste
+            if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
+                                    "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
+            }
+
+            //el siguiente if es solo aplicable a captura de datos de coste
+            if (nombre_de_campo_y_combo_Box == "Fijo por intervención")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
+                    "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Fijo")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+                string auxi5 = "Tiempo de ";
+                if (Ambito == "EFICIENCIA DEL MANTENIMIENTO: ") auxi5 = " "; ;
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Fija de " + palabra_clave, auxi5 + palabra_clave, "", "",
+                                    "", auxi1, "ley_" + sufijo2 + "_param1", "",
+                                    "", "", sufijo2 + auxi2, auxi3, auxi4);
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Uniforme")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi1, "", "",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Línea recta")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
+                                    "Final t " + palabra_clave, auxi1, "X1_" + sufijo2, "Y1_" + sufijo2,
+                                     "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Exponencial")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Weibull2P")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+            }
+
+            if (nombre_de_campo_y_combo_Box == "Normal")
+            {
+                //limpiar_diccionarios();
+                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                string auxi1 = "";
+                string auxi2 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                {
+                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
+                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
+                }
+
+
+                string auxi3 = "";
+                string auxi4 = "";
+                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                {
+                    auxi3 = "% reducción si Preventivo";
+                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
+                }
+
+
+
+                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+            }
+        }
+
+        // Popup de los comboBoxes
+        //TODO List<string>[] fields --> {{label, id, valor}, {}}
+        private void SolicitarDatos(FormDatos1 frm, string Ambito_Op, string Ley, string titulo_del_Formulario, string Rotulo_del_Parametro1,
+                                    string Rotulo_del_Parametro2, string Rotulo_del_Parametro3,
+                                    string Rotulo_del_Parametro4, string Rotulo_del_Parametro5,
+                                    string Nombre_Parametro1, string Nombre_Parametro2,
+                                    string Nombre_Parametro3, string Nombre_Parametro4, string Nombre_Parametro5, string Rotulo_del_Parametro6, string Nombre_Parametro6)
+        {
+            //Dar contenidos a las variables del formulario de captura de indicaciones de usuario
+            frm.TituloDelFormulario = titulo_del_Formulario;
+            frm.Text = Ambito_Op;
+            //TODO frm.fields = fields; 
+            frm.Rotulo_Parametro1 = Rotulo_del_Parametro1;
+            frm.Rotulo_Parametro2 = Rotulo_del_Parametro2;
+            frm.Rotulo_Parametro3 = Rotulo_del_Parametro3;
+            frm.Rotulo_Parametro4 = Rotulo_del_Parametro4;
+            frm.Rotulo_Parametro5 = Rotulo_del_Parametro5;
+            frm.Rotulo_Parametro6 = Rotulo_del_Parametro6;
+
+            //Llamar al formulario de captura de indicaciones de usuario
+            frm.ShowDialog();
+
+            //dar valores a las variables de este formulario en base a las indicaciones de usuario
+            if (frm.DialogResult == DialogResult.OK)
+            {
+                limpiar_diccionarios(); //¿sobra?
+
+                if (Rotulo_del_Parametro1 != "") parametros[Nombre_Parametro1] = Convert.ToDouble(frm.parametro1);
+                if (Rotulo_del_Parametro2 != "") parametros[Nombre_Parametro2] = Convert.ToDouble(frm.parametro2);
+                if (Rotulo_del_Parametro3 != "") parametros[Nombre_Parametro3] = Convert.ToDouble(frm.parametro3);
+                if (Rotulo_del_Parametro4 != "") parametros[Nombre_Parametro4] = Convert.ToDouble(frm.parametro4);
+                if (Rotulo_del_Parametro5 != "") parametros[Nombre_Parametro5] = Convert.ToDouble(frm.parametro5);
+                if (Rotulo_del_Parametro6 != "") parametros[Nombre_Parametro6] = Convert.ToDouble(frm.parametro6);
+
+
+                //Alimentar el Textbox de las opciones elegidas por el usuario
+                if ((Rotulo_del_Parametro1 != "") || (Rotulo_del_Parametro2 != "") || (Rotulo_del_Parametro3 != "") || (Rotulo_del_Parametro4 != "") || (Rotulo_del_Parametro5 != "") || (Rotulo_del_Parametro6 != ""))
+                {
+                    textBox11.Enabled = true;
+                    textBox11.Text += "\r\n" + "\b " + Ambito_Op + titulo_del_Formulario + "\r\n";
+                    if (Rotulo_del_Parametro1 != "") textBox11.Text += "   " + Rotulo_del_Parametro1 + "= " + Convert.ToString(parametros[Nombre_Parametro1]) + "\r\n";
+                    if (Rotulo_del_Parametro2 != "") textBox11.Text += "   " + Rotulo_del_Parametro2 + "= " + Convert.ToString(parametros[Nombre_Parametro2]) + "\r\n";
+                    if (Rotulo_del_Parametro3 != "") textBox11.Text += "   " + Rotulo_del_Parametro3 + "= " + Convert.ToString(parametros[Nombre_Parametro3]) + "\r\n";
+                    if (Rotulo_del_Parametro4 != "") textBox11.Text += "   " + Rotulo_del_Parametro4 + "= " + Convert.ToString(parametros[Nombre_Parametro4]) + "\r\n";
+                    if (Rotulo_del_Parametro5 != "") textBox11.Text += "   " + Rotulo_del_Parametro5 + "= " + Convert.ToString(parametros[Nombre_Parametro5]) + "\r\n";
+                    if (Rotulo_del_Parametro6 != "") textBox11.Text += "   " + Rotulo_del_Parametro6 + "= " + Convert.ToString(parametros[Nombre_Parametro6]) + "\r\n";
+                    textBox11.Text += "             " + "\r\n";
+                }
+
+            }
+        }
+
+
+        // Limpiar diccionarios
+        /// <summary>
+        /// Este método permite eliminar términos contenidos en los diccionarios "nombres" y "parametros"
+        /// para ello usa el diccionario denominado "terminos_a_eliminar_en_diccionarios" que contiene
+        /// parejas <string1,string2>.
+        /// 
+        /// "string2" indica del nombre del diccionario pudiera encontrarse el contenido a eliminar, en
+        /// este caso "string2" solo puede contener "nombres" o "parametros" que son los nombres de los
+        /// dos diccionarios que podría ser necesario limpiar
+        /// 
+        /// "string1" indica la clave (key) que identifica al termino a eliminar
+        /// 
+        /// NOTA: la clave indicada en "string1" pudiera no estar en el diccionario
+        /// NOTA: seria ideal poder generalizar el los diccionarios, puede que para ello sea necesario
+        /// usar a su vez un "diccionario de nombres de diccionarios", pero eso se ha dejado para una
+        /// siguiente versión
+        /// </summary>
+        private void limpiar_diccionarios()
+        {
+            string auxi1;
+            string auxi2;
+            foreach (string key in terminos_a_eliminar_en_diccionarios.Keys)
+            {
+                auxi1 = key; //Extrae el nombre del término a eliminar
+                auxi2 = terminos_a_eliminar_en_diccionarios[key];  //Extrae la key que indica si el nombre del diccionario sobre el que se actuará 
+
+                switch (auxi2)
+                {
+                    case "nombres":
+                        nombres.Remove(auxi1);
+                        break;
+
+                    case "parametros":
+                        parametros.Remove(auxi1);
+                        break;
+                }
+            }
+
+            //limpiar el diccionario de terminos a eliminar pues ya han sido eliminados
+            terminos_a_eliminar_en_diccionarios.Clear();
+
+        }
+
+        // Generar valor
+        /// <summary>
+        /// Este método genera un valor en función de lo que venga especificado en la string "tipo_ley"
+        /// El diccionario global "parametros" del tipo <string,double> contiene los valores asociados a cada nombre de variable de entrada
+        /// si "tipo_ley" contiene "Ninguna Ley" se genera un cero
+        /// si "tipo_ley" contiene "Fijo" se genera el valor almacenado en "parametros[param1]"
+        /// si "tipo_ley" contiene "Uniforme" se genera un aleatorio uniforme entre "parametros[minimo]" y "parametros[maximo]"
+        /// si "tipo_ley" contiene "Exponencial" se genera un aleatorio Exponencial con gamma=parametros[param1]y mu= 1 / parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]        
+        /// si "tipo_ley" contiene "Weibull2P" se genera un aleatorio Weibull de dos parametros con beta=parametros[param1] y eta= parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]
+        /// si "tipo_ley" contiene "Normal" se genera un aleatorio Normal con media=parametros[param1] y desv._tipica=parametros[param2], cuyo valor debe estar entre parametros[minimo] y parametros[maximo]
+        /// si "tipo_ley" contiene "línea recta" se genera un valor no aleatorio obtenido de la ecuacion de la recta que pasa por los puntos A(parametros[X1],(parametros[Y1]) y B(parametros[X2],(parametros[Y2])
+        /// si "tipo_ley" contiene cualquier otra cadena de caracteres se genera u valor cero a la salida
+        /// </summary>
+        /// <param name="r"> contiene aleatorio</param>
+        /// <param name="variable"> contiene el tiempo total transcurrido en la simulacion actual, o valor asimilable al eje de X</param>
+        /// <param name="tipo_ley"> contiene el tipo de ley, por ejemplo: ley_paro_recon</param>
+        /// <param name="nombre_ley"> contiene el nombre de una distribucion o forma de generar, por ejemplo: Uniforme</param>
+        /// <param name="param1"> el primer parametro o el único</param>
+        /// <param name="param2"> contiene el segundo parametro</param>
+        /// <param name="minimo"> contiene el limite minimo admisible para el valor a generar</param>
+        /// <param name="maximo"> contiene el limite maximo admisible para el valor a generar</param>
+        /// <param name="X1"> la x del primer punto de la recta a usar</param>
+        /// <param name="Y1"> la y del primer punto de la recta a usar</param>
+        /// <param name="X2"> la x del segundo punto de la recta a usar</param>
+        /// <param name="Y2"> la y del segundo punto de la recta a usar</param>
+        /// <returns></returns>
+        private double GenerarValor(double variable, string tipo_ley, string param1, string param2, string maximo, string minimo, string X1, string Y1, string X2, string Y2, double tiempo, Random r)
+        {
+            double valor_generado = 0;
+            string auxi1;
+            if (nombres.ContainsKey(tipo_ley))
+            {
+                auxi1 = nombres[tipo_ley];
+                if (auxi1 == "Ninguna Ley") valor_generado = 0;
+                if (auxi1 == "Fijo por tiempo") valor_generado = parametros[param1] * tiempo;
+                if (auxi1 == "Fijo por intervención") valor_generado = parametros[param1];
+                if (auxi1 == "Fijo") valor_generado = parametros[param1];
+                if (auxi1 == "Uniforme") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros[minimo], parametros[maximo], r) * tiempo;
+                if (auxi1 == "Exponencial") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros[param1], 1 / parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
+                if (auxi1 == "Weibull2P") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
+                if (auxi1 == "Normal") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
+                if (auxi1 == "Línea recta") valor_generado = parametros[Y1] + (parametros[Y2] - parametros[Y1]) * (variable - parametros[X1]) / (parametros[X2] - parametros[X1]) * tiempo;
+            }
+
+            return valor_generado;
+        }
+
+
+        /*** Eventos para el formateo de datos ****/
+        private void NumerosConComa(object sender, KeyPressEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            Debug.Assert(tb != null, "sender no es de tipo textBox");
+            if (tb != null)
+            {
+                FormateoDatos.numOcoma(e, tb);
+            }
+        }
+        private void NumerosSinComa(object sender, KeyPressEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            Debug.Assert(tb != null, "sender no es de tipo textBox");
+            if (tb != null)
+            {
+                FormateoDatos.soloNum(e, tb);
+            }
+        } 
     }
 }
 

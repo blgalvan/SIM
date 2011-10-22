@@ -49,7 +49,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox11 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.comboBox_T_Rec = new System.Windows.Forms.ComboBox();
             this.button_Parametros = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -67,7 +66,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             this.comboBox_C_Rec = new System.Windows.Forms.ComboBox();
             this.label26 = new System.Windows.Forms.Label();
             this.comboBox_C_Diag = new System.Windows.Forms.ComboBox();
@@ -91,14 +89,17 @@
             this.label28 = new System.Windows.Forms.Label();
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
-            this.label29 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(33, 412);
+            this.label17.Location = new System.Drawing.Point(33, 355);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(261, 13);
             this.label17.TabIndex = 141;
@@ -106,10 +107,11 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(172, 344);
+            this.progressBar1.Location = new System.Drawing.Point(173, 304);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(147, 25);
             this.progressBar1.TabIndex = 140;
+            this.progressBar1.Visible = false;
             // 
             // pictureBox1
             // 
@@ -173,7 +175,7 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(144, 297);
+            this.textBox10.Location = new System.Drawing.Point(144, 264);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(67, 20);
             this.textBox10.TabIndex = 116;
@@ -182,7 +184,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(34, 300);
+            this.label16.Location = new System.Drawing.Point(34, 267);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(109, 13);
             this.label16.TabIndex = 115;
@@ -225,16 +227,16 @@
             // textBox5
             // 
             this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(34, 431);
+            this.textBox5.Location = new System.Drawing.Point(34, 371);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
             this.textBox5.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox5.Size = new System.Drawing.Size(459, 59);
+            this.textBox5.Size = new System.Drawing.Size(459, 119);
             this.textBox5.TabIndex = 99;
             // 
             // button_Reset
             // 
-            this.button_Reset.Location = new System.Drawing.Point(105, 344);
+            this.button_Reset.Location = new System.Drawing.Point(106, 304);
             this.button_Reset.Name = "button_Reset";
             this.button_Reset.Size = new System.Drawing.Size(61, 25);
             this.button_Reset.TabIndex = 97;
@@ -244,7 +246,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(36, 344);
+            this.button4.Location = new System.Drawing.Point(37, 304);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(63, 25);
             this.button4.TabIndex = 96;
@@ -302,17 +304,8 @@
             this.textBox11.Multiline = true;
             this.textBox11.Name = "textBox11";
             this.textBox11.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox11.Size = new System.Drawing.Size(286, 136);
+            this.textBox11.Size = new System.Drawing.Size(329, 136);
             this.textBox11.TabIndex = 142;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(382, 68);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(218, 13);
-            this.label4.TabIndex = 144;
-            this.label4.Text = "DESGLOSE  TIEMPOS FALLOS/PARADAS";
             // 
             // comboBox_T_Rec
             // 
@@ -325,7 +318,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Rec.Location = new System.Drawing.Point(510, 85);
+            this.comboBox_T_Rec.Location = new System.Drawing.Point(141, 27);
             this.comboBox_T_Rec.Name = "comboBox_T_Rec";
             this.comboBox_T_Rec.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Rec.TabIndex = 145;
@@ -333,18 +326,18 @@
             // 
             // button_Parametros
             // 
-            this.button_Parametros.Location = new System.Drawing.Point(574, 314);
+            this.button_Parametros.Location = new System.Drawing.Point(517, 321);
             this.button_Parametros.Name = "button_Parametros";
-            this.button_Parametros.Size = new System.Drawing.Size(229, 28);
+            this.button_Parametros.Size = new System.Drawing.Size(91, 28);
             this.button_Parametros.TabIndex = 146;
-            this.button_Parametros.Text = "VER PARAMETROS ESCOGIDOS";
+            this.button_Parametros.Text = "Ver parámetros";
             this.button_Parametros.UseVisualStyleBackColor = true;
             this.button_Parametros.Click += new System.EventHandler(this.button_Parametros_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(383, 92);
+            this.label5.Location = new System.Drawing.Point(15, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
             this.label5.TabIndex = 147;
@@ -361,7 +354,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Diag.Location = new System.Drawing.Point(510, 108);
+            this.comboBox_T_Diag.Location = new System.Drawing.Point(141, 50);
             this.comboBox_T_Diag.Name = "comboBox_T_Diag";
             this.comboBox_T_Diag.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Diag.TabIndex = 148;
@@ -378,7 +371,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Prep.Location = new System.Drawing.Point(511, 131);
+            this.comboBox_T_Prep.Location = new System.Drawing.Point(141, 72);
             this.comboBox_T_Prep.Name = "comboBox_T_Prep";
             this.comboBox_T_Prep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Prep.TabIndex = 149;
@@ -395,7 +388,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Desm.Location = new System.Drawing.Point(511, 154);
+            this.comboBox_T_Desm.Location = new System.Drawing.Point(141, 95);
             this.comboBox_T_Desm.Name = "comboBox_T_Desm";
             this.comboBox_T_Desm.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Desm.TabIndex = 150;
@@ -412,7 +405,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Rep.Location = new System.Drawing.Point(511, 177);
+            this.comboBox_T_Rep.Location = new System.Drawing.Point(141, 118);
             this.comboBox_T_Rep.Name = "comboBox_T_Rep";
             this.comboBox_T_Rep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Rep.TabIndex = 151;
@@ -429,7 +422,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Ensam.Location = new System.Drawing.Point(510, 201);
+            this.comboBox_T_Ensam.Location = new System.Drawing.Point(140, 142);
             this.comboBox_T_Ensam.Name = "comboBox_T_Ensam";
             this.comboBox_T_Ensam.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Ensam.TabIndex = 153;
@@ -446,7 +439,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Verif.Location = new System.Drawing.Point(510, 223);
+            this.comboBox_T_Verif.Location = new System.Drawing.Point(140, 164);
             this.comboBox_T_Verif.Name = "comboBox_T_Verif";
             this.comboBox_T_Verif.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Verif.TabIndex = 154;
@@ -463,7 +456,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Serv.Location = new System.Drawing.Point(510, 245);
+            this.comboBox_T_Serv.Location = new System.Drawing.Point(140, 186);
             this.comboBox_T_Serv.Name = "comboBox_T_Serv";
             this.comboBox_T_Serv.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Serv.TabIndex = 155;
@@ -472,7 +465,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(385, 113);
+            this.label3.Location = new System.Drawing.Point(16, 53);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 156;
@@ -481,7 +474,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(385, 134);
+            this.label7.Location = new System.Drawing.Point(15, 76);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 13);
             this.label7.TabIndex = 157;
@@ -490,7 +483,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(385, 157);
+            this.label8.Location = new System.Drawing.Point(15, 98);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(94, 13);
             this.label8.TabIndex = 158;
@@ -499,7 +492,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(385, 180);
+            this.label9.Location = new System.Drawing.Point(15, 121);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(120, 13);
             this.label9.TabIndex = 159;
@@ -508,7 +501,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(385, 204);
+            this.label10.Location = new System.Drawing.Point(15, 145);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(61, 13);
             this.label10.TabIndex = 160;
@@ -517,7 +510,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(385, 226);
+            this.label11.Location = new System.Drawing.Point(15, 167);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(62, 13);
             this.label11.TabIndex = 161;
@@ -526,20 +519,11 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(386, 248);
+            this.label14.Location = new System.Drawing.Point(16, 189);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(96, 13);
             this.label14.TabIndex = 162;
             this.label14.Text = "Puesta en Servicio";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(627, 68);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(129, 13);
-            this.label27.TabIndex = 164;
-            this.label27.Text = "DESGLOSE DE COSTES";
             // 
             // comboBox_C_Rec
             // 
@@ -551,7 +535,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Rec.Location = new System.Drawing.Point(755, 85);
+            this.comboBox_C_Rec.Location = new System.Drawing.Point(141, 27);
             this.comboBox_C_Rec.Name = "comboBox_C_Rec";
             this.comboBox_C_Rec.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Rec.TabIndex = 165;
@@ -560,7 +544,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(628, 92);
+            this.label26.Location = new System.Drawing.Point(14, 30);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(84, 13);
             this.label26.TabIndex = 166;
@@ -576,7 +560,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Diag.Location = new System.Drawing.Point(755, 108);
+            this.comboBox_C_Diag.Location = new System.Drawing.Point(141, 50);
             this.comboBox_C_Diag.Name = "comboBox_C_Diag";
             this.comboBox_C_Diag.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Diag.TabIndex = 167;
@@ -592,7 +576,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Prep.Location = new System.Drawing.Point(756, 131);
+            this.comboBox_C_Prep.Location = new System.Drawing.Point(141, 73);
             this.comboBox_C_Prep.Name = "comboBox_C_Prep";
             this.comboBox_C_Prep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Prep.TabIndex = 168;
@@ -608,7 +592,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Desm.Location = new System.Drawing.Point(756, 154);
+            this.comboBox_C_Desm.Location = new System.Drawing.Point(141, 95);
             this.comboBox_C_Desm.Name = "comboBox_C_Desm";
             this.comboBox_C_Desm.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Desm.TabIndex = 169;
@@ -624,7 +608,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Rep.Location = new System.Drawing.Point(756, 177);
+            this.comboBox_C_Rep.Location = new System.Drawing.Point(141, 118);
             this.comboBox_C_Rep.Name = "comboBox_C_Rep";
             this.comboBox_C_Rep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Rep.TabIndex = 170;
@@ -640,7 +624,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Ensam.Location = new System.Drawing.Point(755, 201);
+            this.comboBox_C_Ensam.Location = new System.Drawing.Point(141, 141);
             this.comboBox_C_Ensam.Name = "comboBox_C_Ensam";
             this.comboBox_C_Ensam.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Ensam.TabIndex = 171;
@@ -656,7 +640,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Verif.Location = new System.Drawing.Point(755, 223);
+            this.comboBox_C_Verif.Location = new System.Drawing.Point(141, 164);
             this.comboBox_C_Verif.Name = "comboBox_C_Verif";
             this.comboBox_C_Verif.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Verif.TabIndex = 172;
@@ -672,7 +656,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Serv.Location = new System.Drawing.Point(755, 245);
+            this.comboBox_C_Serv.Location = new System.Drawing.Point(141, 186);
             this.comboBox_C_Serv.Name = "comboBox_C_Serv";
             this.comboBox_C_Serv.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Serv.TabIndex = 173;
@@ -681,7 +665,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(630, 113);
+            this.label25.Location = new System.Drawing.Point(15, 53);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(53, 13);
             this.label25.TabIndex = 174;
@@ -690,7 +674,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(630, 134);
+            this.label24.Location = new System.Drawing.Point(16, 76);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(64, 13);
             this.label24.TabIndex = 175;
@@ -699,7 +683,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(630, 157);
+            this.label23.Location = new System.Drawing.Point(14, 98);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(94, 13);
             this.label23.TabIndex = 176;
@@ -708,7 +692,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(630, 180);
+            this.label22.Location = new System.Drawing.Point(14, 123);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(120, 13);
             this.label22.TabIndex = 177;
@@ -717,7 +701,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(630, 204);
+            this.label21.Location = new System.Drawing.Point(16, 145);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(61, 13);
             this.label21.TabIndex = 178;
@@ -726,7 +710,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(630, 226);
+            this.label19.Location = new System.Drawing.Point(15, 167);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(62, 13);
             this.label19.TabIndex = 179;
@@ -735,7 +719,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(631, 248);
+            this.label18.Location = new System.Drawing.Point(16, 189);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(96, 13);
             this.label18.TabIndex = 180;
@@ -743,7 +727,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(517, 314);
+            this.button3.Location = new System.Drawing.Point(614, 321);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(50, 28);
             this.button3.TabIndex = 182;
@@ -815,11 +799,12 @@
             "Ratio t_Preventivo/t_total_Mto",
             "Coste Acumulado Rec/Rep",
             "Coste Medio de Recuperacion"});
-            this.comboBox7.Location = new System.Drawing.Point(144, 266);
+            this.comboBox7.Location = new System.Drawing.Point(173, 304);
             this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(175, 21);
+            this.comboBox7.Size = new System.Drawing.Size(147, 21);
             this.comboBox7.TabIndex = 187;
             this.comboBox7.Text = "Elegir gráfico";
+            this.comboBox7.Visible = false;
             this.comboBox7.SelectedIndexChanged += new System.EventHandler(this.comboBox7_SelectedIndexChanged);
             // 
             // comboBox8
@@ -836,28 +821,70 @@
             "Caso8",
             "Caso9",
             "Caso10"});
-            this.comboBox8.Location = new System.Drawing.Point(37, 60);
+            this.comboBox8.Location = new System.Drawing.Point(144, 60);
             this.comboBox8.Name = "comboBox8";
-            this.comboBox8.Size = new System.Drawing.Size(214, 21);
+            this.comboBox8.Size = new System.Drawing.Size(174, 21);
             this.comboBox8.TabIndex = 188;
             this.comboBox8.Text = "Casos prácticos predefinidos";
             this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
             // 
-            // label29
+            // groupBox1
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(33, 274);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(54, 13);
-            this.label29.TabIndex = 189;
-            this.label29.Text = "GRÁFICO";
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.comboBox_T_Rec);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.comboBox_T_Diag);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.comboBox_T_Prep);
+            this.groupBox1.Controls.Add(this.comboBox_T_Desm);
+            this.groupBox1.Controls.Add(this.comboBox_T_Rep);
+            this.groupBox1.Controls.Add(this.comboBox_T_Ensam);
+            this.groupBox1.Controls.Add(this.comboBox_T_Verif);
+            this.groupBox1.Controls.Add(this.comboBox_T_Serv);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.label11);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Location = new System.Drawing.Point(353, 60);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(246, 220);
+            this.groupBox1.TabIndex = 189;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "DESGLOSE TIEMPOS FALLOS/PARADAS";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label26);
+            this.groupBox2.Controls.Add(this.comboBox_C_Rec);
+            this.groupBox2.Controls.Add(this.comboBox_C_Diag);
+            this.groupBox2.Controls.Add(this.comboBox_C_Prep);
+            this.groupBox2.Controls.Add(this.comboBox_C_Desm);
+            this.groupBox2.Controls.Add(this.comboBox_C_Rep);
+            this.groupBox2.Controls.Add(this.comboBox_C_Ensam);
+            this.groupBox2.Controls.Add(this.comboBox_C_Verif);
+            this.groupBox2.Controls.Add(this.comboBox_C_Serv);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.label25);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.label24);
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.label23);
+            this.groupBox2.Controls.Add(this.label22);
+            this.groupBox2.Location = new System.Drawing.Point(614, 60);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(250, 220);
+            this.groupBox2.TabIndex = 190;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "DESGLOSE DE COSTES";
             // 
             // FormFuncionaFallaAmpliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 568);
-            this.Controls.Add(this.label29);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.comboBox8);
             this.Controls.Add(this.comboBox7);
             this.Controls.Add(this.label28);
@@ -865,41 +892,7 @@
             this.Controls.Add(this.comboBox5);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.label18);
-            this.Controls.Add(this.label19);
-            this.Controls.Add(this.label21);
-            this.Controls.Add(this.label22);
-            this.Controls.Add(this.label23);
-            this.Controls.Add(this.label24);
-            this.Controls.Add(this.label25);
-            this.Controls.Add(this.comboBox_C_Serv);
-            this.Controls.Add(this.comboBox_C_Verif);
-            this.Controls.Add(this.comboBox_C_Ensam);
-            this.Controls.Add(this.comboBox_C_Rep);
-            this.Controls.Add(this.comboBox_C_Desm);
-            this.Controls.Add(this.comboBox_C_Prep);
-            this.Controls.Add(this.comboBox_C_Diag);
-            this.Controls.Add(this.label26);
-            this.Controls.Add(this.comboBox_C_Rec);
-            this.Controls.Add(this.label27);
-            this.Controls.Add(this.label14);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBox_T_Serv);
-            this.Controls.Add(this.comboBox_T_Verif);
-            this.Controls.Add(this.comboBox_T_Ensam);
-            this.Controls.Add(this.comboBox_T_Rep);
-            this.Controls.Add(this.comboBox_T_Desm);
-            this.Controls.Add(this.comboBox_T_Prep);
-            this.Controls.Add(this.comboBox_T_Diag);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.button_Parametros);
-            this.Controls.Add(this.comboBox_T_Rec);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox11);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.progressBar1);
@@ -924,6 +917,10 @@
             this.Text = "Ciclo Funcionamiento-Parada Ampliado";
             this.Load += new System.EventHandler(this.FormFuncionaFallaAmpliado_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -951,7 +948,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox_T_Rec;
         private System.Windows.Forms.Button button_Parametros;
         private System.Windows.Forms.Label label5;
@@ -969,7 +965,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label27;
         private System.Windows.Forms.ComboBox comboBox_C_Rec;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.ComboBox comboBox_C_Diag;
@@ -993,6 +988,7 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.ComboBox comboBox7;
         private System.Windows.Forms.ComboBox comboBox8;
-        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }

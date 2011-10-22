@@ -134,21 +134,7 @@ namespace SIM
             this.chart1.GetToolTipText += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ToolTipEventArgs>(ChartControlGraph.Chart1_GetToolTipText);
         }
 
-        private void Form4_Load(object sender, EventArgs e)
-        {
 
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         /*** Eventos para el formateo de datos ****/
         private void NumerosConComa(object sender, KeyPressEventArgs e)
         {

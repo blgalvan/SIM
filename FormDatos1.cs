@@ -27,18 +27,6 @@ namespace SIM
         public double parametro5 = -9999999;
         public double parametro6 = -9999999;
 
-        /*private double m_p1;
-        public double Parametro1
-        {
-            get
-            {
-                return m_p1;
-            }
-            //set
-            //{
-            //    m_p1 = value;
-            //}
-        }*/
 
         public string TipoDeDistribucion;
         
