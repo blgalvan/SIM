@@ -1020,7 +1020,10 @@ namespace SIM
             }
         }
 
-
+        private void buttonLeyFuncPopup_Click(object sender, EventArgs e)
+        {
+            comboBox1Actions();
+        } 
 
 
         /** ComboBoxes **/
@@ -2127,7 +2130,6 @@ namespace SIM
                     parametros.Remove("tiempo_entre_preventivos");
                     SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
                                         "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", "");
-
                 }
             }
 
@@ -2501,7 +2503,9 @@ namespace SIM
             {
                 FormateoDatos.soloNum(e, tb);
             }
-        } 
+        }
+
+
     }
 }
 

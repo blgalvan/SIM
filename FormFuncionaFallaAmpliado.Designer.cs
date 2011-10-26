@@ -91,6 +91,7 @@
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonLeyFuncPopup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -878,11 +879,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "DESGLOSE DE COSTES";
             // 
+            // buttonLeyFuncPopup
+            // 
+            this.buttonLeyFuncPopup.Location = new System.Drawing.Point(326, 90);
+            this.buttonLeyFuncPopup.Name = "buttonLeyFuncPopup";
+            this.buttonLeyFuncPopup.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyFuncPopup.TabIndex = 191;
+            this.buttonLeyFuncPopup.Text = "...";
+            this.buttonLeyFuncPopup.UseVisualStyleBackColor = true;
+            this.buttonLeyFuncPopup.Click += new System.EventHandler(this.buttonLeyFuncPopup_Click);
+            // 
             // FormFuncionaFallaAmpliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 568);
+            this.Controls.Add(this.buttonLeyFuncPopup);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.comboBox8);
@@ -990,5 +1002,6 @@
         private System.Windows.Forms.ComboBox comboBox8;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button buttonLeyFuncPopup;
     }
 }
