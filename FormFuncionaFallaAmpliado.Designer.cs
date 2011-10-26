@@ -92,6 +92,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonLeyFuncPopup = new System.Windows.Forms.Button();
+            this.comboBox9 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -889,11 +890,20 @@
             this.buttonLeyFuncPopup.UseVisualStyleBackColor = true;
             this.buttonLeyFuncPopup.Click += new System.EventHandler(this.buttonLeyFuncPopup_Click);
             // 
+            // comboBox9
+            // 
+            this.comboBox9.FormattingEnabled = true;
+            this.comboBox9.Location = new System.Drawing.Point(388, 307);
+            this.comboBox9.Name = "comboBox9";
+            this.comboBox9.Size = new System.Drawing.Size(121, 21);
+            this.comboBox9.TabIndex = 192;
+            // 
             // FormFuncionaFallaAmpliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 568);
+            this.Controls.Add(this.comboBox9);
             this.Controls.Add(this.buttonLeyFuncPopup);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -1003,5 +1013,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button buttonLeyFuncPopup;
+        private System.Windows.Forms.ComboBox comboBox9;
     }
 }

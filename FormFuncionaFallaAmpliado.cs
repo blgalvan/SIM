@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Collections;
 
 namespace SIM
 {
@@ -24,6 +25,8 @@ namespace SIM
 
         public static string TituloDelFormulario;
 
+        private Hashtable _parameters = new Hashtable();
+        private Hashtable _widgets;
         Dictionary<string, double> parametros = new Dictionary<string, double>();
         Dictionary<string, string> nombres = new Dictionary<string, string>();
         Dictionary<string, double> resultados = new Dictionary<string, double>();
@@ -59,6 +62,35 @@ namespace SIM
             InitializeComponent();
             //Aseguramos que utiliza la configuración española para numeros decimales
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
+            //Inicializamos tabla de widgets
+            
+            _widgets = new Hashtable { 
+                {"ley_func", comboBox1},
+                {"ley_paro", comboBox2},
+                {"ley_recu", comboBox3},
+                {"ley_coste", comboBox4},
+                {"preventivo", comboBox5},
+                {"ley_eficiencia_mto", comboBox6},
+                {"ley_paro_recon", comboBox_T_Rec},
+                {"ley_paro_diag", comboBox_T_Diag},
+                {"ley_paro_prep", comboBox_T_Prep},
+                {"ley_paro_desm", comboBox_T_Desm},
+                {"ley_paro_repa", comboBox_T_Rep},
+                {"ley_paro_ensam", comboBox_T_Ensam},
+                {"ley_paro_verif", comboBox_T_Verif},
+                {"ley_paro_serv", comboBox_T_Serv},
+                {"ley_coste_recon", comboBox_C_Rec},
+                {"ley_coste_diag", comboBox_C_Diag},
+                {"ley_coste_prep", comboBox_C_Prep},
+                {"ley_coste_desm", comboBox_C_Desm},
+                {"ley_coste_repa", comboBox_C_Rep},
+                {"ley_coste_ensam", comboBox_C_Ensam},
+                {"ley_coste_verif", comboBox_C_Verif},
+                {"ley_coste_serv", comboBox_C_Serv},
+                {"grafica", comboBox7},
+                {"caso", comboBox8},
+                {"combo9", comboBox9}
+            };
         }
 
         // Load event
@@ -1542,6 +1574,7 @@ namespace SIM
 
             if (comboBox8.Text == "Caso1")
             {
+                AddParameters(new Hashtable {{"combo9", "Hola"}});
                 nombres["ley_func"] = "Exponencial";
                 nombres["ley_paro"] = "Uniforme";
                 nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
@@ -2505,6 +2538,41 @@ namespace SIM
             }
         }
 
+
+        private void WidgetValue(Object widget, string value) 
+        {
+            Type type = widget.GetType();
+            switch (type.ToString())
+            {
+                case "System.Windows.Forms.ComboBox":
+                    ComboBox comboObj = (ComboBox)widget;
+                    comboObj.Text = value;
+                    break;
+                case "System.Windows.Forms.TextBox":
+                    TextBox textObj = (TextBox)widget;
+                    textObj.Text = value;
+                    break;
+            }
+        }
+
+        private void AddParameters(Hashtable parameters)
+        {
+            foreach (DictionaryEntry parameter in parameters)
+            {
+                _parameters.Remove(parameter.Key);
+                _parameters.Add(parameter.Key, parameter.Value);
+                WidgetValue(_widgets[parameter.Key], (string)parameter.Value);
+            }
+        }
+
+        private void RemoveParameters(string[] parameters)
+        { 
+            foreach (string parameter in parameters)
+            {
+                _parameters.Remove(parameter);
+                WidgetValue(_widgets[parameter], "");
+            }
+        }
 
     }
 }
