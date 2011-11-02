@@ -8,8 +8,8 @@ x Añadir tipo de gráfica como entrada.
 x Poner elección de gráfica sobre progressbar y mostrar uno u otro según estado de la simulación.
 
 - Cambiar diccionarios nombres y parametos por un hashtable params.
-- Crear hashtable widgets (["ley_func", comboBoxLeyFunc])
-- Crear método para modificar el params. AddToParams("ley_func", "Exponencial"), añade al params y además actualiza el value del widget correspondiente.
+x Crear hashtable widgets (["ley_func", comboBoxLeyFunc])
+x Crear método para modificar el params. AddToParams("ley_func", "Exponencial"), añade al params y además actualiza el value del widget correspondiente.
 - Añadir botón al lado de los combo cuando la opción elegida muestre pantalla flotante.
 - En las pantallas flotantes poner valor en los widgets si en el params lo tiene.
 - Mover cálculos del simular a otra clase. Crear clase FuncionaFallaAmpliado y método simular().
@@ -20,3 +20,9 @@ Para nota:
 - Mirar si se pueden detener los eventos de un widget.
 - Mirar si se puede sobrecargar las clases.
 
+
+Horas:
+- 2h
+- 5h
+- 5h
+- 3h
