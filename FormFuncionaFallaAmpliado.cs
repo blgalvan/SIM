@@ -119,16 +119,17 @@ namespace SIM
         {
 
             textBox11.Enabled = true;
-            foreach (string key in nombres.Keys)
+            foreach (string key in _parameters.Keys)
             {
-                textBox11.Text += "\r\n" + "nombres[¡" + key + "¡] = " + "¡" + nombres[key].ToString() + "¡" + ";";
+                textBox11.Text += "\r\n" + "_parameters[" + key + "] = " + " " + _parameters[key].ToString() + ";";
             }
 
+            /*
             textBox11.Text += "\r\n";
             foreach (string key in parametros.Keys)
             {
                 textBox11.Text += "\r\n" + "parametros[¡" + key + "¡] = " + parametros[key].ToString("0.#######") + ";";
-            }
+            }*/
 
         }
 
@@ -1569,22 +1570,20 @@ namespace SIM
         // Selección de casos
         private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
-            parametros.Clear();
-            nombres.Clear();
-
+            Hashtable parameters = new Hashtable { };
             if (comboBox8.Text == "Caso1")
             {
-                AddParameters(new Hashtable {{"combo9", "Hola"}});
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Uniforme";
-                nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001246;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["Maximo_paro"] = 136;
-                parametros["Minimo_paro"] = 1;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Uniforme"},                
+                    {"ley_recu", "Siempre a Nuevo (GAN)"},
+                    {"ley_func_param1", 0},
+                    {"ley_func_param2", 0.0001246},
+                    {"Minimo_func", 2588},
+                    {"Maximo_func", 400000},
+                    {"Maximo_paro", 136},
+                    {"Minimo_paro", 1}
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "400000";
@@ -1592,19 +1591,19 @@ namespace SIM
 
             if (comboBox8.Text == "Caso2")
             {
-                
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001246;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
+                parameters = new Hashtable {   
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Siempre a Nuevo (GAN)"},
+                    {"ley_func_param1", 0},
+                    {"ley_func_param2", 0.0001246},
+                    {"Minimo_func", 2588},
+                    {"Maximo_func", 400000},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1},
+                    {"Maximo_paro", 136}
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "400000";
@@ -1941,8 +1940,10 @@ namespace SIM
                     textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
                 }  
             }
-
-            FieldsCoherency();
+            StartSilentMode();
+            //RemoveParameters(ParameterNames);
+            AddParameters(parameters);
+            StopSilentMode();
         }
 
 
@@ -1972,33 +1973,33 @@ namespace SIM
         }
         
         // Rellena los inputs en función de los valores de nombres y parametros
-        private void FieldsCoherency(bool inSilentMode = true)
+        private void DefaultParameters()
         {
-            if (inSilentMode) StartSilentMode();
-            comboBox1.Text = nombres.ContainsKey("ley_func") ? nombres["ley_func"] : "Ninguna Ley";
-            comboBox2.Text = nombres.ContainsKey("ley_paro") ? nombres["ley_paro"] : "Ninguna Ley";
-            comboBox3.Text = nombres.ContainsKey("ley_recu") ? nombres["ley_recu"] : "Ninguna Ley";
-            comboBox4.Text = nombres.ContainsKey("ley_coste") ? nombres["ley_coste"] : "Ninguna Ley";
-            comboBox5.Text = nombres.ContainsKey("preventivo") ? nombres["preventivo"] : "No activado";
-            comboBox6.Text = nombres.ContainsKey("ley_eficiencia_mto") ? nombres["ley_eficiencia_mto"] : "Ninguna Ley";
-            //TODO añadir incialización y habilitar combos de la derecha si está seleccionada la opción correspondiente de los combos de la izquierda.
-            if (inSilentMode) StopSilentMode();
+            AddParameters(new Hashtable {
+                {"ley_func", "Ninguna Ley"},
+                {"ley_paro", "Ninguna Ley"},
+                {"ley_recu", "Ninguna Ley"},
+                {"ley_coste", "Ninguna Ley"},
+                {"preventivo", "No activado"},
+                {"ley_eficiencia_mto", "Ninguna Ley"}
+            });
         }
+
+
 
 
         // Reset
         private void reset()
         {
-            // Limpiar los diccionarios
-            parametros.Clear();
-            nombres.Clear();
+            StartSilentMode();
+            RemoveParameters(ParameterNames());
+            DefaultParameters();
+            StopSilentMode();
 
             List<ComboBox> comboBoxes = new List<ComboBox> { comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6 };
             foreach (ComboBox comboBox in comboBoxes) {
                 comboBox.Enabled = true;
             }
-
-            FieldsCoherency(inSilentMode: false);
 
             //TextBox de resultados
             textBox5.Text = "";
@@ -2101,6 +2102,22 @@ namespace SIM
         {
             if (SilentMode) return;
 
+            List<String> delete_params = new List<String>
+            {
+                sufijo2 + "_Mantenimiento_Ud_Tiempo",
+                sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
+                sufijo2 + "_MantenimientoCadaIntervencion",
+                "X1_" + sufijo2,
+                "Y1_" + sufijo2,
+                "X2_" + sufijo2,
+                "Y2_" + sufijo2,
+                "ley_" + sufijo2 + "_param1", 
+                "ley_" + sufijo2 + "_param2",
+                "Minimo_" + sufijo2,
+                "Maximo_" + sufijo2,
+                "ley_" + sufijo2
+            };
+            /*
             terminos_a_eliminar_en_diccionarios[sufijo2 + "_Mantenimiento_Ud_Tiempo"] = "parametros";
             terminos_a_eliminar_en_diccionarios[sufijo2 + "_Perdida_Prod_por_Ud_tiempo"] = "parametros";
             terminos_a_eliminar_en_diccionarios[sufijo2 + "_MantenimientoCadaIntervencion"] = "parametros";
@@ -2113,54 +2130,72 @@ namespace SIM
             terminos_a_eliminar_en_diccionarios["Minimo_" + sufijo2] = "parametros";
             terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";
             terminos_a_eliminar_en_diccionarios["ley_" + sufijo2] = "parametros";
-
+            */
             FormDatos1 frm = new FormDatos1();
 
             if (nombre_de_campo_y_combo_Box == "Ninguna Ley")
             {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //limpiar_diccionarios();
+                RemoveParameters(delete_params);
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
+
             }
 
             if (nombre_de_campo_y_combo_Box == "Siempre a Nuevo (GAN)")
             {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //limpiar_diccionarios();
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
+                RemoveParameters(delete_params);
             }
 
             if (nombre_de_campo_y_combo_Box == "Según tiempo (BAO)")
             {
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                limpiar_diccionarios();
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //limpiar_diccionarios();
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
+                RemoveParameters(delete_params);
             }
 
             // Caso particular del combo 'preventivo'
             if (nombre_de_ley == "preventivo")
             {
-                terminos_a_eliminar_en_diccionarios.Clear();
-
+                //terminos_a_eliminar_en_diccionarios.Clear();
+                delete_params.Clear();
                 if (nombre_de_campo_y_combo_Box == "No activado")
                 {
+                    AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
+                    RemoveParameters(new List<String> {"tipo_de_preventivo", "tiempo_entre_preventivo", "disponibilidad_minima_admisible" });
+                    /*
                     nombres[nombre_de_ley] = "No activado";
                     nombres.Remove("tipo_de_preventivo");
                     parametros.Remove("tiempo_entre_preventivos");
-                    parametros.Remove("disponibilidad_minima_admisible");
+                    parametros.Remove("disponibilidad_minima_admisible");*/
                 }
 
                 if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
                 {
+                    /*
                     nombres[nombre_de_ley] = "Activado";
                     nombres["tipo_de_preventivo"] = "Fijo por tiempo";
                     parametros.Remove("disponibilidad_minima_admisible");
+                    */
+                    AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, {"tipo_de_preventivo", nombre_de_campo_y_combo_Box} });
+                    RemoveParameters(new List<String> { "disponibilidad_minima_admisible" });
                     SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
                                         "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", "");
                 }
 
                 if (nombre_de_campo_y_combo_Box == "Por Disponibilidad")
                 {
+                    /*
                     nombres[nombre_de_ley] = "Activado";
                     nombres["tipo_de_preventivo"] = "Por Disponibilidad";
                     parametros.Remove("tiempo_entre_preventivos");
+                    */
+                    AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, { "tipo_de_preventivo", nombre_de_campo_y_combo_Box } });
+                    RemoveParameters(new List<String> { "tiempo_entre_preventivos" }); 
                     SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
                                         "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", "");
                 }
@@ -2168,18 +2203,22 @@ namespace SIM
 
             if (nombre_de_campo_y_combo_Box == "Desglose de Costes")
             {
-                limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-
+                //limpiar_diccionarios();
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                RemoveParameters(delete_params);
+                AddParameters(new Hashtable { {nombre_de_ley, nombre_de_campo_y_combo_Box} });
                 //Se habilitan las opciones de desglose de Coste
                 HabilitarComboBoxDesgloseCoste();
             }
 
             if (nombre_de_campo_y_combo_Box == "Desglose de Fallos")
             {
+                /*
                 limpiar_diccionarios();
                 nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-
+                */
+                RemoveParameters(delete_params);
+                AddParameters(new Hashtable { {nombre_de_ley, nombre_de_campo_y_combo_Box} });
                 //Se habilitan las opciones de desglose de Fallo
                 HabilitarComboBoxDesgloseTiempoFallo();
             }
@@ -2187,8 +2226,8 @@ namespace SIM
             //el siguiente if es solo aplicable a captura de datos de coste
             if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                                     "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                     "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
@@ -2197,8 +2236,8 @@ namespace SIM
             //el siguiente if es solo aplicable a captura de datos de coste
             if (nombre_de_campo_y_combo_Box == "Fijo por intervención")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                     "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                     "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
@@ -2206,8 +2245,8 @@ namespace SIM
 
             if (nombre_de_campo_y_combo_Box == "Fijo")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2235,8 +2274,8 @@ namespace SIM
 
             if (nombre_de_campo_y_combo_Box == "Uniforme")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2256,15 +2295,15 @@ namespace SIM
 
 
 
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
+                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
                                     "Máximo Admisible", auxi1, "", "",
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
             }
 
             if (nombre_de_campo_y_combo_Box == "Línea recta")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2281,9 +2320,7 @@ namespace SIM
                     auxi3 = "% reducción si Preventivo";
                     auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
                 }
-
-
-
+                
                 SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
                                     "Final t " + palabra_clave, auxi1, "X1_" + sufijo2, "Y1_" + sufijo2,
                                      "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
@@ -2291,8 +2328,8 @@ namespace SIM
 
             if (nombre_de_campo_y_combo_Box == "Exponencial")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2310,17 +2347,15 @@ namespace SIM
                     auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
                 }
 
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
+                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
                                     "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
             }
 
             if (nombre_de_campo_y_combo_Box == "Weibull2P")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2340,15 +2375,15 @@ namespace SIM
 
 
 
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
+                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
                                     "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
             }
 
             if (nombre_de_campo_y_combo_Box == "Normal")
             {
-                //limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
+                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
                 string auxi1 = "";
                 string auxi2 = "";
                 if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
@@ -2366,9 +2401,7 @@ namespace SIM
                     auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
                 }
 
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
+                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
                                     "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
             }
@@ -2401,12 +2434,12 @@ namespace SIM
             {
                 limpiar_diccionarios(); //¿sobra?
 
-                if (Rotulo_del_Parametro1 != "") parametros[Nombre_Parametro1] = Convert.ToDouble(frm.parametro1);
-                if (Rotulo_del_Parametro2 != "") parametros[Nombre_Parametro2] = Convert.ToDouble(frm.parametro2);
-                if (Rotulo_del_Parametro3 != "") parametros[Nombre_Parametro3] = Convert.ToDouble(frm.parametro3);
-                if (Rotulo_del_Parametro4 != "") parametros[Nombre_Parametro4] = Convert.ToDouble(frm.parametro4);
-                if (Rotulo_del_Parametro5 != "") parametros[Nombre_Parametro5] = Convert.ToDouble(frm.parametro5);
-                if (Rotulo_del_Parametro6 != "") parametros[Nombre_Parametro6] = Convert.ToDouble(frm.parametro6);
+                if (Rotulo_del_Parametro1 != "") _parameters[Nombre_Parametro1] = Convert.ToDouble(frm.parametro1);
+                if (Rotulo_del_Parametro2 != "") _parameters[Nombre_Parametro2] = Convert.ToDouble(frm.parametro2);
+                if (Rotulo_del_Parametro3 != "") _parameters[Nombre_Parametro3] = Convert.ToDouble(frm.parametro3);
+                if (Rotulo_del_Parametro4 != "") _parameters[Nombre_Parametro4] = Convert.ToDouble(frm.parametro4);
+                if (Rotulo_del_Parametro5 != "") _parameters[Nombre_Parametro5] = Convert.ToDouble(frm.parametro5);
+                if (Rotulo_del_Parametro6 != "") _parameters[Nombre_Parametro6] = Convert.ToDouble(frm.parametro6);
 
 
                 //Alimentar el Textbox de las opciones elegidas por el usuario
@@ -2414,12 +2447,12 @@ namespace SIM
                 {
                     textBox11.Enabled = true;
                     textBox11.Text += "\r\n" + "\b " + Ambito_Op + titulo_del_Formulario + "\r\n";
-                    if (Rotulo_del_Parametro1 != "") textBox11.Text += "   " + Rotulo_del_Parametro1 + "= " + Convert.ToString(parametros[Nombre_Parametro1]) + "\r\n";
-                    if (Rotulo_del_Parametro2 != "") textBox11.Text += "   " + Rotulo_del_Parametro2 + "= " + Convert.ToString(parametros[Nombre_Parametro2]) + "\r\n";
-                    if (Rotulo_del_Parametro3 != "") textBox11.Text += "   " + Rotulo_del_Parametro3 + "= " + Convert.ToString(parametros[Nombre_Parametro3]) + "\r\n";
-                    if (Rotulo_del_Parametro4 != "") textBox11.Text += "   " + Rotulo_del_Parametro4 + "= " + Convert.ToString(parametros[Nombre_Parametro4]) + "\r\n";
-                    if (Rotulo_del_Parametro5 != "") textBox11.Text += "   " + Rotulo_del_Parametro5 + "= " + Convert.ToString(parametros[Nombre_Parametro5]) + "\r\n";
-                    if (Rotulo_del_Parametro6 != "") textBox11.Text += "   " + Rotulo_del_Parametro6 + "= " + Convert.ToString(parametros[Nombre_Parametro6]) + "\r\n";
+                    if (Rotulo_del_Parametro1 != "") textBox11.Text += "   " + Rotulo_del_Parametro1 + "= " + Convert.ToString(_parameters[Nombre_Parametro1]) + "\r\n";
+                    if (Rotulo_del_Parametro2 != "") textBox11.Text += "   " + Rotulo_del_Parametro2 + "= " + Convert.ToString(_parameters[Nombre_Parametro2]) + "\r\n";
+                    if (Rotulo_del_Parametro3 != "") textBox11.Text += "   " + Rotulo_del_Parametro3 + "= " + Convert.ToString(_parameters[Nombre_Parametro3]) + "\r\n";
+                    if (Rotulo_del_Parametro4 != "") textBox11.Text += "   " + Rotulo_del_Parametro4 + "= " + Convert.ToString(_parameters[Nombre_Parametro4]) + "\r\n";
+                    if (Rotulo_del_Parametro5 != "") textBox11.Text += "   " + Rotulo_del_Parametro5 + "= " + Convert.ToString(_parameters[Nombre_Parametro5]) + "\r\n";
+                    if (Rotulo_del_Parametro6 != "") textBox11.Text += "   " + Rotulo_del_Parametro6 + "= " + Convert.ToString(_parameters[Nombre_Parametro6]) + "\r\n";
                     textBox11.Text += "             " + "\r\n";
                 }
 
@@ -2541,6 +2574,7 @@ namespace SIM
 
         private void WidgetValue(Object widget, string value) 
         {
+      
             Type type = widget.GetType();
             switch (type.ToString())
             {
@@ -2555,22 +2589,34 @@ namespace SIM
             }
         }
 
+        private List<String> ParameterNames()
+        {
+            List<String> pnames = new List<String> { };
+            foreach (string name in _parameters.Keys)
+            {
+                pnames.Add(name);
+            }
+            return pnames;
+        }
+
         private void AddParameters(Hashtable parameters)
         {
             foreach (DictionaryEntry parameter in parameters)
             {
                 _parameters.Remove(parameter.Key);
                 _parameters.Add(parameter.Key, parameter.Value);
-                WidgetValue(_widgets[parameter.Key], (string)parameter.Value);
+                if(_widgets.ContainsKey(parameter.Key))
+                    WidgetValue(_widgets[parameter.Key], (string)parameter.Value);
             }
         }
 
-        private void RemoveParameters(string[] parameters)
+        private void RemoveParameters(List<String> parameters)
         { 
             foreach (string parameter in parameters)
             {
                 _parameters.Remove(parameter);
-                WidgetValue(_widgets[parameter], "");
+                if(_widgets.ContainsKey(parameter))
+                    WidgetValue(_widgets[parameter], "");
             }
         }
 
