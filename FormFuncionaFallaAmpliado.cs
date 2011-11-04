@@ -2147,8 +2147,7 @@ namespace SIM
             Hashtable parametersToAdd = new Hashtable { };
             List<String> requestParams = new List<String> { };
             // Se inicializa el subformulario
-            FormDatos1 frm = new FormDatos1();
-            bool showButton = false; 
+            FormDatos1 frm = new FormDatos1(); 
             
             // Parámetros que se van a solicitar en los subformularios
             parametersToRemove = new List<String> {
@@ -2168,43 +2167,7 @@ namespace SIM
 
             parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
 
-            // Caso particular del combo 'preventivo'
-            if (nombre_de_ley == "preventivo")
-            {
-                //terminos_a_eliminar_en_diccionarios.Clear();
-                //delete_params.Clear();
-                if (nombre_de_campo_y_combo_Box == "No activado")
-                {
-                    if (!SilentMode)
-                    {
-                        RemoveParameters(new List<String> { "tipo_de_preventivo", "tiempo_entre_preventivo", "disponibilidad_minima_admisible" });
-                        AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                    }
-                    /*
-                nombres[nombre_de_ley] = "No activado";
-                nombres.Remove("tipo_de_preventivo");
-                parametros.Remove("tiempo_entre_preventivos");
-                parametros.Remove("disponibilidad_minima_admisible");*/
-                }
-
-                if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
-                {
-                    /*
-                    nombres[nombre_de_ley] = "Activado";
-                    nombres["tipo_de_preventivo"] = "Fijo por tiempo";
-                    parametros.Remove("disponibilidad_minima_admisible");
-                    */
-                    if (!SilentMode)
-                    {
-                        RemoveParameters(new List<String> { "disponibilidad_minima_admisible" });
-                        AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, { "tipo_de_preventivo", nombre_de_campo_y_combo_Box } });
-                        SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
-                                            "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", "");
-                    }
-                }
-            }
-
-
+            // Resto de combos
             List<String> auxi = new List<String> {"","","","","" };
 
             switch (nombre_de_campo_y_combo_Box)
@@ -2214,9 +2177,19 @@ namespace SIM
                 case "Según tiempo (BAO)":
                     break;
 
+                case "No activado":
+                    if (nombre_de_ley == "preventivo")
+                    {
+                        parametersToRemove.Add("tipo_de_preventivo");
+                        parametersToRemove.Add("tiempo_entre_preventivo");
+                        parametersToRemove.Add("disponibilidad_minima_admisible");
+                    }
+                    break;
+
                 case "Por Disponibilidad":
                     parametersToRemove.Add("tiempo_entre_preventivos");
                     parametersToRemove.Add("tipo_de_preventivo");
+                    parametersToAdd.Remove(nombre_de_ley);
                     parametersToAdd.Add(nombre_de_ley, "Activado");
                     parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
                     requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
@@ -2234,8 +2207,18 @@ namespace SIM
                     break;
 
                 //el siguiente if es solo aplicable a captura de datos de coste
-                case "Fijo por tiempo":                    
-                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
+                case "Fijo por tiempo":
+                    if (nombre_de_ley == "preventivo")
+                    {
+                        parametersToRemove.Add("disponibilidad_minima_admisible");
+                        parametersToAdd.Remove(nombre_de_ley);
+                        parametersToAdd.Add(nombre_de_ley, "Activado");
+                        parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
+                        requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
+                                                          "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", ""};
+                    }
+                    else
+                        requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                                         "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                         "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
                     break;
@@ -2371,15 +2354,8 @@ namespace SIM
             }
             
             // Mostrar botón cuando se solicita subform
-            Button objButton = (Button)_subformButtons[nombre_de_ley];
-            if (requestParams.Count() != 0)
-            {  
-                objButton.Enabled = true;
-            }
-            else
-            {
-                objButton.Enabled = false;
-            }
+            Button objButton = (Button)_subformButtons[nombre_de_ley];            
+            objButton.Enabled = requestParams.Count() != 0 ? true : false;            
         }
 
         // Popup de los comboBoxes
