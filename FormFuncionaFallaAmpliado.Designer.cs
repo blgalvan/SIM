@@ -90,9 +90,30 @@
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonLeyparoensam = new System.Windows.Forms.Button();
+            this.buttonLeyparorepa = new System.Windows.Forms.Button();
+            this.buttonLeyparodesm = new System.Windows.Forms.Button();
+            this.buttonLeyparodiag = new System.Windows.Forms.Button();
+            this.buttonLeyparorecon = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.buttonLeyFuncPopup = new System.Windows.Forms.Button();
+            this.buttonLeycosteserv = new System.Windows.Forms.Button();
+            this.buttonLeycosteverif = new System.Windows.Forms.Button();
+            this.buttonLeycosterepa = new System.Windows.Forms.Button();
+            this.buttonLeycostedesm = new System.Windows.Forms.Button();
+            this.buttonLeycosteprep = new System.Windows.Forms.Button();
+            this.buttonLeycostediag = new System.Windows.Forms.Button();
+            this.buttonLeycosterecon = new System.Windows.Forms.Button();
+            this.buttonLeyfunc = new System.Windows.Forms.Button();
             this.comboBox9 = new System.Windows.Forms.ComboBox();
+            this.buttonLeyparo = new System.Windows.Forms.Button();
+            this.buttonLeyrecu = new System.Windows.Forms.Button();
+            this.buttonLeycoste = new System.Windows.Forms.Button();
+            this.buttonPreventivo = new System.Windows.Forms.Button();
+            this.buttonLeyeficienciamto = new System.Windows.Forms.Button();
+            this.buttonLeyparoprep = new System.Windows.Forms.Button();
+            this.buttonLeyparoverif = new System.Windows.Forms.Button();
+            this.buttonLeyparoserv = new System.Windows.Forms.Button();
+            this.buttonLeycosteensam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -127,7 +148,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(34, 183);
+            this.label20.Location = new System.Drawing.Point(19, 183);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(50, 13);
             this.label20.TabIndex = 132;
@@ -144,7 +165,7 @@
             "Weibull2P",
             "Normal",
             "Desglose de Costes"});
-            this.comboBox4.Location = new System.Drawing.Point(144, 176);
+            this.comboBox4.Location = new System.Drawing.Point(129, 176);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(175, 21);
             this.comboBox4.TabIndex = 127;
@@ -153,7 +174,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(34, 155);
+            this.label13.Location = new System.Drawing.Point(19, 155);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(92, 13);
             this.label13.TabIndex = 118;
@@ -169,7 +190,7 @@
             "Línea recta",
             "Exponencial",
             "Weibull2P"});
-            this.comboBox3.Location = new System.Drawing.Point(144, 148);
+            this.comboBox3.Location = new System.Drawing.Point(129, 148);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(175, 21);
             this.comboBox3.TabIndex = 117;
@@ -177,7 +198,7 @@
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(144, 264);
+            this.textBox10.Location = new System.Drawing.Point(129, 264);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(67, 20);
             this.textBox10.TabIndex = 116;
@@ -186,7 +207,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(34, 267);
+            this.label16.Location = new System.Drawing.Point(19, 267);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(109, 13);
             this.label16.TabIndex = 115;
@@ -195,7 +216,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(34, 121);
+            this.label6.Location = new System.Drawing.Point(19, 121);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(103, 13);
             this.label6.TabIndex = 110;
@@ -211,7 +232,7 @@
             "Normal",
             "Uniforme",
             "Desglose de Fallos"});
-            this.comboBox2.Location = new System.Drawing.Point(144, 118);
+            this.comboBox2.Location = new System.Drawing.Point(129, 118);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(175, 21);
             this.comboBox2.TabIndex = 109;
@@ -220,7 +241,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(34, 93);
+            this.label12.Location = new System.Drawing.Point(19, 93);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(104, 13);
             this.label12.TabIndex = 100;
@@ -264,7 +285,7 @@
             "Exponencial",
             "Weibull2P",
             "Uniforme"});
-            this.comboBox1.Location = new System.Drawing.Point(144, 90);
+            this.comboBox1.Location = new System.Drawing.Point(129, 90);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(175, 21);
             this.comboBox1.TabIndex = 95;
@@ -320,7 +341,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Rec.Location = new System.Drawing.Point(141, 27);
+            this.comboBox_T_Rec.Location = new System.Drawing.Point(132, 27);
             this.comboBox_T_Rec.Name = "comboBox_T_Rec";
             this.comboBox_T_Rec.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Rec.TabIndex = 145;
@@ -339,7 +360,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 30);
+            this.label5.Location = new System.Drawing.Point(6, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(84, 13);
             this.label5.TabIndex = 147;
@@ -356,7 +377,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Diag.Location = new System.Drawing.Point(141, 50);
+            this.comboBox_T_Diag.Location = new System.Drawing.Point(132, 50);
             this.comboBox_T_Diag.Name = "comboBox_T_Diag";
             this.comboBox_T_Diag.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Diag.TabIndex = 148;
@@ -373,7 +394,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Prep.Location = new System.Drawing.Point(141, 72);
+            this.comboBox_T_Prep.Location = new System.Drawing.Point(132, 72);
             this.comboBox_T_Prep.Name = "comboBox_T_Prep";
             this.comboBox_T_Prep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Prep.TabIndex = 149;
@@ -390,7 +411,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Desm.Location = new System.Drawing.Point(141, 95);
+            this.comboBox_T_Desm.Location = new System.Drawing.Point(132, 95);
             this.comboBox_T_Desm.Name = "comboBox_T_Desm";
             this.comboBox_T_Desm.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Desm.TabIndex = 150;
@@ -407,7 +428,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Rep.Location = new System.Drawing.Point(141, 118);
+            this.comboBox_T_Rep.Location = new System.Drawing.Point(132, 118);
             this.comboBox_T_Rep.Name = "comboBox_T_Rep";
             this.comboBox_T_Rep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_T_Rep.TabIndex = 151;
@@ -424,7 +445,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Ensam.Location = new System.Drawing.Point(140, 142);
+            this.comboBox_T_Ensam.Location = new System.Drawing.Point(131, 142);
             this.comboBox_T_Ensam.Name = "comboBox_T_Ensam";
             this.comboBox_T_Ensam.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Ensam.TabIndex = 153;
@@ -441,7 +462,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Verif.Location = new System.Drawing.Point(140, 164);
+            this.comboBox_T_Verif.Location = new System.Drawing.Point(131, 164);
             this.comboBox_T_Verif.Name = "comboBox_T_Verif";
             this.comboBox_T_Verif.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Verif.TabIndex = 154;
@@ -458,7 +479,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_T_Serv.Location = new System.Drawing.Point(140, 186);
+            this.comboBox_T_Serv.Location = new System.Drawing.Point(131, 186);
             this.comboBox_T_Serv.Name = "comboBox_T_Serv";
             this.comboBox_T_Serv.Size = new System.Drawing.Size(90, 21);
             this.comboBox_T_Serv.TabIndex = 155;
@@ -467,7 +488,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 53);
+            this.label3.Location = new System.Drawing.Point(7, 53);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 156;
@@ -476,7 +497,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 76);
+            this.label7.Location = new System.Drawing.Point(6, 76);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 13);
             this.label7.TabIndex = 157;
@@ -485,7 +506,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 98);
+            this.label8.Location = new System.Drawing.Point(6, 98);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(94, 13);
             this.label8.TabIndex = 158;
@@ -494,7 +515,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(15, 121);
+            this.label9.Location = new System.Drawing.Point(6, 121);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(120, 13);
             this.label9.TabIndex = 159;
@@ -503,7 +524,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(15, 145);
+            this.label10.Location = new System.Drawing.Point(6, 145);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(61, 13);
             this.label10.TabIndex = 160;
@@ -512,7 +533,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(15, 167);
+            this.label11.Location = new System.Drawing.Point(6, 167);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(62, 13);
             this.label11.TabIndex = 161;
@@ -521,7 +542,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(16, 189);
+            this.label14.Location = new System.Drawing.Point(7, 189);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(96, 13);
             this.label14.TabIndex = 162;
@@ -537,7 +558,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Rec.Location = new System.Drawing.Point(141, 27);
+            this.comboBox_C_Rec.Location = new System.Drawing.Point(133, 27);
             this.comboBox_C_Rec.Name = "comboBox_C_Rec";
             this.comboBox_C_Rec.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Rec.TabIndex = 165;
@@ -546,7 +567,7 @@
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(14, 30);
+            this.label26.Location = new System.Drawing.Point(6, 30);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(84, 13);
             this.label26.TabIndex = 166;
@@ -562,7 +583,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Diag.Location = new System.Drawing.Point(141, 50);
+            this.comboBox_C_Diag.Location = new System.Drawing.Point(133, 50);
             this.comboBox_C_Diag.Name = "comboBox_C_Diag";
             this.comboBox_C_Diag.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Diag.TabIndex = 167;
@@ -578,7 +599,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Prep.Location = new System.Drawing.Point(141, 73);
+            this.comboBox_C_Prep.Location = new System.Drawing.Point(133, 73);
             this.comboBox_C_Prep.Name = "comboBox_C_Prep";
             this.comboBox_C_Prep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Prep.TabIndex = 168;
@@ -594,7 +615,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Desm.Location = new System.Drawing.Point(141, 95);
+            this.comboBox_C_Desm.Location = new System.Drawing.Point(133, 95);
             this.comboBox_C_Desm.Name = "comboBox_C_Desm";
             this.comboBox_C_Desm.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Desm.TabIndex = 169;
@@ -610,7 +631,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Rep.Location = new System.Drawing.Point(141, 118);
+            this.comboBox_C_Rep.Location = new System.Drawing.Point(133, 118);
             this.comboBox_C_Rep.Name = "comboBox_C_Rep";
             this.comboBox_C_Rep.Size = new System.Drawing.Size(89, 21);
             this.comboBox_C_Rep.TabIndex = 170;
@@ -626,7 +647,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Ensam.Location = new System.Drawing.Point(141, 141);
+            this.comboBox_C_Ensam.Location = new System.Drawing.Point(133, 141);
             this.comboBox_C_Ensam.Name = "comboBox_C_Ensam";
             this.comboBox_C_Ensam.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Ensam.TabIndex = 171;
@@ -642,7 +663,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Verif.Location = new System.Drawing.Point(141, 164);
+            this.comboBox_C_Verif.Location = new System.Drawing.Point(133, 164);
             this.comboBox_C_Verif.Name = "comboBox_C_Verif";
             this.comboBox_C_Verif.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Verif.TabIndex = 172;
@@ -658,7 +679,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox_C_Serv.Location = new System.Drawing.Point(141, 186);
+            this.comboBox_C_Serv.Location = new System.Drawing.Point(133, 186);
             this.comboBox_C_Serv.Name = "comboBox_C_Serv";
             this.comboBox_C_Serv.Size = new System.Drawing.Size(90, 21);
             this.comboBox_C_Serv.TabIndex = 173;
@@ -667,7 +688,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(15, 53);
+            this.label25.Location = new System.Drawing.Point(7, 53);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(53, 13);
             this.label25.TabIndex = 174;
@@ -676,7 +697,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(16, 76);
+            this.label24.Location = new System.Drawing.Point(8, 76);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(64, 13);
             this.label24.TabIndex = 175;
@@ -685,7 +706,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(14, 98);
+            this.label23.Location = new System.Drawing.Point(6, 98);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(94, 13);
             this.label23.TabIndex = 176;
@@ -694,7 +715,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(14, 123);
+            this.label22.Location = new System.Drawing.Point(6, 123);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(120, 13);
             this.label22.TabIndex = 177;
@@ -703,7 +724,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(16, 145);
+            this.label21.Location = new System.Drawing.Point(8, 145);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(61, 13);
             this.label21.TabIndex = 178;
@@ -712,7 +733,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(15, 167);
+            this.label19.Location = new System.Drawing.Point(7, 167);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(62, 13);
             this.label19.TabIndex = 179;
@@ -721,7 +742,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(16, 189);
+            this.label18.Location = new System.Drawing.Point(8, 189);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(96, 13);
             this.label18.TabIndex = 180;
@@ -740,7 +761,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(34, 209);
+            this.label15.Location = new System.Drawing.Point(19, 209);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(76, 13);
             this.label15.TabIndex = 183;
@@ -753,7 +774,7 @@
             "No activado",
             "Fijo por tiempo",
             "Por Disponibilidad"});
-            this.comboBox5.Location = new System.Drawing.Point(144, 205);
+            this.comboBox5.Location = new System.Drawing.Point(129, 205);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(174, 21);
             this.comboBox5.TabIndex = 184;
@@ -770,7 +791,7 @@
             "Weibull2P",
             "Normal",
             "Línea recta"});
-            this.comboBox6.Location = new System.Drawing.Point(144, 234);
+            this.comboBox6.Location = new System.Drawing.Point(129, 234);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(175, 21);
             this.comboBox6.TabIndex = 185;
@@ -779,7 +800,7 @@
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(34, 238);
+            this.label28.Location = new System.Drawing.Point(19, 238);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(95, 13);
             this.label28.TabIndex = 186;
@@ -823,7 +844,7 @@
             "Caso8",
             "Caso9",
             "Caso10"});
-            this.comboBox8.Location = new System.Drawing.Point(144, 60);
+            this.comboBox8.Location = new System.Drawing.Point(129, 60);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(174, 21);
             this.comboBox8.TabIndex = 188;
@@ -832,6 +853,14 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonLeyparoensam);
+            this.groupBox1.Controls.Add(this.buttonLeyparoserv);
+            this.groupBox1.Controls.Add(this.buttonLeyparorepa);
+            this.groupBox1.Controls.Add(this.buttonLeyparoverif);
+            this.groupBox1.Controls.Add(this.buttonLeyparodesm);
+            this.groupBox1.Controls.Add(this.buttonLeyparoprep);
+            this.groupBox1.Controls.Add(this.buttonLeyparodiag);
+            this.groupBox1.Controls.Add(this.buttonLeyparorecon);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBox_T_Rec);
             this.groupBox1.Controls.Add(this.label3);
@@ -850,13 +879,66 @@
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Location = new System.Drawing.Point(353, 60);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(246, 220);
+            this.groupBox1.Size = new System.Drawing.Size(255, 220);
             this.groupBox1.TabIndex = 189;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "DESGLOSE TIEMPOS FALLOS/PARADAS";
             // 
+            // buttonLeyparoensam
+            // 
+            this.buttonLeyparoensam.Location = new System.Drawing.Point(228, 139);
+            this.buttonLeyparoensam.Name = "buttonLeyparoensam";
+            this.buttonLeyparoensam.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoensam.TabIndex = 203;
+            this.buttonLeyparoensam.Text = "...";
+            this.buttonLeyparoensam.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparorepa
+            // 
+            this.buttonLeyparorepa.Location = new System.Drawing.Point(228, 114);
+            this.buttonLeyparorepa.Name = "buttonLeyparorepa";
+            this.buttonLeyparorepa.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparorepa.TabIndex = 202;
+            this.buttonLeyparorepa.Text = "...";
+            this.buttonLeyparorepa.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparodesm
+            // 
+            this.buttonLeyparodesm.Location = new System.Drawing.Point(228, 93);
+            this.buttonLeyparodesm.Name = "buttonLeyparodesm";
+            this.buttonLeyparodesm.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparodesm.TabIndex = 201;
+            this.buttonLeyparodesm.Text = "...";
+            this.buttonLeyparodesm.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparodiag
+            // 
+            this.buttonLeyparodiag.Location = new System.Drawing.Point(228, 48);
+            this.buttonLeyparodiag.Name = "buttonLeyparodiag";
+            this.buttonLeyparodiag.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparodiag.TabIndex = 199;
+            this.buttonLeyparodiag.Text = "...";
+            this.buttonLeyparodiag.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparorecon
+            // 
+            this.buttonLeyparorecon.Location = new System.Drawing.Point(228, 25);
+            this.buttonLeyparorecon.Name = "buttonLeyparorecon";
+            this.buttonLeyparorecon.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparorecon.TabIndex = 198;
+            this.buttonLeyparorecon.Text = "...";
+            this.buttonLeyparorecon.UseVisualStyleBackColor = true;
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonLeycosteensam);
+            this.groupBox2.Controls.Add(this.buttonLeycosteserv);
+            this.groupBox2.Controls.Add(this.buttonLeycosteverif);
+            this.groupBox2.Controls.Add(this.buttonLeycosterepa);
+            this.groupBox2.Controls.Add(this.buttonLeycostedesm);
+            this.groupBox2.Controls.Add(this.buttonLeycosteprep);
+            this.groupBox2.Controls.Add(this.buttonLeycostediag);
+            this.groupBox2.Controls.Add(this.buttonLeycosterecon);
             this.groupBox2.Controls.Add(this.label26);
             this.groupBox2.Controls.Add(this.comboBox_C_Rec);
             this.groupBox2.Controls.Add(this.comboBox_C_Diag);
@@ -875,20 +957,83 @@
             this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Location = new System.Drawing.Point(614, 60);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(250, 220);
+            this.groupBox2.Size = new System.Drawing.Size(260, 220);
             this.groupBox2.TabIndex = 190;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "DESGLOSE DE COSTES";
             // 
-            // buttonLeyFuncPopup
+            // buttonLeycosteserv
             // 
-            this.buttonLeyFuncPopup.Location = new System.Drawing.Point(326, 90);
-            this.buttonLeyFuncPopup.Name = "buttonLeyFuncPopup";
-            this.buttonLeyFuncPopup.Size = new System.Drawing.Size(21, 23);
-            this.buttonLeyFuncPopup.TabIndex = 191;
-            this.buttonLeyFuncPopup.Text = "...";
-            this.buttonLeyFuncPopup.UseVisualStyleBackColor = true;
-            this.buttonLeyFuncPopup.Click += new System.EventHandler(this.buttonLeyFuncPopup_Click);
+            this.buttonLeycosteserv.Location = new System.Drawing.Point(229, 184);
+            this.buttonLeycosteserv.Name = "buttonLeycosteserv";
+            this.buttonLeycosteserv.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosteserv.TabIndex = 213;
+            this.buttonLeycosteserv.Text = "...";
+            this.buttonLeycosteserv.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycosteverif
+            // 
+            this.buttonLeycosteverif.Location = new System.Drawing.Point(229, 162);
+            this.buttonLeycosteverif.Name = "buttonLeycosteverif";
+            this.buttonLeycosteverif.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosteverif.TabIndex = 212;
+            this.buttonLeycosteverif.Text = "...";
+            this.buttonLeycosteverif.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycosterepa
+            // 
+            this.buttonLeycosterepa.Location = new System.Drawing.Point(229, 116);
+            this.buttonLeycosterepa.Name = "buttonLeycosterepa";
+            this.buttonLeycosterepa.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosterepa.TabIndex = 210;
+            this.buttonLeycosterepa.Text = "...";
+            this.buttonLeycosterepa.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycostedesm
+            // 
+            this.buttonLeycostedesm.Location = new System.Drawing.Point(229, 93);
+            this.buttonLeycostedesm.Name = "buttonLeycostedesm";
+            this.buttonLeycostedesm.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycostedesm.TabIndex = 209;
+            this.buttonLeycostedesm.Text = "...";
+            this.buttonLeycostedesm.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycosteprep
+            // 
+            this.buttonLeycosteprep.Location = new System.Drawing.Point(229, 70);
+            this.buttonLeycosteprep.Name = "buttonLeycosteprep";
+            this.buttonLeycosteprep.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosteprep.TabIndex = 208;
+            this.buttonLeycosteprep.Text = "...";
+            this.buttonLeycosteprep.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycostediag
+            // 
+            this.buttonLeycostediag.Location = new System.Drawing.Point(229, 48);
+            this.buttonLeycostediag.Name = "buttonLeycostediag";
+            this.buttonLeycostediag.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycostediag.TabIndex = 207;
+            this.buttonLeycostediag.Text = "...";
+            this.buttonLeycostediag.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycosterecon
+            // 
+            this.buttonLeycosterecon.Location = new System.Drawing.Point(229, 25);
+            this.buttonLeycosterecon.Name = "buttonLeycosterecon";
+            this.buttonLeycosterecon.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosterecon.TabIndex = 206;
+            this.buttonLeycosterecon.Text = "...";
+            this.buttonLeycosterecon.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyfunc
+            // 
+            this.buttonLeyfunc.Location = new System.Drawing.Point(310, 88);
+            this.buttonLeyfunc.Name = "buttonLeyfunc";
+            this.buttonLeyfunc.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyfunc.TabIndex = 191;
+            this.buttonLeyfunc.Text = "...";
+            this.buttonLeyfunc.UseVisualStyleBackColor = true;
+            this.buttonLeyfunc.Click += new System.EventHandler(this.buttonLeyFuncPopup_Click);
             // 
             // comboBox9
             // 
@@ -898,13 +1043,99 @@
             this.comboBox9.Size = new System.Drawing.Size(121, 21);
             this.comboBox9.TabIndex = 192;
             // 
+            // buttonLeyparo
+            // 
+            this.buttonLeyparo.Location = new System.Drawing.Point(310, 116);
+            this.buttonLeyparo.Name = "buttonLeyparo";
+            this.buttonLeyparo.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparo.TabIndex = 193;
+            this.buttonLeyparo.Text = "...";
+            this.buttonLeyparo.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyrecu
+            // 
+            this.buttonLeyrecu.Location = new System.Drawing.Point(310, 146);
+            this.buttonLeyrecu.Name = "buttonLeyrecu";
+            this.buttonLeyrecu.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyrecu.TabIndex = 194;
+            this.buttonLeyrecu.Text = "...";
+            this.buttonLeyrecu.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycoste
+            // 
+            this.buttonLeycoste.Location = new System.Drawing.Point(310, 174);
+            this.buttonLeycoste.Name = "buttonLeycoste";
+            this.buttonLeycoste.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycoste.TabIndex = 195;
+            this.buttonLeycoste.Text = "...";
+            this.buttonLeycoste.UseVisualStyleBackColor = true;
+            // 
+            // buttonPreventivo
+            // 
+            this.buttonPreventivo.Location = new System.Drawing.Point(310, 204);
+            this.buttonPreventivo.Name = "buttonPreventivo";
+            this.buttonPreventivo.Size = new System.Drawing.Size(21, 23);
+            this.buttonPreventivo.TabIndex = 196;
+            this.buttonPreventivo.Text = "...";
+            this.buttonPreventivo.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyeficienciamto
+            // 
+            this.buttonLeyeficienciamto.Location = new System.Drawing.Point(310, 233);
+            this.buttonLeyeficienciamto.Name = "buttonLeyeficienciamto";
+            this.buttonLeyeficienciamto.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyeficienciamto.TabIndex = 197;
+            this.buttonLeyeficienciamto.Text = "...";
+            this.buttonLeyeficienciamto.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparoprep
+            // 
+            this.buttonLeyparoprep.Location = new System.Drawing.Point(228, 71);
+            this.buttonLeyparoprep.Name = "buttonLeyparoprep";
+            this.buttonLeyparoprep.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoprep.TabIndex = 200;
+            this.buttonLeyparoprep.Text = "...";
+            this.buttonLeyparoprep.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparoverif
+            // 
+            this.buttonLeyparoverif.Location = new System.Drawing.Point(228, 162);
+            this.buttonLeyparoverif.Name = "buttonLeyparoverif";
+            this.buttonLeyparoverif.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoverif.TabIndex = 204;
+            this.buttonLeyparoverif.Text = "...";
+            this.buttonLeyparoverif.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparoserv
+            // 
+            this.buttonLeyparoserv.Location = new System.Drawing.Point(228, 184);
+            this.buttonLeyparoserv.Name = "buttonLeyparoserv";
+            this.buttonLeyparoserv.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoserv.TabIndex = 205;
+            this.buttonLeyparoserv.Text = "...";
+            this.buttonLeyparoserv.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeycosteensam
+            // 
+            this.buttonLeycosteensam.Location = new System.Drawing.Point(229, 139);
+            this.buttonLeycosteensam.Name = "buttonLeycosteensam";
+            this.buttonLeycosteensam.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosteensam.TabIndex = 211;
+            this.buttonLeycosteensam.Text = "...";
+            this.buttonLeycosteensam.UseVisualStyleBackColor = true;
+            // 
             // FormFuncionaFallaAmpliado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 568);
+            this.Controls.Add(this.buttonLeyeficienciamto);
+            this.Controls.Add(this.buttonPreventivo);
+            this.Controls.Add(this.buttonLeycoste);
+            this.Controls.Add(this.buttonLeyrecu);
+            this.Controls.Add(this.buttonLeyparo);
             this.Controls.Add(this.comboBox9);
-            this.Controls.Add(this.buttonLeyFuncPopup);
+            this.Controls.Add(this.buttonLeyfunc);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.comboBox8);
@@ -1012,7 +1243,28 @@
         private System.Windows.Forms.ComboBox comboBox8;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button buttonLeyFuncPopup;
+        private System.Windows.Forms.Button buttonLeyfunc;
         private System.Windows.Forms.ComboBox comboBox9;
+        private System.Windows.Forms.Button buttonLeyparoensam;
+        private System.Windows.Forms.Button buttonLeyparorepa;
+        private System.Windows.Forms.Button buttonLeyparodesm;
+        private System.Windows.Forms.Button buttonLeyparodiag;
+        private System.Windows.Forms.Button buttonLeyparorecon;
+        private System.Windows.Forms.Button buttonLeycosteserv;
+        private System.Windows.Forms.Button buttonLeycosteverif;
+        private System.Windows.Forms.Button buttonLeycosterepa;
+        private System.Windows.Forms.Button buttonLeycostedesm;
+        private System.Windows.Forms.Button buttonLeycosteprep;
+        private System.Windows.Forms.Button buttonLeycostediag;
+        private System.Windows.Forms.Button buttonLeycosterecon;
+        private System.Windows.Forms.Button buttonLeyparo;
+        private System.Windows.Forms.Button buttonLeyrecu;
+        private System.Windows.Forms.Button buttonLeycoste;
+        private System.Windows.Forms.Button buttonPreventivo;
+        private System.Windows.Forms.Button buttonLeyeficienciamto;
+        private System.Windows.Forms.Button buttonLeyparoprep;
+        private System.Windows.Forms.Button buttonLeyparoverif;
+        private System.Windows.Forms.Button buttonLeyparoserv;
+        private System.Windows.Forms.Button buttonLeycosteensam;
     }
 }

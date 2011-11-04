@@ -27,6 +27,7 @@ namespace SIM
 
         private Hashtable _parameters = new Hashtable();
         private Hashtable _widgets;
+        private Hashtable _subformButtons;
         Dictionary<string, double> parametros = new Dictionary<string, double>();
         Dictionary<string, string> nombres = new Dictionary<string, string>();
         Dictionary<string, double> resultados = new Dictionary<string, double>();
@@ -90,6 +91,31 @@ namespace SIM
                 {"grafica", comboBox7},
                 {"caso", comboBox8},
                 {"combo9", comboBox9}
+            };
+
+            _subformButtons = new Hashtable { 
+                {"ley_func", buttonLeyfunc},
+                {"ley_paro", buttonLeyparo},
+                {"ley_recu", buttonLeyrecu},
+                {"ley_coste", buttonLeycoste},
+                {"preventivo", buttonPreventivo},
+                {"ley_eficiencia_mto", buttonLeyeficienciamto},
+                {"ley_paro_recon", buttonLeyparorecon},
+                {"ley_paro_diag", buttonLeyparodiag},
+                {"ley_paro_prep", buttonLeyparoprep},
+                {"ley_paro_desm", buttonLeyparodesm},
+                {"ley_paro_repa", buttonLeyparorepa},
+                {"ley_paro_ensam", buttonLeyparoensam},
+                {"ley_paro_verif", buttonLeyparoverif},
+                {"ley_paro_serv", buttonLeyparoserv},
+                {"ley_coste_recon", buttonLeycosterecon},
+                {"ley_coste_diag", buttonLeycostediag},
+                {"ley_coste_prep", buttonLeycosteprep},
+                {"ley_coste_desm", buttonLeycostedesm},
+                {"ley_coste_repa", buttonLeycosterepa},
+                {"ley_coste_ensam", buttonLeycosteensam},
+                {"ley_coste_verif", buttonLeycosteverif},
+                {"ley_coste_serv", buttonLeycosteserv}
             };
         }
 
@@ -2100,23 +2126,34 @@ namespace SIM
         // Se asigna valores a nombres y parametros
         private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box)
         {
-            if (SilentMode) return;
+            List<String> parametersToRemove = new List<String> { };
+            Hashtable parametersToAdd = new Hashtable { };
+            List<String> requestParams = new List<String> { };
+            // Se inicializa el subformulario
+            FormDatos1 frm = new FormDatos1();
 
-            List<String> delete_params = new List<String>
+            if (!SilentMode)
             {
-                sufijo2 + "_Mantenimiento_Ud_Tiempo",
-                sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
-                sufijo2 + "_MantenimientoCadaIntervencion",
-                "X1_" + sufijo2,
-                "Y1_" + sufijo2,
-                "X2_" + sufijo2,
-                "Y2_" + sufijo2,
-                "ley_" + sufijo2 + "_param1", 
-                "ley_" + sufijo2 + "_param2",
-                "Minimo_" + sufijo2,
-                "Maximo_" + sufijo2,
-                "ley_" + sufijo2
-            };
+                // Se eliminan parámetros que se van a solicitar en los subformularios
+                RemoveParameters(new List<String>
+                {
+                    sufijo2 + "_Mantenimiento_Ud_Tiempo",
+                    sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
+                    sufijo2 + "_MantenimientoCadaIntervencion",
+                    "X1_" + sufijo2,
+                    "Y1_" + sufijo2,
+                    "X2_" + sufijo2,
+                    "Y2_" + sufijo2,
+                    "ley_" + sufijo2 + "_param1", 
+                    "ley_" + sufijo2 + "_param2",
+                    "Minimo_" + sufijo2,
+                    "Maximo_" + sufijo2,
+                    "ley_" + sufijo2
+                });
+            }
+
+
+
             /*
             terminos_a_eliminar_en_diccionarios[sufijo2 + "_Mantenimiento_Ud_Tiempo"] = "parametros";
             terminos_a_eliminar_en_diccionarios[sufijo2 + "_Perdida_Prod_por_Ud_tiempo"] = "parametros";
@@ -2131,47 +2168,24 @@ namespace SIM
             terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";
             terminos_a_eliminar_en_diccionarios["ley_" + sufijo2] = "parametros";
             */
-            FormDatos1 frm = new FormDatos1();
-
-            if (nombre_de_campo_y_combo_Box == "Ninguna Ley")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                //limpiar_diccionarios();
-                RemoveParameters(delete_params);
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Siempre a Nuevo (GAN)")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                //limpiar_diccionarios();
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                RemoveParameters(delete_params);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Según tiempo (BAO)")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                //limpiar_diccionarios();
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                RemoveParameters(delete_params);
-            }
 
             // Caso particular del combo 'preventivo'
             if (nombre_de_ley == "preventivo")
             {
                 //terminos_a_eliminar_en_diccionarios.Clear();
-                delete_params.Clear();
+                //delete_params.Clear();
                 if (nombre_de_campo_y_combo_Box == "No activado")
                 {
-                    AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                    RemoveParameters(new List<String> {"tipo_de_preventivo", "tiempo_entre_preventivo", "disponibilidad_minima_admisible" });
+                    if (!SilentMode)
+                    {
+                        RemoveParameters(new List<String> { "tipo_de_preventivo", "tiempo_entre_preventivo", "disponibilidad_minima_admisible" });
+                        AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
+                    }
                     /*
-                    nombres[nombre_de_ley] = "No activado";
-                    nombres.Remove("tipo_de_preventivo");
-                    parametros.Remove("tiempo_entre_preventivos");
-                    parametros.Remove("disponibilidad_minima_admisible");*/
+                nombres[nombre_de_ley] = "No activado";
+                nombres.Remove("tipo_de_preventivo");
+                parametros.Remove("tiempo_entre_preventivos");
+                parametros.Remove("disponibilidad_minima_admisible");*/
                 }
 
                 if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
@@ -2181,230 +2195,209 @@ namespace SIM
                     nombres["tipo_de_preventivo"] = "Fijo por tiempo";
                     parametros.Remove("disponibilidad_minima_admisible");
                     */
-                    AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, {"tipo_de_preventivo", nombre_de_campo_y_combo_Box} });
-                    RemoveParameters(new List<String> { "disponibilidad_minima_admisible" });
-                    SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
-                                        "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", "");
-                }
-
-                if (nombre_de_campo_y_combo_Box == "Por Disponibilidad")
-                {
-                    /*
-                    nombres[nombre_de_ley] = "Activado";
-                    nombres["tipo_de_preventivo"] = "Por Disponibilidad";
-                    parametros.Remove("tiempo_entre_preventivos");
-                    */
-                    AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, { "tipo_de_preventivo", nombre_de_campo_y_combo_Box } });
-                    RemoveParameters(new List<String> { "tiempo_entre_preventivos" }); 
-                    SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
-                                        "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", "");
+                    if (!SilentMode)
+                    {
+                        RemoveParameters(new List<String> { "disponibilidad_minima_admisible" });
+                        AddParameters(new Hashtable { { nombre_de_ley, "Activado" }, { "tipo_de_preventivo", nombre_de_campo_y_combo_Box } });
+                        SolicitarDatos(frm, "PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
+                                            "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", "");
+                    }
                 }
             }
 
-            if (nombre_de_campo_y_combo_Box == "Desglose de Costes")
-            {
-                //limpiar_diccionarios();
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                RemoveParameters(delete_params);
-                AddParameters(new Hashtable { {nombre_de_ley, nombre_de_campo_y_combo_Box} });
-                //Se habilitan las opciones de desglose de Coste
-                HabilitarComboBoxDesgloseCoste();
-            }
 
-            if (nombre_de_campo_y_combo_Box == "Desglose de Fallos")
-            {
-                /*
-                limpiar_diccionarios();
-                nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                */
-                RemoveParameters(delete_params);
-                AddParameters(new Hashtable { {nombre_de_ley, nombre_de_campo_y_combo_Box} });
-                //Se habilitan las opciones de desglose de Fallo
-                HabilitarComboBoxDesgloseTiempoFallo();
-            }
 
-            //el siguiente if es solo aplicable a captura de datos de coste
-            if (nombre_de_campo_y_combo_Box == "Fijo por tiempo")
+
+
+            List<String> auxi = new List<String> {"","","","","" };
+
+            switch (nombre_de_campo_y_combo_Box)
             {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
+                case "Ninguna Ley":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    break;
+
+                case "Siempre a Nuevo (GAN)":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    break;
+
+                case "Según tiempo (BAO)":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    break;
+
+                case "Por Disponibilidad":
+                    parametersToRemove.Add("tiempo_entre_preventivos");
+                    parametersToAdd.Add(nombre_de_ley, "Activado");
+                    parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
+                    requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
+                                    "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", ""};
+                    break;
+
+                case "Desglose de Costes":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    //Se habilitan las opciones de desglose de Coste
+                    HabilitarComboBoxDesgloseCoste();
+                    break;
+
+                case "Desglose de Fallos":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    //Se habilitan las opciones de desglose de Fallo
+                    HabilitarComboBoxDesgloseTiempoFallo();
+                    break;
+
+
+                //el siguiente if es solo aplicable a captura de datos de coste
+                case "Fijo por tiempo":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
+                                        "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                        "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
+                    break;
+
+                //el siguiente if es solo aplicable a captura de datos de coste
+                case "Fijo por intervención":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                                     "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
+                                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
+                    break;
+
+                case "Fijo":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    auxi[4] = "Tiempo de ";
+                    if (Ambito == "EFICIENCIA DEL MANTENIMIENTO: ")
+                        auxi[4] = " "; ;
+
+                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley Fija de " + palabra_clave, auxi[4] + palabra_clave, "", "",
+                                    "", auxi[0], "ley_" + sufijo2 + "_param1", "",
+                                    "", "", sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break;
+
+                case "Uniforme":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi[0], "", "",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break;
+
+                case "Línea recta":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
+                                    "Final t " + palabra_clave, auxi[0], "X1_" + sufijo2, "Y1_" + sufijo2,
+                                    "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break;
+
+                case "Exponencial":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break;
+
+                case "Weibull2P":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break;
+
+                case "Normal":
+                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
+                    {
+                        auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
+                        auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                    }
+
+                    if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
+                    {
+                        auxi[2] = "% reducción si Preventivo";
+                        auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                    }
+
+                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
+                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
+                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    break; 
             }
 
-            //el siguiente if es solo aplicable a captura de datos de coste
-            if (nombre_de_campo_y_combo_Box == "Fijo por intervención")
+            if (!SilentMode)
             {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
-                    "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo");
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Fijo")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-                string auxi5 = "Tiempo de ";
-                if (Ambito == "EFICIENCIA DEL MANTENIMIENTO: ") auxi5 = " "; ;
-
-
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Fija de " + palabra_clave, auxi5 + palabra_clave, "", "",
-                                    "", auxi1, "ley_" + sufijo2 + "_param1", "",
-                                    "", "", sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Uniforme")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "", "",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Línea recta")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
+                RemoveParameters(parametersToRemove);
+                AddParameters(parametersToAdd);
                 
-                SolicitarDatos(frm, Ambito, nombres[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
-                                    "Final t " + palabra_clave, auxi1, "X1_" + sufijo2, "Y1_" + sufijo2,
-                                     "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
+                SolicitarDatos(frm, requestParams[0], requestParams[1], requestParams[2], requestParams[3], requestParams[4],
+                                    requestParams[5], requestParams[6], requestParams[7], requestParams[8], requestParams[9],
+                                    requestParams[10], requestParams[11], requestParams[12], requestParams[13], requestParams[14]);
+                  
             }
 
-            if (nombre_de_campo_y_combo_Box == "Exponencial")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Weibull2P")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-
-
-                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
-
-            if (nombre_de_campo_y_combo_Box == "Normal")
-            {
-                //nombres[nombre_de_ley] = nombre_de_campo_y_combo_Box;
-                AddParameters(new Hashtable { { nombre_de_ley, nombre_de_campo_y_combo_Box } });
-                string auxi1 = "";
-                string auxi2 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
-                {
-                    auxi1 = "Coste Perdida_Prod / Ud_tiempo";
-                    auxi2 = "_Perdida_Prod_por_Ud_tiempo";
-                }
-
-
-                string auxi3 = "";
-                string auxi4 = "";
-                if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
-                {
-                    auxi3 = "% reducción si Preventivo";
-                    auxi4 = sufijo2 + "_Reduccion_si_Preventivo";
-                }
-
-                SolicitarDatos(frm, Ambito, (string)_parameters[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi1, "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi2, auxi3, auxi4);
-            }
         }
 
         // Popup de los comboBoxes
