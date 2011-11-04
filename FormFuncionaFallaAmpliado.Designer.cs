@@ -89,13 +89,13 @@
             this.label28 = new System.Windows.Forms.Label();
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxDesgloceTiempos = new System.Windows.Forms.GroupBox();
             this.buttonLeyparoensam = new System.Windows.Forms.Button();
             this.buttonLeyparorepa = new System.Windows.Forms.Button();
             this.buttonLeyparodesm = new System.Windows.Forms.Button();
             this.buttonLeyparodiag = new System.Windows.Forms.Button();
             this.buttonLeyparorecon = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBoxDesgloceCostes = new System.Windows.Forms.GroupBox();
             this.buttonLeycosteserv = new System.Windows.Forms.Button();
             this.buttonLeycosteverif = new System.Windows.Forms.Button();
             this.buttonLeycosterepa = new System.Windows.Forms.Button();
@@ -115,8 +115,8 @@
             this.buttonLeyparoserv = new System.Windows.Forms.Button();
             this.buttonLeycosteensam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.groupBoxDesgloceTiempos.SuspendLayout();
+            this.groupBoxDesgloceCostes.SuspendLayout();
             this.SuspendLayout();
             // 
             // label17
@@ -851,41 +851,42 @@
             this.comboBox8.Text = "Casos prácticos predefinidos";
             this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
             // 
-            // groupBox1
+            // groupBoxDesgloceTiempos
             // 
-            this.groupBox1.Controls.Add(this.buttonLeyparoensam);
-            this.groupBox1.Controls.Add(this.buttonLeyparoserv);
-            this.groupBox1.Controls.Add(this.buttonLeyparorepa);
-            this.groupBox1.Controls.Add(this.buttonLeyparoverif);
-            this.groupBox1.Controls.Add(this.buttonLeyparodesm);
-            this.groupBox1.Controls.Add(this.buttonLeyparoprep);
-            this.groupBox1.Controls.Add(this.buttonLeyparodiag);
-            this.groupBox1.Controls.Add(this.buttonLeyparorecon);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.comboBox_T_Rec);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.comboBox_T_Diag);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.comboBox_T_Prep);
-            this.groupBox1.Controls.Add(this.comboBox_T_Desm);
-            this.groupBox1.Controls.Add(this.comboBox_T_Rep);
-            this.groupBox1.Controls.Add(this.comboBox_T_Ensam);
-            this.groupBox1.Controls.Add(this.comboBox_T_Verif);
-            this.groupBox1.Controls.Add(this.comboBox_T_Serv);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Location = new System.Drawing.Point(353, 60);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(255, 220);
-            this.groupBox1.TabIndex = 189;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "DESGLOSE TIEMPOS FALLOS/PARADAS";
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparoensam);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparoserv);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparorepa);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparoverif);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparodesm);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparoprep);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparodiag);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.buttonLeyparorecon);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label5);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Rec);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label3);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Diag);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label7);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Prep);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Desm);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Rep);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Ensam);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Verif);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.comboBox_T_Serv);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label8);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label9);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label10);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label11);
+            this.groupBoxDesgloceTiempos.Controls.Add(this.label14);
+            this.groupBoxDesgloceTiempos.Location = new System.Drawing.Point(353, 60);
+            this.groupBoxDesgloceTiempos.Name = "groupBoxDesgloceTiempos";
+            this.groupBoxDesgloceTiempos.Size = new System.Drawing.Size(255, 220);
+            this.groupBoxDesgloceTiempos.TabIndex = 189;
+            this.groupBoxDesgloceTiempos.TabStop = false;
+            this.groupBoxDesgloceTiempos.Text = "DESGLOSE TIEMPOS FALLOS/PARADAS";
             // 
             // buttonLeyparoensam
             // 
+            this.buttonLeyparoensam.Enabled = false;
             this.buttonLeyparoensam.Location = new System.Drawing.Point(228, 139);
             this.buttonLeyparoensam.Name = "buttonLeyparoensam";
             this.buttonLeyparoensam.Size = new System.Drawing.Size(21, 23);
@@ -895,6 +896,7 @@
             // 
             // buttonLeyparorepa
             // 
+            this.buttonLeyparorepa.Enabled = false;
             this.buttonLeyparorepa.Location = new System.Drawing.Point(228, 114);
             this.buttonLeyparorepa.Name = "buttonLeyparorepa";
             this.buttonLeyparorepa.Size = new System.Drawing.Size(21, 23);
@@ -904,6 +906,7 @@
             // 
             // buttonLeyparodesm
             // 
+            this.buttonLeyparodesm.Enabled = false;
             this.buttonLeyparodesm.Location = new System.Drawing.Point(228, 93);
             this.buttonLeyparodesm.Name = "buttonLeyparodesm";
             this.buttonLeyparodesm.Size = new System.Drawing.Size(21, 23);
@@ -913,6 +916,7 @@
             // 
             // buttonLeyparodiag
             // 
+            this.buttonLeyparodiag.Enabled = false;
             this.buttonLeyparodiag.Location = new System.Drawing.Point(228, 48);
             this.buttonLeyparodiag.Name = "buttonLeyparodiag";
             this.buttonLeyparodiag.Size = new System.Drawing.Size(21, 23);
@@ -922,6 +926,7 @@
             // 
             // buttonLeyparorecon
             // 
+            this.buttonLeyparorecon.Enabled = false;
             this.buttonLeyparorecon.Location = new System.Drawing.Point(228, 25);
             this.buttonLeyparorecon.Name = "buttonLeyparorecon";
             this.buttonLeyparorecon.Size = new System.Drawing.Size(21, 23);
@@ -929,41 +934,42 @@
             this.buttonLeyparorecon.Text = "...";
             this.buttonLeyparorecon.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // groupBoxDesgloceCostes
             // 
-            this.groupBox2.Controls.Add(this.buttonLeycosteensam);
-            this.groupBox2.Controls.Add(this.buttonLeycosteserv);
-            this.groupBox2.Controls.Add(this.buttonLeycosteverif);
-            this.groupBox2.Controls.Add(this.buttonLeycosterepa);
-            this.groupBox2.Controls.Add(this.buttonLeycostedesm);
-            this.groupBox2.Controls.Add(this.buttonLeycosteprep);
-            this.groupBox2.Controls.Add(this.buttonLeycostediag);
-            this.groupBox2.Controls.Add(this.buttonLeycosterecon);
-            this.groupBox2.Controls.Add(this.label26);
-            this.groupBox2.Controls.Add(this.comboBox_C_Rec);
-            this.groupBox2.Controls.Add(this.comboBox_C_Diag);
-            this.groupBox2.Controls.Add(this.comboBox_C_Prep);
-            this.groupBox2.Controls.Add(this.comboBox_C_Desm);
-            this.groupBox2.Controls.Add(this.comboBox_C_Rep);
-            this.groupBox2.Controls.Add(this.comboBox_C_Ensam);
-            this.groupBox2.Controls.Add(this.comboBox_C_Verif);
-            this.groupBox2.Controls.Add(this.comboBox_C_Serv);
-            this.groupBox2.Controls.Add(this.label18);
-            this.groupBox2.Controls.Add(this.label25);
-            this.groupBox2.Controls.Add(this.label19);
-            this.groupBox2.Controls.Add(this.label24);
-            this.groupBox2.Controls.Add(this.label21);
-            this.groupBox2.Controls.Add(this.label23);
-            this.groupBox2.Controls.Add(this.label22);
-            this.groupBox2.Location = new System.Drawing.Point(614, 60);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(260, 220);
-            this.groupBox2.TabIndex = 190;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "DESGLOSE DE COSTES";
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosteensam);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosteserv);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosteverif);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosterepa);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycostedesm);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosteprep);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycostediag);
+            this.groupBoxDesgloceCostes.Controls.Add(this.buttonLeycosterecon);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label26);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Rec);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Diag);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Prep);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Desm);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Rep);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Ensam);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Verif);
+            this.groupBoxDesgloceCostes.Controls.Add(this.comboBox_C_Serv);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label18);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label25);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label19);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label24);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label21);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label23);
+            this.groupBoxDesgloceCostes.Controls.Add(this.label22);
+            this.groupBoxDesgloceCostes.Location = new System.Drawing.Point(614, 60);
+            this.groupBoxDesgloceCostes.Name = "groupBoxDesgloceCostes";
+            this.groupBoxDesgloceCostes.Size = new System.Drawing.Size(260, 220);
+            this.groupBoxDesgloceCostes.TabIndex = 190;
+            this.groupBoxDesgloceCostes.TabStop = false;
+            this.groupBoxDesgloceCostes.Text = "DESGLOSE DE COSTES";
             // 
             // buttonLeycosteserv
             // 
+            this.buttonLeycosteserv.Enabled = false;
             this.buttonLeycosteserv.Location = new System.Drawing.Point(229, 184);
             this.buttonLeycosteserv.Name = "buttonLeycosteserv";
             this.buttonLeycosteserv.Size = new System.Drawing.Size(21, 23);
@@ -973,6 +979,7 @@
             // 
             // buttonLeycosteverif
             // 
+            this.buttonLeycosteverif.Enabled = false;
             this.buttonLeycosteverif.Location = new System.Drawing.Point(229, 162);
             this.buttonLeycosteverif.Name = "buttonLeycosteverif";
             this.buttonLeycosteverif.Size = new System.Drawing.Size(21, 23);
@@ -982,6 +989,7 @@
             // 
             // buttonLeycosterepa
             // 
+            this.buttonLeycosterepa.Enabled = false;
             this.buttonLeycosterepa.Location = new System.Drawing.Point(229, 116);
             this.buttonLeycosterepa.Name = "buttonLeycosterepa";
             this.buttonLeycosterepa.Size = new System.Drawing.Size(21, 23);
@@ -991,6 +999,7 @@
             // 
             // buttonLeycostedesm
             // 
+            this.buttonLeycostedesm.Enabled = false;
             this.buttonLeycostedesm.Location = new System.Drawing.Point(229, 93);
             this.buttonLeycostedesm.Name = "buttonLeycostedesm";
             this.buttonLeycostedesm.Size = new System.Drawing.Size(21, 23);
@@ -1000,6 +1009,7 @@
             // 
             // buttonLeycosteprep
             // 
+            this.buttonLeycosteprep.Enabled = false;
             this.buttonLeycosteprep.Location = new System.Drawing.Point(229, 70);
             this.buttonLeycosteprep.Name = "buttonLeycosteprep";
             this.buttonLeycosteprep.Size = new System.Drawing.Size(21, 23);
@@ -1009,6 +1019,7 @@
             // 
             // buttonLeycostediag
             // 
+            this.buttonLeycostediag.Enabled = false;
             this.buttonLeycostediag.Location = new System.Drawing.Point(229, 48);
             this.buttonLeycostediag.Name = "buttonLeycostediag";
             this.buttonLeycostediag.Size = new System.Drawing.Size(21, 23);
@@ -1018,6 +1029,7 @@
             // 
             // buttonLeycosterecon
             // 
+            this.buttonLeycosterecon.Enabled = false;
             this.buttonLeycosterecon.Location = new System.Drawing.Point(229, 25);
             this.buttonLeycosterecon.Name = "buttonLeycosterecon";
             this.buttonLeycosterecon.Size = new System.Drawing.Size(21, 23);
@@ -1027,6 +1039,7 @@
             // 
             // buttonLeyfunc
             // 
+            this.buttonLeyfunc.Enabled = false;
             this.buttonLeyfunc.Location = new System.Drawing.Point(310, 88);
             this.buttonLeyfunc.Name = "buttonLeyfunc";
             this.buttonLeyfunc.Size = new System.Drawing.Size(21, 23);
@@ -1045,6 +1058,7 @@
             // 
             // buttonLeyparo
             // 
+            this.buttonLeyparo.Enabled = false;
             this.buttonLeyparo.Location = new System.Drawing.Point(310, 116);
             this.buttonLeyparo.Name = "buttonLeyparo";
             this.buttonLeyparo.Size = new System.Drawing.Size(21, 23);
@@ -1054,6 +1068,7 @@
             // 
             // buttonLeyrecu
             // 
+            this.buttonLeyrecu.Enabled = false;
             this.buttonLeyrecu.Location = new System.Drawing.Point(310, 146);
             this.buttonLeyrecu.Name = "buttonLeyrecu";
             this.buttonLeyrecu.Size = new System.Drawing.Size(21, 23);
@@ -1063,6 +1078,7 @@
             // 
             // buttonLeycoste
             // 
+            this.buttonLeycoste.Enabled = false;
             this.buttonLeycoste.Location = new System.Drawing.Point(310, 174);
             this.buttonLeycoste.Name = "buttonLeycoste";
             this.buttonLeycoste.Size = new System.Drawing.Size(21, 23);
@@ -1072,6 +1088,7 @@
             // 
             // buttonPreventivo
             // 
+            this.buttonPreventivo.Enabled = false;
             this.buttonPreventivo.Location = new System.Drawing.Point(310, 204);
             this.buttonPreventivo.Name = "buttonPreventivo";
             this.buttonPreventivo.Size = new System.Drawing.Size(21, 23);
@@ -1081,6 +1098,7 @@
             // 
             // buttonLeyeficienciamto
             // 
+            this.buttonLeyeficienciamto.Enabled = false;
             this.buttonLeyeficienciamto.Location = new System.Drawing.Point(310, 233);
             this.buttonLeyeficienciamto.Name = "buttonLeyeficienciamto";
             this.buttonLeyeficienciamto.Size = new System.Drawing.Size(21, 23);
@@ -1090,6 +1108,7 @@
             // 
             // buttonLeyparoprep
             // 
+            this.buttonLeyparoprep.Enabled = false;
             this.buttonLeyparoprep.Location = new System.Drawing.Point(228, 71);
             this.buttonLeyparoprep.Name = "buttonLeyparoprep";
             this.buttonLeyparoprep.Size = new System.Drawing.Size(21, 23);
@@ -1099,6 +1118,7 @@
             // 
             // buttonLeyparoverif
             // 
+            this.buttonLeyparoverif.Enabled = false;
             this.buttonLeyparoverif.Location = new System.Drawing.Point(228, 162);
             this.buttonLeyparoverif.Name = "buttonLeyparoverif";
             this.buttonLeyparoverif.Size = new System.Drawing.Size(21, 23);
@@ -1108,6 +1128,7 @@
             // 
             // buttonLeyparoserv
             // 
+            this.buttonLeyparoserv.Enabled = false;
             this.buttonLeyparoserv.Location = new System.Drawing.Point(228, 184);
             this.buttonLeyparoserv.Name = "buttonLeyparoserv";
             this.buttonLeyparoserv.Size = new System.Drawing.Size(21, 23);
@@ -1117,6 +1138,7 @@
             // 
             // buttonLeycosteensam
             // 
+            this.buttonLeycosteensam.Enabled = false;
             this.buttonLeycosteensam.Location = new System.Drawing.Point(229, 139);
             this.buttonLeycosteensam.Name = "buttonLeycosteensam";
             this.buttonLeycosteensam.Size = new System.Drawing.Size(21, 23);
@@ -1136,8 +1158,8 @@
             this.Controls.Add(this.buttonLeyparo);
             this.Controls.Add(this.comboBox9);
             this.Controls.Add(this.buttonLeyfunc);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBoxDesgloceCostes);
+            this.Controls.Add(this.groupBoxDesgloceTiempos);
             this.Controls.Add(this.comboBox8);
             this.Controls.Add(this.comboBox7);
             this.Controls.Add(this.label28);
@@ -1170,10 +1192,10 @@
             this.Text = "Ciclo Funcionamiento-Parada Ampliado";
             this.Load += new System.EventHandler(this.FormFuncionaFallaAmpliado_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.groupBoxDesgloceTiempos.ResumeLayout(false);
+            this.groupBoxDesgloceTiempos.PerformLayout();
+            this.groupBoxDesgloceCostes.ResumeLayout(false);
+            this.groupBoxDesgloceCostes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1241,8 +1263,8 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.ComboBox comboBox7;
         private System.Windows.Forms.ComboBox comboBox8;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBoxDesgloceTiempos;
+        private System.Windows.Forms.GroupBox groupBoxDesgloceCostes;
         private System.Windows.Forms.Button buttonLeyfunc;
         private System.Windows.Forms.ComboBox comboBox9;
         private System.Windows.Forms.Button buttonLeyparoensam;

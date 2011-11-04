@@ -27,7 +27,9 @@ namespace SIM
 
         private Hashtable _parameters = new Hashtable();
         private Hashtable _widgets;
+        private Hashtable _defaultValues;
         private Hashtable _subformButtons;
+
         Dictionary<string, double> parametros = new Dictionary<string, double>();
         Dictionary<string, string> nombres = new Dictionary<string, string>();
         Dictionary<string, double> resultados = new Dictionary<string, double>();
@@ -91,6 +93,31 @@ namespace SIM
                 {"grafica", comboBox7},
                 {"caso", comboBox8},
                 {"combo9", comboBox9}
+            };
+
+            _defaultValues = new Hashtable {
+                {"ley_func", "Ninguna Ley"},
+                {"ley_paro", "Ninguna Ley"},
+                {"ley_recu", "Ninguna Ley"},
+                {"ley_coste", "Ninguna Ley"},
+                {"preventivo", "No activado"},
+                {"ley_eficiencia_mto", "Ninguna Ley"},                  
+                {"ley_paro_recon", "Ninguna Ley"},
+                {"ley_paro_diag", "Ninguna Ley"},
+                {"ley_paro_prep", "Ninguna Ley"},
+                {"ley_paro_desm", "Ninguna Ley"},
+                {"ley_paro_repa", "Ninguna Ley"},
+                {"ley_paro_ensam", "Ninguna Ley"},
+                {"ley_paro_verif", "Ninguna Ley"},
+                {"ley_paro_serv", "Ninguna Ley"},
+                {"ley_coste_recon", "Ninguna Ley"},
+                {"ley_coste_diag", "Ninguna Ley"},
+                {"ley_coste_prep", "Ninguna Ley"},
+                {"ley_coste_desm", "Ninguna Ley"},
+                {"ley_coste_repa", "Ninguna Ley"},
+                {"ley_coste_ensam", "Ninguna Ley"},
+                {"ley_coste_verif", "Ninguna Ley"},
+                {"ley_coste_serv", "Ninguna Ley"}
             };
 
             _subformButtons = new Hashtable { 
@@ -1121,7 +1148,6 @@ namespace SIM
             string nombre_de_ley = "ley_paro";
             string nombre_de_campo_y_combo_Box = comboBox2.Text;
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
-
         }
 
         //Captura de indicaciones de usuario sobre ley de reparación/recuperacion
@@ -1190,13 +1216,18 @@ namespace SIM
         //SELECCION DE LAS OPCIONES DE DESGLOSE DE TIEMPO DE FALLO/PARADA
         private void comboBox_T_Rec_SelectedIndexChanged(object sender, EventArgs e)
         {
+            comboBox_T_RecActions();   
+        }
+
+        private void comboBox_T_RecActions()
+        {
             //string Ambito = "PREPARACION: ";
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Reconocimiento";
             string sufijo2 = "paro_recon";
             string nombre_de_ley = "ley_paro_recon";
             string nombre_de_campo_y_combo_Box = comboBox_T_Rec.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);        
         }
 
         private void comboBox_T_Diag_SelectedIndexChanged(object sender, EventArgs e)
@@ -1967,7 +1998,7 @@ namespace SIM
                 }  
             }
             StartSilentMode();
-            //RemoveParameters(ParameterNames);
+            DefaultParameters();
             AddParameters(parameters);
             StopSilentMode();
         }
@@ -2001,24 +2032,14 @@ namespace SIM
         // Rellena los inputs en función de los valores de nombres y parametros
         private void DefaultParameters()
         {
-            AddParameters(new Hashtable {
-                {"ley_func", "Ninguna Ley"},
-                {"ley_paro", "Ninguna Ley"},
-                {"ley_recu", "Ninguna Ley"},
-                {"ley_coste", "Ninguna Ley"},
-                {"preventivo", "No activado"},
-                {"ley_eficiencia_mto", "Ninguna Ley"}
-            });
+            RemoveParameters(ParameterNames());
+            AddParameters(_defaultValues);
         }
-
-
-
 
         // Reset
         private void reset()
         {
             StartSilentMode();
-            RemoveParameters(ParameterNames());
             DefaultParameters();
             StopSilentMode();
 
@@ -2035,10 +2056,6 @@ namespace SIM
             textBox11.Text = "";
             textBox11.Enabled = false;
 
-            //Desglose Fallos
-            comboBox_T_Rec.Text = "";
-            comboBox_T_Rec.Enabled = false;
-
             //Tiempo a simular y repeticiones de la simulación
             textBox10.Text = "";
             textBox10.Enabled = true;
@@ -2050,10 +2067,6 @@ namespace SIM
             
             // Selección de casos predefinidos
             comboBox8.Text = "Casos prácticos predefinidos";
-
-            //Desabilitamos las opciones de desglose de Fallo y Coste
-            DeshabilitarComboBoxDesgloseTiempoFallo();
-            DeshabilitarComboBoxDesgloseCoste();
         }
 
         // Reset selección de gráfica
@@ -2066,50 +2079,54 @@ namespace SIM
         // Habilitar/deshabilitar groupboxes
         private void DeshabilitarComboBoxDesgloseTiempoFallo()
         {
-            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = false;
-            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = false;
-            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = false;
-            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = false;
-            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = false;
-            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = false;
-            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = false;
-            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = false;
+            groupBoxDesgloceTiempos.Enabled = false;
+
+            List<String> widgets = new List<String> {
+                "ley_paro_recon",
+                "ley_paro_diag",
+                "ley_paro_prep",
+                "ley_paro_desm",
+                "ley_paro_repa",
+                "ley_paro_ensam",
+                "ley_paro_verif",
+                "ley_paro_serv"
+            };
+
+            foreach (String wname in widgets)
+            {
+                SetWidgetValue(_widgets[wname], (string)_defaultValues[wname]);
+            }
         }
 
         private void HabilitarComboBoxDesgloseTiempoFallo()
         {
-            comboBox_T_Rec.Text = ""; comboBox_T_Rec.Enabled = true;
-            comboBox_T_Diag.Text = ""; comboBox_T_Diag.Enabled = true;
-            comboBox_T_Prep.Text = ""; comboBox_T_Prep.Enabled = true;
-            comboBox_T_Desm.Text = ""; comboBox_T_Desm.Enabled = true;
-            comboBox_T_Rep.Text = ""; comboBox_T_Rep.Enabled = true;
-            comboBox_T_Ensam.Text = ""; comboBox_T_Ensam.Enabled = true;
-            comboBox_T_Verif.Text = ""; comboBox_T_Verif.Enabled = true;
-            comboBox_T_Serv.Text = ""; comboBox_T_Serv.Enabled = true;
+            groupBoxDesgloceTiempos.Enabled = true;
         }
 
         private void DeshabilitarComboBoxDesgloseCoste()
         {
-            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = false;
-            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = false;
-            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = false;
-            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = false;
-            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = false;
-            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = false;
-            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = false;
-            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = false;
+            groupBoxDesgloceCostes.Enabled = false;
+
+            List<String> widgets = new List<String> {
+                "ley_coste_recon",
+                "ley_coste_diag",
+                "ley_coste_prep",
+                "ley_coste_desm",
+                "ley_coste_repa",
+                "ley_coste_ensam",
+                "ley_coste_verif",
+                "ley_coste_serv"
+            };
+
+            foreach (String wname in widgets)
+            {
+                SetWidgetValue(_widgets[wname], (string)_defaultValues[wname]);
+            }
         }
 
         private void HabilitarComboBoxDesgloseCoste()
         {
-            comboBox_C_Rec.Text = ""; comboBox_C_Rec.Enabled = true;
-            comboBox_C_Diag.Text = ""; comboBox_C_Diag.Enabled = true;
-            comboBox_C_Prep.Text = ""; comboBox_C_Prep.Enabled = true;
-            comboBox_C_Desm.Text = ""; comboBox_C_Desm.Enabled = true;
-            comboBox_C_Rep.Text = ""; comboBox_C_Rep.Enabled = true;
-            comboBox_C_Ensam.Text = ""; comboBox_C_Ensam.Enabled = true;
-            comboBox_C_Verif.Text = ""; comboBox_C_Verif.Enabled = true;
-            comboBox_C_Serv.Text = ""; comboBox_C_Serv.Enabled = true;
+            groupBoxDesgloceCostes.Enabled = true;
         }
 
         private void DeshabilitarComboBoxVerGraficas()
@@ -2126,48 +2143,30 @@ namespace SIM
         // Se asigna valores a nombres y parametros
         private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box)
         {
-            List<String> parametersToRemove = new List<String> { };
+            List<String> parametersToRemove;
             Hashtable parametersToAdd = new Hashtable { };
             List<String> requestParams = new List<String> { };
             // Se inicializa el subformulario
             FormDatos1 frm = new FormDatos1();
+            bool showButton = false; 
+            
+            // Parámetros que se van a solicitar en los subformularios
+            parametersToRemove = new List<String> {
+                sufijo2 + "_Mantenimiento_Ud_Tiempo",
+                sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
+                sufijo2 + "_MantenimientoCadaIntervencion",
+                "X1_" + sufijo2,
+                "Y1_" + sufijo2,
+                "X2_" + sufijo2,
+                "Y2_" + sufijo2,
+                "ley_" + sufijo2 + "_param1", 
+                "ley_" + sufijo2 + "_param2",
+                "Minimo_" + sufijo2,
+                "Maximo_" + sufijo2,
+                "ley_" + sufijo2
+            };
 
-            if (!SilentMode)
-            {
-                // Se eliminan parámetros que se van a solicitar en los subformularios
-                RemoveParameters(new List<String>
-                {
-                    sufijo2 + "_Mantenimiento_Ud_Tiempo",
-                    sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
-                    sufijo2 + "_MantenimientoCadaIntervencion",
-                    "X1_" + sufijo2,
-                    "Y1_" + sufijo2,
-                    "X2_" + sufijo2,
-                    "Y2_" + sufijo2,
-                    "ley_" + sufijo2 + "_param1", 
-                    "ley_" + sufijo2 + "_param2",
-                    "Minimo_" + sufijo2,
-                    "Maximo_" + sufijo2,
-                    "ley_" + sufijo2
-                });
-            }
-
-
-
-            /*
-            terminos_a_eliminar_en_diccionarios[sufijo2 + "_Mantenimiento_Ud_Tiempo"] = "parametros";
-            terminos_a_eliminar_en_diccionarios[sufijo2 + "_Perdida_Prod_por_Ud_tiempo"] = "parametros";
-            terminos_a_eliminar_en_diccionarios[sufijo2 + "_MantenimientoCadaIntervencion"] = "parametros";
-            terminos_a_eliminar_en_diccionarios["X1_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["Y1_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["X2_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["Y2_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param1"] = "parametros";
-            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2 + "_param2"] = "parametros";
-            terminos_a_eliminar_en_diccionarios["Minimo_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["Maximo_" + sufijo2] = "parametros";
-            terminos_a_eliminar_en_diccionarios["ley_" + sufijo2] = "parametros";
-            */
+            parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
 
             // Caso particular del combo 'preventivo'
             if (nombre_de_ley == "preventivo")
@@ -2206,65 +2205,49 @@ namespace SIM
             }
 
 
-
-
-
             List<String> auxi = new List<String> {"","","","","" };
 
             switch (nombre_de_campo_y_combo_Box)
             {
                 case "Ninguna Ley":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-                    break;
-
-                case "Siempre a Nuevo (GAN)":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-                    break;
-
+                case "Siempre a Nuevo (GAN)":        
                 case "Según tiempo (BAO)":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
                     break;
 
                 case "Por Disponibilidad":
                     parametersToRemove.Add("tiempo_entre_preventivos");
+                    parametersToRemove.Add("tipo_de_preventivo");
                     parametersToAdd.Add(nombre_de_ley, "Activado");
                     parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
                     requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
                                     "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", ""};
                     break;
 
-                case "Desglose de Costes":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                case "Desglose de Costes":                    
                     //Se habilitan las opciones de desglose de Coste
                     HabilitarComboBoxDesgloseCoste();
                     break;
 
-                case "Desglose de Fallos":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                case "Desglose de Fallos":                    
                     //Se habilitan las opciones de desglose de Fallo
                     HabilitarComboBoxDesgloseTiempoFallo();
                     break;
 
-
                 //el siguiente if es solo aplicable a captura de datos de coste
-                case "Fijo por tiempo":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                case "Fijo por tiempo":                    
                     requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                                         "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                         "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
                     break;
 
                 //el siguiente if es solo aplicable a captura de datos de coste
-                case "Fijo por intervención":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
+                case "Fijo por intervención":                    
                     requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
                                     "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
                                     "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
                     break;
 
-                case "Fijo":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
+                case "Fijo":                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2286,9 +2269,7 @@ namespace SIM
                                     "", "", sufijo2 + auxi[1], auxi[2], auxi[3]};
                     break;
 
-                case "Uniforme":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
+                case "Uniforme":                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2306,9 +2287,7 @@ namespace SIM
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
                     break;
 
-                case "Línea recta":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
+                case "Línea recta":                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2327,8 +2306,6 @@ namespace SIM
                     break;
 
                 case "Exponencial":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2347,8 +2324,6 @@ namespace SIM
                     break;
 
                 case "Weibull2P":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2366,9 +2341,7 @@ namespace SIM
                                     "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
                     break;
 
-                case "Normal":
-                    parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
-
+                case "Normal":                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
@@ -2391,13 +2364,22 @@ namespace SIM
             {
                 RemoveParameters(parametersToRemove);
                 AddParameters(parametersToAdd);
-                
-                SolicitarDatos(frm, requestParams[0], requestParams[1], requestParams[2], requestParams[3], requestParams[4],
-                                    requestParams[5], requestParams[6], requestParams[7], requestParams[8], requestParams[9],
-                                    requestParams[10], requestParams[11], requestParams[12], requestParams[13], requestParams[14]);
-                  
+                if (requestParams.Count() != 0)
+                    SolicitarDatos(frm, requestParams[0], requestParams[1], requestParams[2], requestParams[3], requestParams[4],
+                                        requestParams[5], requestParams[6], requestParams[7], requestParams[8], requestParams[9],
+                                        requestParams[10], requestParams[11], requestParams[12], requestParams[13], requestParams[14]);
             }
-
+            
+            // Mostrar botón cuando se solicita subform
+            Button objButton = (Button)_subformButtons[nombre_de_ley];
+            if (requestParams.Count() != 0)
+            {  
+                objButton.Enabled = true;
+            }
+            else
+            {
+                objButton.Enabled = false;
+            }
         }
 
         // Popup de los comboBoxes
@@ -2563,25 +2545,7 @@ namespace SIM
                 FormateoDatos.soloNum(e, tb);
             }
         }
-
-
-        private void WidgetValue(Object widget, string value) 
-        {
-      
-            Type type = widget.GetType();
-            switch (type.ToString())
-            {
-                case "System.Windows.Forms.ComboBox":
-                    ComboBox comboObj = (ComboBox)widget;
-                    comboObj.Text = value;
-                    break;
-                case "System.Windows.Forms.TextBox":
-                    TextBox textObj = (TextBox)widget;
-                    textObj.Text = value;
-                    break;
-            }
-        }
-
+     
         private List<String> ParameterNames()
         {
             List<String> pnames = new List<String> { };
@@ -2599,7 +2563,7 @@ namespace SIM
                 _parameters.Remove(parameter.Key);
                 _parameters.Add(parameter.Key, parameter.Value);
                 if(_widgets.ContainsKey(parameter.Key))
-                    WidgetValue(_widgets[parameter.Key], (string)parameter.Value);
+                    SetWidgetValue(_widgets[parameter.Key], (string)parameter.Value);
             }
         }
 
@@ -2608,8 +2572,24 @@ namespace SIM
             foreach (string parameter in parameters)
             {
                 _parameters.Remove(parameter);
-                if(_widgets.ContainsKey(parameter))
-                    WidgetValue(_widgets[parameter], "");
+                if (_widgets.ContainsKey(parameter))
+                    SetWidgetValue(_widgets[parameter], "");
+            }
+        }
+
+        private void SetWidgetValue(Object widget, string value)
+        {
+            Type type = widget.GetType();
+            switch (type.ToString())
+            {
+                case "System.Windows.Forms.ComboBox":
+                    ComboBox comboObj = (ComboBox)widget;
+                    comboObj.Text = value;
+                    break;
+                case "System.Windows.Forms.TextBox":
+                    TextBox textObj = (TextBox)widget;
+                    textObj.Text = value;
+                    break;
             }
         }
 
