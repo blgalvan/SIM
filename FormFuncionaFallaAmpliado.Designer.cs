@@ -91,11 +91,15 @@
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.groupBoxDesgloceTiempos = new System.Windows.Forms.GroupBox();
             this.buttonLeyparoensam = new System.Windows.Forms.Button();
+            this.buttonLeyparoserv = new System.Windows.Forms.Button();
             this.buttonLeyparorepa = new System.Windows.Forms.Button();
+            this.buttonLeyparoverif = new System.Windows.Forms.Button();
             this.buttonLeyparodesm = new System.Windows.Forms.Button();
+            this.buttonLeyparoprep = new System.Windows.Forms.Button();
             this.buttonLeyparodiag = new System.Windows.Forms.Button();
             this.buttonLeyparorecon = new System.Windows.Forms.Button();
             this.groupBoxDesgloceCostes = new System.Windows.Forms.GroupBox();
+            this.buttonLeycosteensam = new System.Windows.Forms.Button();
             this.buttonLeycosteserv = new System.Windows.Forms.Button();
             this.buttonLeycosteverif = new System.Windows.Forms.Button();
             this.buttonLeycosterepa = new System.Windows.Forms.Button();
@@ -110,10 +114,6 @@
             this.buttonLeycoste = new System.Windows.Forms.Button();
             this.buttonPreventivo = new System.Windows.Forms.Button();
             this.buttonLeyeficienciamto = new System.Windows.Forms.Button();
-            this.buttonLeyparoprep = new System.Windows.Forms.Button();
-            this.buttonLeyparoverif = new System.Windows.Forms.Button();
-            this.buttonLeyparoserv = new System.Windows.Forms.Button();
-            this.buttonLeycosteensam = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBoxDesgloceTiempos.SuspendLayout();
             this.groupBoxDesgloceCostes.SuspendLayout();
@@ -894,6 +894,16 @@
             this.buttonLeyparoensam.Text = "...";
             this.buttonLeyparoensam.UseVisualStyleBackColor = true;
             // 
+            // buttonLeyparoserv
+            // 
+            this.buttonLeyparoserv.Enabled = false;
+            this.buttonLeyparoserv.Location = new System.Drawing.Point(228, 184);
+            this.buttonLeyparoserv.Name = "buttonLeyparoserv";
+            this.buttonLeyparoserv.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoserv.TabIndex = 205;
+            this.buttonLeyparoserv.Text = "...";
+            this.buttonLeyparoserv.UseVisualStyleBackColor = true;
+            // 
             // buttonLeyparorepa
             // 
             this.buttonLeyparorepa.Enabled = false;
@@ -904,6 +914,16 @@
             this.buttonLeyparorepa.Text = "...";
             this.buttonLeyparorepa.UseVisualStyleBackColor = true;
             // 
+            // buttonLeyparoverif
+            // 
+            this.buttonLeyparoverif.Enabled = false;
+            this.buttonLeyparoverif.Location = new System.Drawing.Point(228, 162);
+            this.buttonLeyparoverif.Name = "buttonLeyparoverif";
+            this.buttonLeyparoverif.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoverif.TabIndex = 204;
+            this.buttonLeyparoverif.Text = "...";
+            this.buttonLeyparoverif.UseVisualStyleBackColor = true;
+            // 
             // buttonLeyparodesm
             // 
             this.buttonLeyparodesm.Enabled = false;
@@ -913,6 +933,16 @@
             this.buttonLeyparodesm.TabIndex = 201;
             this.buttonLeyparodesm.Text = "...";
             this.buttonLeyparodesm.UseVisualStyleBackColor = true;
+            // 
+            // buttonLeyparoprep
+            // 
+            this.buttonLeyparoprep.Enabled = false;
+            this.buttonLeyparoprep.Location = new System.Drawing.Point(228, 71);
+            this.buttonLeyparoprep.Name = "buttonLeyparoprep";
+            this.buttonLeyparoprep.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeyparoprep.TabIndex = 200;
+            this.buttonLeyparoprep.Text = "...";
+            this.buttonLeyparoprep.UseVisualStyleBackColor = true;
             // 
             // buttonLeyparodiag
             // 
@@ -966,6 +996,16 @@
             this.groupBoxDesgloceCostes.TabIndex = 190;
             this.groupBoxDesgloceCostes.TabStop = false;
             this.groupBoxDesgloceCostes.Text = "DESGLOSE DE COSTES";
+            // 
+            // buttonLeycosteensam
+            // 
+            this.buttonLeycosteensam.Enabled = false;
+            this.buttonLeycosteensam.Location = new System.Drawing.Point(229, 139);
+            this.buttonLeycosteensam.Name = "buttonLeycosteensam";
+            this.buttonLeycosteensam.Size = new System.Drawing.Size(21, 23);
+            this.buttonLeycosteensam.TabIndex = 211;
+            this.buttonLeycosteensam.Text = "...";
+            this.buttonLeycosteensam.UseVisualStyleBackColor = true;
             // 
             // buttonLeycosteserv
             // 
@@ -1046,7 +1086,7 @@
             this.buttonLeyfunc.TabIndex = 191;
             this.buttonLeyfunc.Text = "...";
             this.buttonLeyfunc.UseVisualStyleBackColor = true;
-            this.buttonLeyfunc.Click += new System.EventHandler(this.buttonLeyFuncPopup_Click);
+            this.buttonLeyfunc.Click += new System.EventHandler(this.buttonLeyfunc_Click);
             // 
             // comboBox9
             // 
@@ -1065,6 +1105,7 @@
             this.buttonLeyparo.TabIndex = 193;
             this.buttonLeyparo.Text = "...";
             this.buttonLeyparo.UseVisualStyleBackColor = true;
+            this.buttonLeyparo.Click += new System.EventHandler(this.buttonLeyparo_Click);
             // 
             // buttonLeyrecu
             // 
@@ -1075,6 +1116,7 @@
             this.buttonLeyrecu.TabIndex = 194;
             this.buttonLeyrecu.Text = "...";
             this.buttonLeyrecu.UseVisualStyleBackColor = true;
+            this.buttonLeyrecu.Click += new System.EventHandler(this.buttonLeyrecu_Click);
             // 
             // buttonLeycoste
             // 
@@ -1085,6 +1127,7 @@
             this.buttonLeycoste.TabIndex = 195;
             this.buttonLeycoste.Text = "...";
             this.buttonLeycoste.UseVisualStyleBackColor = true;
+            this.buttonLeycoste.Click += new System.EventHandler(this.buttonLeycoste_Click);
             // 
             // buttonPreventivo
             // 
@@ -1095,6 +1138,7 @@
             this.buttonPreventivo.TabIndex = 196;
             this.buttonPreventivo.Text = "...";
             this.buttonPreventivo.UseVisualStyleBackColor = true;
+            this.buttonPreventivo.Click += new System.EventHandler(this.buttonPreventivo_Click);
             // 
             // buttonLeyeficienciamto
             // 
@@ -1105,46 +1149,7 @@
             this.buttonLeyeficienciamto.TabIndex = 197;
             this.buttonLeyeficienciamto.Text = "...";
             this.buttonLeyeficienciamto.UseVisualStyleBackColor = true;
-            // 
-            // buttonLeyparoprep
-            // 
-            this.buttonLeyparoprep.Enabled = false;
-            this.buttonLeyparoprep.Location = new System.Drawing.Point(228, 71);
-            this.buttonLeyparoprep.Name = "buttonLeyparoprep";
-            this.buttonLeyparoprep.Size = new System.Drawing.Size(21, 23);
-            this.buttonLeyparoprep.TabIndex = 200;
-            this.buttonLeyparoprep.Text = "...";
-            this.buttonLeyparoprep.UseVisualStyleBackColor = true;
-            // 
-            // buttonLeyparoverif
-            // 
-            this.buttonLeyparoverif.Enabled = false;
-            this.buttonLeyparoverif.Location = new System.Drawing.Point(228, 162);
-            this.buttonLeyparoverif.Name = "buttonLeyparoverif";
-            this.buttonLeyparoverif.Size = new System.Drawing.Size(21, 23);
-            this.buttonLeyparoverif.TabIndex = 204;
-            this.buttonLeyparoverif.Text = "...";
-            this.buttonLeyparoverif.UseVisualStyleBackColor = true;
-            // 
-            // buttonLeyparoserv
-            // 
-            this.buttonLeyparoserv.Enabled = false;
-            this.buttonLeyparoserv.Location = new System.Drawing.Point(228, 184);
-            this.buttonLeyparoserv.Name = "buttonLeyparoserv";
-            this.buttonLeyparoserv.Size = new System.Drawing.Size(21, 23);
-            this.buttonLeyparoserv.TabIndex = 205;
-            this.buttonLeyparoserv.Text = "...";
-            this.buttonLeyparoserv.UseVisualStyleBackColor = true;
-            // 
-            // buttonLeycosteensam
-            // 
-            this.buttonLeycosteensam.Enabled = false;
-            this.buttonLeycosteensam.Location = new System.Drawing.Point(229, 139);
-            this.buttonLeycosteensam.Name = "buttonLeycosteensam";
-            this.buttonLeycosteensam.Size = new System.Drawing.Size(21, 23);
-            this.buttonLeycosteensam.TabIndex = 211;
-            this.buttonLeycosteensam.Text = "...";
-            this.buttonLeycosteensam.UseVisualStyleBackColor = true;
+            this.buttonLeyeficienciamto.Click += new System.EventHandler(this.buttonLeyeficienciamto_Click);
             // 
             // FormFuncionaFallaAmpliado
             // 

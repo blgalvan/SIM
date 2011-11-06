@@ -60,7 +60,7 @@ namespace SIM
                 Label label = _labelList[_widgets.Keys.Count];
                 _widgets.Add(field, textbox);
                 textbox.Visible = true;
-                textbox.Text = extParameters.Contains(field) ? (string)extParameters[field] : "";
+                textbox.Text = extParameters.Contains(field) ? Convert.ToString(extParameters[field]) : "";
                 label.Visible = true;
                 label.Text = (string)fields[field];
             }

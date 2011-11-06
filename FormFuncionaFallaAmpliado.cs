@@ -1106,10 +1106,36 @@ namespace SIM
             }
         }
 
-        private void buttonLeyFuncPopup_Click(object sender, EventArgs e)
+        // Subform buttons
+        private void buttonLeyfunc_Click(object sender, EventArgs e)
         {
-            comboBox1Actions();
-        } 
+            comboBox1Actions(updateParams: false);
+        }
+
+        private void buttonLeyparo_Click(object sender, EventArgs e)
+        {
+            comboBox2Actions(updateParams: false);
+        }
+
+        private void buttonLeyrecu_Click(object sender, EventArgs e)
+        {
+            comboBox3Actions(updateParams: false);
+        }
+
+        private void buttonLeycoste_Click(object sender, EventArgs e)
+        {
+            comboBox4Actions(updateParams: false);
+        }
+
+        private void buttonPreventivo_Click(object sender, EventArgs e)
+        {
+            comboBox5Actions(updateParams: false);
+        }
+
+        private void buttonLeyeficienciamto_Click(object sender, EventArgs e)
+        {
+            comboBox6Actions(updateParams: false);
+        }
 
 
         /** ComboBoxes **/
@@ -1122,14 +1148,14 @@ namespace SIM
             comboBox1Actions();
         }
 
-        private void comboBox1Actions()
+        private void comboBox1Actions(bool updateParams = true)
         {
             string Ambito = "FUNCIONAMIENTO: ";
             string palabra_clave = "Funcionamiento";
             string sufijo2 = "func";
             string nombre_de_ley = "ley_func";
             string nombre_de_campo_y_combo_Box = comboBox1.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         //Entradas de usuario sobre la Ley de Parada
@@ -1138,7 +1164,7 @@ namespace SIM
             comboBox2Actions();
         }
 
-        private void comboBox2Actions()
+        private void comboBox2Actions(bool updateParams = true)
         {           
             DeshabilitarComboBoxDesgloseTiempoFallo();
 
@@ -1147,7 +1173,7 @@ namespace SIM
             string sufijo2 = "paro";
             string nombre_de_ley = "ley_paro";
             string nombre_de_campo_y_combo_Box = comboBox2.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         //Captura de indicaciones de usuario sobre ley de reparación/recuperacion
@@ -1156,14 +1182,14 @@ namespace SIM
             comboBox3Actions();
         }
 
-        private void comboBox3Actions()
+        private void comboBox3Actions(bool updateParams = true)
         {
             string Ambito = "REPARACIÓN/RECUPERACIÓN: ";
             string palabra_clave = "Recuperación";
             string sufijo2 = "recu";
             string nombre_de_ley = "ley_recu";
             string nombre_de_campo_y_combo_Box = comboBox3.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         //Captura de indicaciones de usuario sobre ley de COSTES
@@ -1172,7 +1198,8 @@ namespace SIM
             comboBox4Actions();
         }
 
-        private void comboBox4Actions() {
+        private void comboBox4Actions(bool updateParams = true)
+        {
          
             DeshabilitarComboBoxDesgloseCoste();
 
@@ -1181,7 +1208,7 @@ namespace SIM
             string sufijo2 = "coste";
             string nombre_de_ley = "ley_coste";
             string nombre_de_campo_y_combo_Box = comboBox4.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
@@ -1189,13 +1216,14 @@ namespace SIM
             comboBox5Actions();
         }
 
-        private void comboBox5Actions() {
+        private void comboBox5Actions(bool updateParams = true)
+        {
             string Ambito = "";
             string palabra_clave = "";
             string sufijo2 = "";
             string nombre_de_ley = "preventivo";
             string nombre_de_campo_y_combo_Box = comboBox5.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
@@ -1203,13 +1231,14 @@ namespace SIM
             comboBox6Actions();
         }
 
-        private void comboBox6Actions() {
+        private void comboBox6Actions(bool updateParams = true)
+        {
             string Ambito = "EFICIENCIA DEL MANTENIMIENTO: ";
             string palabra_clave = "% de Eficiencia del Mto.";
             string sufijo2 = "eficiencia_mto";
             string nombre_de_ley = "ley_eficiencia_mto";
             string nombre_de_campo_y_combo_Box = comboBox6.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
 
@@ -2141,17 +2170,13 @@ namespace SIM
 
 
         // Se asigna valores a nombres y parametros
-        private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box)
+        private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box, bool updateParams = true)
         {
             List<String> parametersToRemove;
             Hashtable parametersToAdd = new Hashtable { };
-            List<String> requestParams = new List<String> { };
             Hashtable subform = new Hashtable { };
             Hashtable subformFields = new Hashtable { };
-
-            // Se inicializa el subformulario
-            //FormDatos1 frm = new FormDatos1(); 
-            
+    
             // Parámetros que se van a solicitar en los subformularios
             parametersToRemove = new List<String> {
                 sufijo2 + "_Mantenimiento_Ud_Tiempo",
@@ -2170,7 +2195,6 @@ namespace SIM
 
             parametersToAdd.Add(nombre_de_ley, nombre_de_campo_y_combo_Box);
 
-            // Resto de combos
             List<String> auxi = new List<String> {"","","","","" };
 
             switch (nombre_de_campo_y_combo_Box)
@@ -2448,8 +2472,11 @@ namespace SIM
 
             if (!SilentMode)
             {
-                RemoveParameters(parametersToRemove);
-                AddParameters(parametersToAdd);
+                if (updateParams)
+                {
+                    RemoveParameters(parametersToRemove);
+                    AddParameters(parametersToAdd);
+                }
                 if (subform.Keys.Count != 0)
                     Subform((string)subform["title"], 
                             (string)subform["ambito"], 
@@ -2690,6 +2717,7 @@ namespace SIM
                     break;
             }
         }
+
 
     }
 }
