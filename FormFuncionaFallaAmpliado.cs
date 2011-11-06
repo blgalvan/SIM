@@ -2146,8 +2146,11 @@ namespace SIM
             List<String> parametersToRemove;
             Hashtable parametersToAdd = new Hashtable { };
             List<String> requestParams = new List<String> { };
+            Hashtable subform = new Hashtable { };
+            Hashtable subformFields = new Hashtable { };
+
             // Se inicializa el subformulario
-            FormDatos1 frm = new FormDatos1(); 
+            //FormDatos1 frm = new FormDatos1(); 
             
             // Parámetros que se van a solicitar en los subformularios
             parametersToRemove = new List<String> {
@@ -2192,8 +2195,17 @@ namespace SIM
                     parametersToAdd.Remove(nombre_de_ley);
                     parametersToAdd.Add(nombre_de_ley, "Activado");
                     parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
-                    requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO POR DISPONIBILIDAD", "Disponibilidad Mínima Admisible (%)",
-                                    "", "", "", "", "disponibilidad_minima_admisible", "", "", "", "", "", ""};
+
+                    subformFields = new Hashtable {
+                        {"disponibilidad_minima_admisible", "Disponibilidad Mínima Admisible (%)"}
+                    };
+
+                    subform = new Hashtable {
+                        {"title", "MANTENIMIENTO POR DISPONIBILIDAD"},
+                        {"ambito", "PREVENTIVO"},
+                        {"ley", ""},
+                        {"fields", subformFields}
+                    };
                     break;
 
                 case "Desglose de Costes":                    
@@ -2214,132 +2226,223 @@ namespace SIM
                         parametersToAdd.Remove(nombre_de_ley);
                         parametersToAdd.Add(nombre_de_ley, "Activado");
                         parametersToAdd.Add("tipo_de_preventivo", nombre_de_campo_y_combo_Box);
-                        requestParams = new List<String> {"PREVENTIVO", "", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO", "Tiempo entre Preventivos (Udes. de Tiempo)",
-                                                          "", "", "", "", "tiempo_entre_preventivos", "", "", "", "", "", ""};
+
+                        subformFields = new Hashtable {
+                            {"Tiempo entre Preventivos (Udes. de Tiempo)", "tiempo_entre_preventivos"}
+                        };
+
+                        subform = new Hashtable {
+                            {"title", "MANTENIMIENTO PREVENTIVO FIJO POR TIEMPO"},
+                            {"ambito", "PREVENTIVO"},
+                            {"ley", ""},
+                            {"fields", subformFields}
+                        };
                     }
                     else
-                        requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo por tiempo ", "Coste Mto./Ud_tiempo", "Coste_Perdida_Prod_por_Ud_tiempo", "",
-                                        "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                        "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
+                    {
+                        subformFields = new Hashtable {
+                            {"ley_" + sufijo2 + "_param1", "Coste Mto./Ud_tiempo"}, 
+                            {"ley_" + sufijo2 + "_param2", "Coste_Perdida_Prod_por_Ud_tiempo"},
+                            {sufijo2 + "_Reduccion_si_Preventivo", "% reducción si Preventivo"}
+                        };
+
+                        subform = new Hashtable {
+                            {"title", "Ley de Coste Fijo por tiempo "},
+                            {"ambito", Ambito},
+                            {"ley", (string)_parameters[nombre_de_ley]},
+                            {"fields", subformFields}
+                        };
+                    }
                     break;
 
                 //el siguiente if es solo aplicable a captura de datos de coste
                 case "Fijo por intervención":                    
-                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley de Coste Fijo cada Intervención ", "Coste cada Intervención", "Coste_Perdida_Prod_por_Ud_tiempo", "",
-                                    "", "", "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "", "", "", "% reducción si Preventivo", sufijo2 + "_Reduccion_si_Preventivo"};
+                    subformFields = new Hashtable {
+                        {"ley_" + sufijo2 + "_param1", "Coste cada Intervención"}, 
+                        {"ley_" + sufijo2 + "_param2", "Coste_Perdida_Prod_por_Ud_tiempo"},
+                        {sufijo2 + "_Reduccion_si_Preventivo", "% reducción si Preventivo"}
+                    };
+
+                    subform = new Hashtable {
+                        {"title", "Ley de Coste Fijo cada Intervención "},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
-                case "Fijo":                    
+                case "Fijo":
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    auxi[4] = "Tiempo de ";
-                    if (Ambito == "EFICIENCIA DEL MANTENIMIENTO: ")
-                        auxi[4] = " "; ;
-
-                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley Fija de " + palabra_clave, auxi[4] + palabra_clave, "", "",
-                                    "", auxi[0], "ley_" + sufijo2 + "_param1", "",
-                                    "", "", sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    auxi[4] = Ambito == "EFICIENCIA DEL MANTENIMIENTO: " ? " " : "Tiempo de ";
+                    subformFields.Add("ley_" + sufijo2 + "_param1", auxi[4] + palabra_clave);
+                    
+                    subform = new Hashtable {
+                        {"title", "Ley Fija de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
-                case "Uniforme":                    
+                case "Uniforme":
+                    subformFields = new Hashtable {
+                        {"Minimo_" + sufijo2, "Mínimo Admisible"},
+                        {"Maximo_" + sufijo2, "Máximo Admisible"}
+                    };
+
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    requestParams = new List<String> {Ambito, (string)_parameters[nombre_de_ley], "Ley Uniforme de " + palabra_clave, "", "", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi[0], "", "",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    subform = new Hashtable {
+                        {"title", "Ley Uniforme de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
-                case "Línea recta":                    
+                case "Línea recta":
+                    subformFields = new Hashtable {
+                        {"X1_" + sufijo2, "Inicial T"}, 
+                        {"Y1_" + sufijo2, "Inicial t " + palabra_clave}, 
+                        {"X2_" + sufijo2, "Final T"},
+                        {"Y2_" + sufijo2, "Final t " + palabra_clave}
+                    };
+
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Lineal de " + palabra_clave, "Inicial T", "Inicial t " + palabra_clave, "Final T",
-                                    "Final t " + palabra_clave, auxi[0], "X1_" + sufijo2, "Y1_" + sufijo2,
-                                    "X2_" + sufijo2, "Y2_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    subform = new Hashtable {
+                        {"title", "Ley Lineal de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
                 case "Exponencial":
+                    subformFields = new Hashtable {
+                        {"ley_" + sufijo2 + "_param1", "Gamma"},
+                        { "ley_" + sufijo2 + "_param2", "Lambda"}, 
+                        {"Minimo_" + sufijo2, "Mínimo Admisible"},
+                        {"Maximo_" + sufijo2, "Máximo Admisible"}
+                    };
+
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Exponencial de " + palabra_clave, "Gamma", "Lambda", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    subform = new Hashtable {
+                        {"title", "Ley Exponencial de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
                 case "Weibull2P":
+                    subformFields = new Hashtable {
+                        {"ley_" + sufijo2 + "_param1", "Beta"}, 
+                        {"ley_" + sufijo2 + "_param2", "Eta"}, 
+                        {"Minimo_" + sufijo2, "Mínimo Admisible"},
+                        {"Maximo_" + sufijo2, "Máximo Admisible"}
+                    };
+                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Weibull2P de " + palabra_clave, "Beta", "Eta", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    subform = new Hashtable {
+                        {"title", "Ley Weibull2P de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break;
 
-                case "Normal":                    
+                case "Normal":
+                    subformFields = new Hashtable {
+                        {"ley_" + sufijo2 + "_param1", "Valor Medio"}, 
+                        {"ley_" + sufijo2 + "_param2", "Desviación Típica"}, 
+                        {"Minimo_" + sufijo2, "Mínimo Admisible"},
+                        {"Maximo_" + sufijo2, "Máximo Admisible"}
+                    };
+                    
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: ")
                     {
                         auxi[0] = "Coste Perdida_Prod / Ud_tiempo";
                         auxi[1] = "_Perdida_Prod_por_Ud_tiempo";
+                        subformFields.Add(sufijo2 + auxi[1], auxi[0]);
                     }
 
                     if (Ambito == "COSTE DESGLOSADO: " || Ambito == "COSTE SIN DESGLOSE: " || Ambito == "FALLO/PARADA: " || Ambito == "DESGLOSE DE FALLO/PARADA: ")
                     {
                         auxi[2] = "% reducción si Preventivo";
                         auxi[3] = sufijo2 + "_Reduccion_si_Preventivo";
+                        subformFields.Add(auxi[3], auxi[2]);
                     }
 
-                    requestParams = new List<string> {Ambito, (string)_parameters[nombre_de_ley], "Ley Normal de " + palabra_clave, "Valor Medio", "Desviación Típica", "Mínimo Admisible",
-                                    "Máximo Admisible", auxi[0], "ley_" + sufijo2 + "_param1", "ley_" + sufijo2 + "_param2",
-                                    "Minimo_" + sufijo2, "Maximo_" + sufijo2, sufijo2 + auxi[1], auxi[2], auxi[3]};
+                    subform = new Hashtable {
+                        {"title", "Ley Normal de " + palabra_clave},
+                        {"ambito", Ambito},
+                        {"ley", (string)_parameters[nombre_de_ley]},
+                        {"fields", subformFields}
+                    };
                     break; 
             }
 
@@ -2347,17 +2450,35 @@ namespace SIM
             {
                 RemoveParameters(parametersToRemove);
                 AddParameters(parametersToAdd);
-                if (requestParams.Count() != 0)
-                    SolicitarDatos(frm, requestParams[0], requestParams[1], requestParams[2], requestParams[3], requestParams[4],
-                                        requestParams[5], requestParams[6], requestParams[7], requestParams[8], requestParams[9],
-                                        requestParams[10], requestParams[11], requestParams[12], requestParams[13], requestParams[14]);
+                if (subform.Keys.Count != 0)
+                    Subform((string)subform["title"], 
+                            (string)subform["ambito"], 
+                            (string)subform["ley"], 
+                            (Hashtable)subform["fields"]);
             }
             
             // Mostrar botón cuando se solicita subform
             Button objButton = (Button)_subformButtons[nombre_de_ley];            
-            objButton.Enabled = requestParams.Count() != 0 ? true : false;            
+            objButton.Enabled = subform.Keys.Count != 0 ? true : false;            
         }
 
+        
+        private void Subform(string title, string ambito, string ley, Hashtable fields) 
+        {
+            FormDatos1 form = new FormDatos1();
+            form.title = title;
+            form.Text = ambito;
+            form.fields = fields;
+            form.extParameters = _parameters;
+            
+            form.ShowDialog();
+            if (form.DialogResult == DialogResult.OK)
+            {
+                AddParameters(form.parameters);
+            }
+        }
+        
+/*
         // Popup de los comboBoxes
         //TODO List<string>[] fields --> {{label, id, valor}, {}}
         private void SolicitarDatos(FormDatos1 frm, string Ambito_Op, string Ley, string titulo_del_Formulario, string Rotulo_del_Parametro1,
@@ -2368,6 +2489,7 @@ namespace SIM
         {
             //Dar contenidos a las variables del formulario de captura de indicaciones de usuario
             frm.TituloDelFormulario = titulo_del_Formulario;
+            frm.parameters = _parameters;
             frm.Text = Ambito_Op;
             //TODO frm.fields = fields; 
             frm.Rotulo_Parametro1 = Rotulo_del_Parametro1;
@@ -2409,7 +2531,7 @@ namespace SIM
 
             }
         }
-
+        */
 
         // Limpiar diccionarios
         /// <summary>
