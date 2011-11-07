@@ -433,7 +433,7 @@ namespace SIM
             textBox5.Text += "\r\n";
             textBox5.Text += "\r\n" + "------------------- DATOS DE PARTIDA -------------------------";
             textBox5.Text += "\r\n";
-            foreach (string key in nombres.Keys)
+            /*foreach (string key in nombres.Keys)
             {
                 textBox5.Text += "\r\n" + key + " = " + nombres[key].ToString();
             }
@@ -441,6 +441,10 @@ namespace SIM
             foreach (string key in parametros.Keys)
             {
                 textBox5.Text += "\r\n" + key + " = " + parametros[key].ToString();
+            }*/
+            foreach (string key in _parameters.Keys)
+            {
+                textBox5.Text += "\r\n" + key + " = " + _parameters[key].ToString();
             }
             textBox5.Text += "\r\n" + "Tiempo a Simular = " + Tiempo_A_Simular.ToString();
             textBox5.Text += "\r\n";
@@ -455,12 +459,12 @@ namespace SIM
             comboBox7.Visible = false;
 
             //Poner aqui el umbral de disponibilidad si esta activado el preventivo por disponibilidad
-            if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+            if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
             {
-                if (nombres["preventivo"] == "Activado")
+                if ((string)_parameters["preventivo"] == "Activado")
                 {
-                    if (nombres["tipo_de_preventivo"] == "Por Disponibilidad") DisponibilidadMinimaAdmisible = parametros["disponibilidad_minima_admisible"] / 100;
-                    if (nombres["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
+                    if ((string)_parameters["tipo_de_preventivo"] == "Por Disponibilidad") DisponibilidadMinimaAdmisible = (double)_parameters["disponibilidad_minima_admisible"] / 100;
+                    if ((string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo = (double)_parameters["tiempo_entre_preventivos"];
                 }
             }
 
@@ -479,43 +483,43 @@ namespace SIM
                 Lista_Disponibilidad.Add(new PointF((float)TiempoTranscurrido, (float)maximoY));
 
                 //Generar tiempo funcionando, controlar su validez y acumularlo
-                switch (nombres["ley_func"])
+                switch ((string)_parameters["ley_func"])
                 {
                     case "Uniforme":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme((double)_parameters["Minimo_func"], (double)_parameters["Maximo_func"], r);
                         break;
                     case "Exponencial":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_func_param1"], 1 / parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial((double)_parameters["ley_func_param1"], 1 / (double)_parameters["ley_func_param2"], (double)_parameters["Minimo_func"], (double)_parameters["Maximo_func"], r);
                         break;
                     case "Weibull2P":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P((double)_parameters["ley_func_param1"], (double)_parameters["ley_func_param2"], (double)_parameters["Minimo_func"], (double)_parameters["Maximo_func"], r);
                         break;
                     case "Normal":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_func_param1"], parametros["ley_func_param2"], parametros["Minimo_func"], parametros["Maximo_func"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal((double)_parameters["ley_func_param1"], (double)_parameters["ley_func_param2"], (double)_parameters["Minimo_func"], (double)_parameters["Maximo_func"], r);
                         break;
                     //TODO Ojo, que pasa si se elige la poción Ninguna Ley.
                 }
 
                 //En caso de estar activado el Mto Preventivo fijo por tiempo controlar si el tiempo de funcionamiento de este ciclo excede al tiempo restante para el siguiente Mto preventivo
-                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                 {
-                    if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
+                    if ((string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
                     {
                         t = TiempoHastaSiguientePreventivo;
                         tipo_mto_este_ciclo = "Preventivo";
-                        TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
+                        TiempoHastaSiguientePreventivo = (double)_parameters["tiempo_entre_preventivos"];
                     }
                 }
 
                 //bajada de disponibilidad durante el periodo de funcionamiento, solo Exponencial y Weubull tienen sentido
                 //Para las otras leyes se opta por no bajar la disponibilidad
-                switch (nombres["ley_func"])
+                switch ((string)_parameters["ley_func"])
                 {
                     case "Exponencial":
-                        PuntoFinalBajadaDisponibilidad = Math.Exp(-parametros["ley_func_param2"] * t) - 1 + maximoY;
+                        PuntoFinalBajadaDisponibilidad = Math.Exp(-(double)_parameters["ley_func_param2"] * t) - 1 + maximoY;
                         break;
                     case "Weibull2P":
-                        PuntoFinalBajadaDisponibilidad = Math.Exp(-Math.Pow(t / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                        PuntoFinalBajadaDisponibilidad = Math.Exp(-Math.Pow(t / (double)_parameters["ley_func_param2"], (double)_parameters["ley_func_param1"])) - 1 + maximoY;
                         break;
                     case "Uniforme":
                     case "Normal":
@@ -530,16 +534,16 @@ namespace SIM
                     double DisponibilidadInstantanea = -1000;
                     for (int j = 1; j <= t; j++)
                     {
-                        if (nombres["ley_func"] == "Exponencial") DisponibilidadInstantanea = Math.Exp(-parametros["ley_func_param2"] * j) - 1 + maximoY;
-                        else if (nombres["ley_func"] == "Weibull2P") DisponibilidadInstantanea = Math.Exp(-Math.Pow(j / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                        if ((string)_parameters["ley_func"] == "Exponencial") DisponibilidadInstantanea = Math.Exp(-(double)_parameters["ley_func_param2"] * j) - 1 + maximoY;
+                        else if ((string)_parameters["ley_func"] == "Weibull2P") DisponibilidadInstantanea = Math.Exp(-Math.Pow(j / (double)_parameters["ley_func_param2"], (double)_parameters["ley_func_param1"])) - 1 + maximoY;
                         if (DisponibilidadInstantanea <= DisponibilidadMinimaAdmisible) break;
                         ContadorTiempoDisponibilidadPositiva += 1;
                     }
                     PuntoFinalBajadaDisponibilidad = DisponibilidadMinimaAdmisible;
                     t = ContadorTiempoDisponibilidadPositiva;
-                    if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                    if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                     {
-                        if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Por Disponibilidad") tipo_mto_este_ciclo = "Preventivo";
+                        if ((string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Por Disponibilidad") tipo_mto_este_ciclo = "Preventivo";
                     }
                 }
 
@@ -551,9 +555,9 @@ namespace SIM
                 TiempoTranscurrido += t;
 
                 //Si el mantenimiento en este ciclo es correctivo pero el preventivo Fijo por Tiempo está activado, decrementar el tiempo restante hasta el siguiente preventivo
-                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                 {
-                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo -= t;
+                    if (tipo_mto_este_ciclo == "Correctivo" && (string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo") TiempoHastaSiguientePreventivo -= t;
                 }
 
 
@@ -562,15 +566,15 @@ namespace SIM
                 {
                     double TiempoIntermedio = 0;
                     double maxY_new = 0;
-                    if (nombres["ley_func"] == "Exponencial" || nombres["ley_func"] == "Weibull2P")
+                    if ((string)_parameters["ley_func"] == "Exponencial" || (string)_parameters["ley_func"] == "Weibull2P")
                     {
                         for (int j = 1; j <= 9; j++)
                         {
                             //TiempoIntermedio = (TiempoTranscurrido - t) + j * (t / 10);
                             TiempoIntermedio = j * (t / 10);
 
-                            if (nombres["ley_func"] == "Exponencial") maxY_new = Math.Exp(-parametros["ley_func_param2"] * TiempoIntermedio) - 1 + maximoY;
-                            else if (nombres["ley_func"] == "Weibull2P") maxY_new = Math.Exp(-Math.Pow(TiempoIntermedio / parametros["ley_func_param2"], parametros["ley_func_param1"])) - 1 + maximoY;
+                            if ((string)_parameters["ley_func"] == "Exponencial") maxY_new = Math.Exp(-(double)_parameters["ley_func_param2"] * TiempoIntermedio) - 1 + maximoY;
+                            else if ((string)_parameters["ley_func"] == "Weibull2P") maxY_new = Math.Exp(-Math.Pow(TiempoIntermedio / (double)_parameters["ley_func_param2"], (double)_parameters["ley_func_param1"])) - 1 + maximoY;
                             Lista_Disponibilidad.Add(new PointF((float)(TiempoTranscurrido - t + TiempoIntermedio), (float)maxY_new));
                         }
                     }
@@ -585,21 +589,21 @@ namespace SIM
 
                 //B)GENERAR TIEMPO DE FALLO/PARO, TRATARLO, ALMACENARLO Y ACUMULARLO
                 //------------------------------------------------------------------ 
-                switch (nombres["ley_paro"])
+                switch ((string)_parameters["ley_paro"])
                 {
                     //B.1.-Generar tiempo de fallo/paro en el caso en que no exista desglose de tiempos de fallos/paradas
 
                     case "Uniforme":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme((double)_parameters["Minimo_paro"], (double)_parameters["Maximo_paro"], r);
                         break;
                     case "Exponencial":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_paro_param1"], 1 / parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial((double)_parameters["ley_paro_param1"], 1 / (double)_parameters["ley_paro_param2"], (double)_parameters["Minimo_paro"], (double)_parameters["Maximo_paro"], r);
                         break;
                     case "Weibull2P":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P((double)_parameters["ley_paro_param1"], (double)_parameters["ley_paro_param2"], (double)_parameters["Minimo_paro"], (double)_parameters["Maximo_paro"], r);
                         break;
                     case "Normal":
-                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_paro_param1"], parametros["ley_paro_param2"], parametros["Minimo_paro"], parametros["Maximo_paro"], r);
+                        t = GeneradoresDeAleatorios.Generador_Aleatorio_Normal((double)_parameters["ley_paro_param1"], (double)_parameters["ley_paro_param2"], (double)_parameters["Minimo_paro"], (double)_parameters["Maximo_paro"], r);
                         break;
 
                     //B.2.-Generar tiempo de fallo/paro en el caso en que exista desglose de tiempos
@@ -646,38 +650,38 @@ namespace SIM
 
                 //B.3.-Decidir si el Mantenimiento es "Correctivo" ó "Preventivo" en función de t (de fall/paro) y datos de entrada
                 //Si está activado el Preventivo por Disponibilidad no corresponde hacer nada aqui
-                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                 {
-                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
+                    if (tipo_mto_este_ciclo == "Correctivo" && (string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo < t)
                     {
                         tipo_mto_este_ciclo = "Preventivo";
-                        TiempoHastaSiguientePreventivo = parametros["tiempo_entre_preventivos"];
+                        TiempoHastaSiguientePreventivo = (double)_parameters["tiempo_entre_preventivos"];
                     }
                 }
 
                 //B.4.-Corregir el "Tiempo hasta el siguiente preventivo" en caso de que el mto de este ciclo sea correctivo pero esté activado el preventivo "Fijo por Tiempo"
-                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                 {
-                    if (tipo_mto_este_ciclo == "Correctivo" && nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo > t) TiempoHastaSiguientePreventivo -= t;
+                    if (tipo_mto_este_ciclo == "Correctivo" && (string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo" && TiempoHastaSiguientePreventivo > t) TiempoHastaSiguientePreventivo -= t;
                 }
 
                 //B.5.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo sin desglose de tiempos
-                if (nombres.ContainsKey("ley_paro") && tipo_mto_este_ciclo == "Preventivo")
+                if (_parameters.ContainsKey("ley_paro") && tipo_mto_este_ciclo == "Preventivo")
                 {
-                    if (nombres["ley_paro"] != "Desglose de Fallos" && parametros.ContainsKey("paro_Reduccion_si_Preventivo")) t = (100 - parametros["paro_Reduccion_si_Preventivo"]) * t / 100;
+                    if ((string)_parameters["ley_paro"] != "Desglose de Fallos" && _parameters.ContainsKey("paro_Reduccion_si_Preventivo")) t = (100 - (double)_parameters["paro_Reduccion_si_Preventivo"]) * t / 100;
                     //OJO FALTA POR ARREGLAR QUE ESTE CARGADO EL parametros["paro_Reduccion_si_Preventivo"] EN EL CASO DE NO DESGLOSE DEL TIEMPO DE PARO, EL FORMULARIO NO LO PREGUNTA
 
                     //B.6.-Corregir los tiempos de fallo/parada en caso de que se este aplicando Preventivo con desglose de tiempos
-                    else if (nombres["ley_paro"] == "Desglose de Fallos")
+                    else if ((string)_parameters["ley_paro"] == "Desglose de Fallos")
                     {
-                        if (parametros.ContainsKey("paro_recon_Reduccion_si_Preventivo")) t_paro_recon = (100 - parametros["paro_recon_Reduccion_si_Preventivo"]) * t_paro_recon / 100;
-                        if (parametros.ContainsKey("paro_diag_Reduccion_si_Preventivo")) t_paro_diag = (100 - parametros["paro_diag_Reduccion_si_Preventivo"]) * t_paro_diag / 100;
-                        if (parametros.ContainsKey("paro_prep_Reduccion_si_Preventivo")) t_paro_prep = (100 - parametros["paro_prep_Reduccion_si_Preventivo"]) * t_paro_prep / 100;
-                        if (parametros.ContainsKey("paro_desm_Reduccion_si_Preventivo")) t_paro_desm = (100 - parametros["paro_desm_Reduccion_si_Preventivo"]) * t_paro_desm / 100;
-                        if (parametros.ContainsKey("paro_repa_Reduccion_si_Preventivo")) t_paro_repa = (100 - parametros["paro_repa_Reduccion_si_Preventivo"]) * t_paro_repa / 100;
-                        if (parametros.ContainsKey("paro_ensam_Reduccion_si_Preventivo")) t_paro_ensam = (100 - parametros["paro_ensam_Reduccion_si_Preventivo"]) * t_paro_ensam / 100;
-                        if (parametros.ContainsKey("paro_verif_Reduccion_si_Preventivo")) t_paro_verif = (100 - parametros["paro_verif_Reduccion_si_Preventivo"]) * t_paro_verif / 100;
-                        if (parametros.ContainsKey("paro_serv_Reduccion_si_Preventivo")) t_paro_serv = (100 - parametros["paro_serv_Reduccion_si_Preventivo"]) * t_paro_serv / 100;
+                        if (_parameters.ContainsKey("paro_recon_Reduccion_si_Preventivo")) t_paro_recon = (100 - (double)_parameters["paro_recon_Reduccion_si_Preventivo"]) * t_paro_recon / 100;
+                        if (_parameters.ContainsKey("paro_diag_Reduccion_si_Preventivo")) t_paro_diag = (100 - (double)_parameters["paro_diag_Reduccion_si_Preventivo"]) * t_paro_diag / 100;
+                        if (_parameters.ContainsKey("paro_prep_Reduccion_si_Preventivo")) t_paro_prep = (100 - (double)_parameters["paro_prep_Reduccion_si_Preventivo"]) * t_paro_prep / 100;
+                        if (_parameters.ContainsKey("paro_desm_Reduccion_si_Preventivo")) t_paro_desm = (100 - (double)_parameters["paro_desm_Reduccion_si_Preventivo"]) * t_paro_desm / 100;
+                        if (_parameters.ContainsKey("paro_repa_Reduccion_si_Preventivo")) t_paro_repa = (100 - (double)_parameters["paro_repa_Reduccion_si_Preventivo"]) * t_paro_repa / 100;
+                        if (_parameters.ContainsKey("paro_ensam_Reduccion_si_Preventivo")) t_paro_ensam = (100 - (double)_parameters["paro_ensam_Reduccion_si_Preventivo"]) * t_paro_ensam / 100;
+                        if (_parameters.ContainsKey("paro_verif_Reduccion_si_Preventivo")) t_paro_verif = (100 - (double)_parameters["paro_verif_Reduccion_si_Preventivo"]) * t_paro_verif / 100;
+                        if (_parameters.ContainsKey("paro_serv_Reduccion_si_Preventivo")) t_paro_serv = (100 - (double)_parameters["paro_serv_Reduccion_si_Preventivo"]) * t_paro_serv / 100;
 
                         //Se recalcula ahora el tiempo fallado/parado como la suma de los tiempos del desglose modificados
                         t = t_paro_recon + t_paro_diag + t_paro_prep + t_paro_desm + t_paro_repa + t_paro_ensam + t_paro_verif + t_paro_serv;
@@ -703,29 +707,29 @@ namespace SIM
 
                 //C)ESTABLECER EL VALOR DE LA RECUPERACIÓN EN CASO DE QUE PROCEDA, TRATARLO Y USARLO
                 //Establecer el valor de la máxima recuperacion posible dado por la Ley de Recuperación
-                if (nombres.ContainsKey("ley_recu"))
+                if (_parameters.ContainsKey("ley_recu"))
                 {
-                    switch (nombres["ley_recu"])
+                    switch ((string)_parameters["ley_recu"])
                     {
                         case "Siempre a Nuevo (GAN)":
                         case "Ninguna Ley":
                             maximoY = 1;
                             break;
                         case "Según tiempo (BAO)":
-                            if (nombres.ContainsKey("ley_func"))
+                            if (_parameters.ContainsKey("ley_func"))
                             {
-                                if (nombres["ley_func"] == "Exponencial") maximoY = Math.Exp(-parametros["ley_func_param2"] * (TiempoTranscurrido - parametros["ley_func_param1"]));
-                                else if (nombres["ley_func"] == "Weibull2P") maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_func_param2"], parametros["ley_func_param1"]));
+                                if ((string)_parameters["ley_func"] == "Exponencial") maximoY = Math.Exp(-(double)_parameters["ley_func_param2"] * (TiempoTranscurrido - (double)_parameters["ley_func_param1"]));
+                                else if ((string)_parameters["ley_func"] == "Weibull2P") maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido /(double) _parameters["ley_func_param2"], (double)_parameters["ley_func_param1"]));
                             }
                             break;
                         case "Exponencial":
-                            maximoY = Math.Exp(-parametros["ley_recu_param2"] * (TiempoTranscurrido - parametros["ley_recu_param1"]));
+                            maximoY = Math.Exp(-(double)_parameters["ley_recu_param2"] * (TiempoTranscurrido - (double)_parameters["ley_recu_param1"]));
                             break;
                         case "Weibull2P":
-                            maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / parametros["ley_recu_param2"], parametros["ley_recu_param1"]));
+                            maximoY = Math.Exp(-Math.Pow(TiempoTranscurrido / (double)_parameters["ley_recu_param2"], (double)_parameters["ley_recu_param1"]));
                             break;
                         case "Línea recta":
-                            maximoY = parametros["Y1_recu"] + (parametros["Y2_recu"] - parametros["Y1_recu"]) * (TiempoTranscurrido - parametros["X1_recu"]) / (parametros["X2_recu"] - parametros["X1_recu"]);
+                            maximoY = (double)_parameters["Y1_recu"] + ((double)_parameters["Y2_recu"] - (double)_parameters["Y1_recu"]) * (TiempoTranscurrido - (double)_parameters["X1_recu"]) / ((double)_parameters["X2_recu"] - (double)_parameters["X1_recu"]);
                             break;
                     }
                     if (maximoY > 1) maximoY = 1;
@@ -733,80 +737,79 @@ namespace SIM
 
                 //Modificar el valor de la maxima recuperación si se usa el "% de eficiencia del Mantenimiento"
                 EficienciaMto = 100;
-                if (nombres.ContainsKey("ley_eficiencia_mto"))
+                if (_parameters.ContainsKey("ley_eficiencia_mto"))
                 {
-                    switch (nombres["ley_eficiencia_mto"])
+                    switch ((string)_parameters["ley_eficiencia_mto"])
                     {
                         //A)Determinación del parametro "EficienciaMto"
                         case "Fijo":
-                            EficienciaMto = parametros["ley_eficiencia_mto_param1"];
+                            EficienciaMto = (double)_parameters["ley_eficiencia_mto_param1"];
                             break;
                         case "Uniforme":
-                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme((double)_parameters["Minimo_eficiencia_mto"], (double)_parameters["Maximo_eficiencia_mto"], r);
                             break;
                         case "Exponencial":
-                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros["ley_eficiencia_mto_param1"], 1 / parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial((double)_parameters["ley_eficiencia_mto_param1"], 1 / (double)_parameters["ley_eficiencia_mto_param2"], (double)_parameters["Minimo_eficiencia_mto"], (double)_parameters["Maximo_eficiencia_mto"], r);
                             break;
                         case "Weibull2P":
-                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P((double)_parameters["ley_eficiencia_mto_param1"], (double)_parameters["ley_eficiencia_mto_param2"], (double)_parameters["Minimo_eficiencia_mto"], (double)_parameters["Maximo_eficiencia_mto"], r);
                             break;
                         case "Línea recta":
-                            EficienciaMto = parametros["Y1_eficiencia_mto"] + (parametros["Y2_eficiencia_mto"] - parametros["Y1_eficiencia_mto"]) * (TiempoTranscurrido - parametros["X1_eficiencia_mto"]) / (parametros["X2_eficiencia_mto"] - parametros["X1_eficiencia_mto"]);
+                            EficienciaMto = (double)_parameters["Y1_eficiencia_mto"] + ((double)_parameters["Y2_eficiencia_mto"] - (double)_parameters["Y1_eficiencia_mto"]) * (TiempoTranscurrido - (double)_parameters["X1_eficiencia_mto"]) / ((double)_parameters["X2_eficiencia_mto"] - (double)_parameters["X1_eficiencia_mto"]);
                             break;
                         case "Normal":
-                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_eficiencia_mto_param1"], parametros["ley_eficiencia_mto_param2"], parametros["Minimo_eficiencia_mto"], parametros["Maximo_eficiencia_mto"], r);
+                            EficienciaMto = GeneradoresDeAleatorios.Generador_Aleatorio_Normal((double)_parameters["ley_eficiencia_mto_param1"], (double)_parameters["ley_eficiencia_mto_param2"], (double)_parameters["Minimo_eficiencia_mto"], (double)_parameters["Maximo_eficiencia_mto"], r);
                             break;
-
-                            //B)Modificación de la variable que contiene el maximo de recuperación 
-                            if (EficienciaMto > 0 && EficienciaMto <= 100) maximoY = maximoY * EficienciaMto / 100;
                     }
+                    //B)Modificación de la variable que contiene el maximo de recuperación 
+                    if (EficienciaMto > 0 && EficienciaMto <= 100) maximoY = maximoY * EficienciaMto / 100;
                 }
 
 
                 //Generar los costes de la recuperacion y de pérdida de producción
-                if (nombres.ContainsKey("ley_coste"))
+                if (_parameters.ContainsKey("ley_coste"))
                 {
-                    switch (nombres["ley_coste"])
+                    switch ((string)_parameters["ley_coste"])
                     {
                         case "Fijo por tiempo":
-                            CosteEsteMantenimiento = parametros["ley_coste_param1"] * t;
+                            CosteEsteMantenimiento = (double)_parameters["ley_coste_param1"] * t;
 
                             //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+                            if (tipo_mto_este_ciclo == "Preventivo" && _parameters.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - (double)_parameters["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
 
-                            CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
+                            CosteEstaPerdidaDeProduccion = (double)_parameters["ley_coste_param2"] * t;
                             break;
                         case "Fijo por intervención":
-                            CosteEsteMantenimiento = parametros["ley_coste_param1"];
+                            CosteEsteMantenimiento = (double)_parameters["ley_coste_param1"];
 
                             //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
-                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+                            if (tipo_mto_este_ciclo == "Preventivo" && _parameters.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - (double)_parameters["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
 
-                            CosteEstaPerdidaDeProduccion = parametros["ley_coste_param2"] * t;
+                            CosteEstaPerdidaDeProduccion = (double)_parameters["ley_coste_param2"] * t;
                             break;
                         case "Weibull2P":
-                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
+                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P((double)_parameters["ley_coste_param1"], (double)_parameters["ley_coste_param2"], (double)_parameters["Minimo_coste"], (double)_parameters["Maximo_coste"], r) * t;
 
                             //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+                            if (tipo_mto_este_ciclo == "Preventivo" && _parameters.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - (double)_parameters["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
 
-                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            CosteEstaPerdidaDeProduccion = (double)_parameters["coste_Perdida_Prod_por_Ud_tiempo"] * t;
                             break;
                         case "Normal":
-                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros["ley_coste_param1"], parametros["ley_coste_param2"], parametros["Minimo_coste"], parametros["Maximo_coste"], r) * t;
+                            CosteEsteMantenimiento = GeneradoresDeAleatorios.Generador_Aleatorio_Normal((double)_parameters["ley_coste_param1"], (double)_parameters["ley_coste_param2"], (double)_parameters["Minimo_coste"], (double)_parameters["Maximo_coste"], r) * t;
 
                             //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento
-                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+                            if (tipo_mto_este_ciclo == "Preventivo" && _parameters.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - (double)_parameters["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
 
-                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            CosteEstaPerdidaDeProduccion = (double)_parameters["coste_Perdida_Prod_por_Ud_tiempo"] * t;
                             break;
                         case "Lineal creciente":
-                            CosteEsteMantenimiento = (parametros["Y1_coste"] + (parametros["Y2_coste"] - parametros["Y1_coste"]) * (TiempoTranscurrido - parametros["X1_coste"]) / (parametros["X2_coste"] - parametros["X1_coste"])) * t;
+                            CosteEsteMantenimiento = ((double)_parameters["Y1_coste"] + ((double)_parameters["Y2_coste"] - (double)_parameters["Y1_coste"]) * (TiempoTranscurrido - (double)_parameters["X1_coste"]) / ((double)_parameters["X2_coste"] - (double)_parameters["X1_coste"])) * t;
 
                             //Si en lugar de un Mto correctivo se está realizando un Mto Preventivo entonces corregir el coste de Mantenimiento 
-                            if (tipo_mto_este_ciclo == "Preventivo" && parametros.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - parametros["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
+                            if (tipo_mto_este_ciclo == "Preventivo" && _parameters.ContainsKey("coste_Reduccion_si_Preventivo")) CosteEsteMantenimiento = (100 - (double)_parameters["coste_Reduccion_si_Preventivo"]) * CosteEsteMantenimiento / 100;
 
-                            CosteEstaPerdidaDeProduccion = parametros["coste_Perdida_Prod_por_Ud_tiempo"] * t;
+                            CosteEstaPerdidaDeProduccion = (double)_parameters["coste_Perdida_Prod_por_Ud_tiempo"] * t;
                             break;
                         case "Desglose de Costes":
                             //Reconocimiento 
@@ -844,14 +847,14 @@ namespace SIM
                             //Corrección si se está realizando Mantenimiento Preventivo
                             if (tipo_mto_este_ciclo == "Preventivo")
                             {
-                                if (parametros.ContainsKey("coste_recon_Reduccion_si_Preventivo")) coste_recon = (100 - parametros["coste_recon_Reduccion_si_Preventivo"]) * coste_recon / 100;
-                                if (parametros.ContainsKey("coste_diag_Reduccion_si_Preventivo")) coste_diag = (100 - parametros["coste_diag_Reduccion_si_Preventivo"]) * coste_diag / 100;
-                                if (parametros.ContainsKey("coste_prep_Reduccion_si_Preventivo")) coste_prep = (100 - parametros["coste_prep_Reduccion_si_Preventivo"]) * coste_prep / 100;
-                                if (parametros.ContainsKey("coste_desm_Reduccion_si_Preventivo")) coste_desm = (100 - parametros["coste_desm_Reduccion_si_Preventivo"]) * coste_desm / 100;
-                                if (parametros.ContainsKey("coste_repa_Reduccion_si_Preventivo")) coste_repa = (100 - parametros["coste_repa_Reduccion_si_Preventivo"]) * coste_repa / 100;
-                                if (parametros.ContainsKey("coste_ensam_Reduccion_si_Preventivo")) coste_ensam = (100 - parametros["coste_ensam_Reduccion_si_Preventivo"]) * coste_ensam / 100;
-                                if (parametros.ContainsKey("coste_verif_Reduccion_si_Preventivo")) coste_verif = (100 - parametros["coste_verif_Reduccion_si_Preventivo"]) * coste_verif / 100;
-                                if (parametros.ContainsKey("coste_serv_Reduccion_si_Preventivo")) coste_serv = (100 - parametros["coste_serv_Reduccion_si_Preventivo"]) * coste_serv / 100;
+                                if (_parameters.ContainsKey("coste_recon_Reduccion_si_Preventivo")) coste_recon = (100 - (double)_parameters["coste_recon_Reduccion_si_Preventivo"]) * coste_recon / 100;
+                                if (_parameters.ContainsKey("coste_diag_Reduccion_si_Preventivo")) coste_diag = (100 - (double)_parameters["coste_diag_Reduccion_si_Preventivo"]) * coste_diag / 100;
+                                if (_parameters.ContainsKey("coste_prep_Reduccion_si_Preventivo")) coste_prep = (100 - (double)_parameters["coste_prep_Reduccion_si_Preventivo"]) * coste_prep / 100;
+                                if (_parameters.ContainsKey("coste_desm_Reduccion_si_Preventivo")) coste_desm = (100 - (double)_parameters["coste_desm_Reduccion_si_Preventivo"]) * coste_desm / 100;
+                                if (_parameters.ContainsKey("coste_repa_Reduccion_si_Preventivo")) coste_repa = (100 - (double)_parameters["coste_repa_Reduccion_si_Preventivo"]) * coste_repa / 100;
+                                if (_parameters.ContainsKey("coste_ensam_Reduccion_si_Preventivo")) coste_ensam = (100 - (double)_parameters["coste_ensam_Reduccion_si_Preventivo"]) * coste_ensam / 100;
+                                if (_parameters.ContainsKey("coste_verif_Reduccion_si_Preventivo")) coste_verif = (100 - (double)_parameters["coste_verif_Reduccion_si_Preventivo"]) * coste_verif / 100;
+                                if (_parameters.ContainsKey("coste_serv_Reduccion_si_Preventivo")) coste_serv = (100 - (double)_parameters["coste_serv_Reduccion_si_Preventivo"]) * coste_serv / 100;
                             }
 
                             //Se calcula ahora el coste de parada como la suma de los costes del desglose
@@ -859,14 +862,14 @@ namespace SIM
 
 
                             //Calculo de los costes desglosados de perdida de producción
-                            if (parametros.ContainsKey("coste_recon_Perdida_Prod_por_Ud_tiempo")) coste_prod_recon = parametros["coste_recon_Perdida_Prod_por_Ud_tiempo"] * t_paro_recon;
-                            if (parametros.ContainsKey("coste_diag_Perdida_Prod_por_Ud_tiempo")) coste_prod_diag = parametros["coste_diag_Perdida_Prod_por_Ud_tiempo"] * t_paro_diag;
-                            if (parametros.ContainsKey("coste_prep_Perdida_Prod_por_Ud_tiempo")) coste_prod_prep = parametros["coste_prep_Perdida_Prod_por_Ud_tiempo"] * t_paro_prep;
-                            if (parametros.ContainsKey("coste_desm_Perdida_Prod_por_Ud_tiempo")) coste_prod_desm = parametros["coste_desm_Perdida_Prod_por_Ud_tiempo"] * t_paro_desm;
-                            if (parametros.ContainsKey("coste_repa_Perdida_Prod_por_Ud_tiempo")) coste_prod_repa = parametros["coste_repa_Perdida_Prod_por_Ud_tiempo"] * t_paro_repa;
-                            if (parametros.ContainsKey("coste_ensam_Perdida_Prod_por_Ud_tiempo")) coste_prod_ensam = parametros["coste_ensam_Perdida_Prod_por_Ud_tiempo"] * t_paro_ensam;
-                            if (parametros.ContainsKey("coste_verif_Perdida_Prod_por_Ud_tiempo")) coste_prod_verif = parametros["coste_verif_Perdida_Prod_por_Ud_tiempo"] * t_paro_verif;
-                            if (parametros.ContainsKey("coste_serv_Perdida_Prod_por_Ud_tiempo")) coste_prod_serv = parametros["coste_serv_Perdida_Prod_por_Ud_tiempo"] * t_paro_serv;
+                            if (_parameters.ContainsKey("coste_recon_Perdida_Prod_por_Ud_tiempo")) coste_prod_recon = (double)_parameters["coste_recon_Perdida_Prod_por_Ud_tiempo"] * t_paro_recon;
+                            if (_parameters.ContainsKey("coste_diag_Perdida_Prod_por_Ud_tiempo")) coste_prod_diag = (double)_parameters["coste_diag_Perdida_Prod_por_Ud_tiempo"] * t_paro_diag;
+                            if (_parameters.ContainsKey("coste_prep_Perdida_Prod_por_Ud_tiempo")) coste_prod_prep = (double)_parameters["coste_prep_Perdida_Prod_por_Ud_tiempo"] * t_paro_prep;
+                            if (_parameters.ContainsKey("coste_desm_Perdida_Prod_por_Ud_tiempo")) coste_prod_desm = (double)_parameters["coste_desm_Perdida_Prod_por_Ud_tiempo"] * t_paro_desm;
+                            if (_parameters.ContainsKey("coste_repa_Perdida_Prod_por_Ud_tiempo")) coste_prod_repa = (double)_parameters["coste_repa_Perdida_Prod_por_Ud_tiempo"] * t_paro_repa;
+                            if (_parameters.ContainsKey("coste_ensam_Perdida_Prod_por_Ud_tiempo")) coste_prod_ensam = (double)_parameters["coste_ensam_Perdida_Prod_por_Ud_tiempo"] * t_paro_ensam;
+                            if (_parameters.ContainsKey("coste_verif_Perdida_Prod_por_Ud_tiempo")) coste_prod_verif = (double)_parameters["coste_verif_Perdida_Prod_por_Ud_tiempo"] * t_paro_verif;
+                            if (_parameters.ContainsKey("coste_serv_Perdida_Prod_por_Ud_tiempo")) coste_prod_serv = (double)_parameters["coste_serv_Perdida_Prod_por_Ud_tiempo"] * t_paro_serv;
 
                             //Calculo del coste total de perdida de produccion como suma de los costes desglosados de perdida de producción
                             CosteEstaPerdidaDeProduccion = coste_prod_recon + coste_prod_diag + coste_prod_prep + coste_prod_desm + coste_prod_repa + coste_prod_ensam + coste_prod_verif + coste_prod_serv;
@@ -948,7 +951,7 @@ namespace SIM
                 textBox5.Text += " t funcionando este ciclo = " + TiempoParcialFuncionando.ToString("0.##") + "\r\n";
                 textBox5.Text += " t parado/fallado este ciclo = " + TiempoParadoParcial.ToString("0.##") + "\r\n";
                 textBox5.Text += " t total del ciclo = " + TiempoDelCiclo.ToString("0.##") + "\r\n";
-                if (nombres["ley_paro"] == "Desglose de Fallos")
+                if ((string)_parameters["ley_paro"] == "Desglose de Fallos")
                 {
                     textBox5.Text += "Desglose de Tiempos de Parada/Fallo" + "\r\n";
                     textBox5.Text += "........................................................." + "\r\n";
@@ -978,9 +981,9 @@ namespace SIM
                 textBox5.Text += " Coste Mto este ciclo = " + CosteEsteMantenimiento.ToString("0.##") + "\r\n";
                 textBox5.Text += " Coste acumulado Recuperación (Mto+PérdidaProd) = " + CosteAcumuladoRecuperacion.ToString("0.##") + "\r\n";
                 textBox5.Text += " Coste Medio de Recuperacion = " + CosteMedioRecuperacion.ToString("0.##") + "\r\n";
-                if (nombres.ContainsKey("ley_coste"))
+                if (_parameters.ContainsKey("ley_coste"))
                 {
-                    if (nombres["ley_coste"] == "Desglose de Costes")
+                    if ((string)_parameters["ley_coste"] == "Desglose de Costes")
                     {
                         textBox5.Text += "Desglose de Costes de Parada/Fallo" + "\r\n";
                         textBox5.Text += "........................................................." + "\r\n";
@@ -994,7 +997,7 @@ namespace SIM
                         textBox5.Text += " Coste de Puesta en servicio      = " + coste_serv.ToString("0.##") + "\r\n";
                     }
                     textBox5.Text += " Coste Perdida de producción este ciclo = " + CosteEstaPerdidaDeProduccion.ToString("0.##") + "\r\n";
-                    if (nombres["ley_coste"] == "Desglose de Costes")
+                    if ((string)_parameters["ley_coste"] == "Desglose de Costes")
                     {
                         textBox5.Text += "Desglose de Costes Producción Perdida durante la Parada/Fallo" + "\r\n";
                         textBox5.Text += "........................................................................" + "\r\n";
@@ -1009,9 +1012,9 @@ namespace SIM
                     }
                 }
 
-                if (nombres.ContainsKey("preventivo") && nombres.ContainsKey("tipo_de_preventivo"))
+                if (_parameters.ContainsKey("preventivo") && _parameters.ContainsKey("tipo_de_preventivo"))
                 {
-                    if (nombres["preventivo"] == "Activado" && nombres["tipo_de_preventivo"] == "Fijo por tiempo")
+                    if ((string)_parameters["preventivo"] == "Activado" && (string)_parameters["tipo_de_preventivo"] == "Fijo por tiempo")
                     {
                         textBox5.Text += " Tiempo hasta el siguiente preventivo   = " + TiempoHastaSiguientePreventivo.ToString("0.##") + "\r\n";
                     }
@@ -1922,12 +1925,12 @@ namespace SIM
                     {"ley_func", "Exponencial"},
                     {"ley_paro", "Uniforme"},                
                     {"ley_recu", "Siempre a Nuevo (GAN)"},
-                    {"ley_func_param1", 0},
+                    {"ley_func_param1", 0.0},
                     {"ley_func_param2", 0.0001246},
-                    {"Minimo_func", 2588},
-                    {"Maximo_func", 400000},
-                    {"Maximo_paro", 136},
-                    {"Minimo_paro", 1}
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"Maximo_paro", 136.0},
+                    {"Minimo_paro", 1.0}
                 };
 
                 textBox11.Enabled = true;
@@ -1940,14 +1943,14 @@ namespace SIM
                     {"ley_func", "Exponencial"},
                     {"ley_paro", "Weibull2P"},
                     {"ley_recu", "Siempre a Nuevo (GAN)"},
-                    {"ley_func_param1", 0},
+                    {"ley_func_param1", 0.0},
                     {"ley_func_param2", 0.0001246},
-                    {"Minimo_func", 2588},
-                    {"Maximo_func", 400000},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
                     {"ley_paro_param1", 0.588},
                     {"ley_paro_param2", 15.073},
-                    {"Minimo_paro", 1},
-                    {"Maximo_paro", 136}
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0}
                 };
 
                 textBox11.Enabled = true;
@@ -1957,19 +1960,19 @@ namespace SIM
 
             if (comboBox8.Text == "Caso3")
             {
-                
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-
-                parametros["Maximo_func"] = 400000;
-                parametros["Minimo_func"] = 2588;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Siempre a Nuevo (GAN)"},
+                    {"Maximo_func", 400000.0},
+                    {"Minimo_func", 2588.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"ley_func_param1", 0.0},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0}
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "400000";
@@ -1977,18 +1980,19 @@ namespace SIM
 
             if (comboBox8.Text == "Caso4")
             {
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Según tiempo (BAO)";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Según tiempo (BAO)"},    
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "20000";
@@ -1996,23 +2000,23 @@ namespace SIM
 
             if (comboBox8.Text == "Caso5")
             {
-                
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Línea recta";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2020,26 +2024,26 @@ namespace SIM
 
             if (comboBox8.Text == "Caso6")
             {
-                
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Línea recta";
-                nombres["ley_eficiencia_mto"] = "Uniforme";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
-                parametros["Minimo_eficiencia_mto"] = 90;
-                parametros["Maximo_eficiencia_mto"] = 100;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_eficiencia_mto", "Uniforme"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                    {"Minimo_eficiencia_mto", 90.0},
+                    {"Maximo_eficiencia_mto", 100.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2047,29 +2051,29 @@ namespace SIM
 
             if (comboBox8.Text == "Caso7")
             {
-                
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Línea recta";
-                nombres["ley_eficiencia_mto"] = "Uniforme";
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Fijo por tiempo";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["Minimo_paro"] = 1;
-                parametros["Maximo_paro"] = 136;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
-                parametros["Minimo_eficiencia_mto"] = 90;
-                parametros["Maximo_eficiencia_mto"] = 100;
-                parametros["tiempo_entre_preventivos"] = 8760;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_eficiencia_mto", "Uniforme"},
+                    {"preventivo", "Activado"},
+                    {"tipo_de_preventivo", "Fijo por tiempo"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"ley_paro_param1", 0.588},
+                    {"ley_paro_param2", 15.073},
+                    {"Minimo_paro", 1.0},
+                    {"Maximo_paro", 136.0},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                    {"Minimo_eficiencia_mto", 90.0},
+                    {"Maximo_eficiencia_mto", 100.0},
+                    {"tiempo_entre_preventivos", 8760.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2078,29 +2082,30 @@ namespace SIM
 
             if (comboBox8.Text == "Caso8")
             {
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Línea recta";
-                nombres["ley_eficiencia_mto"] = "Uniforme";
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Fijo por tiempo";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["Maximo_paro"] = 136;
-                parametros["Minimo_paro"] = 1;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
-                parametros["Minimo_eficiencia_mto"] = 90;
-                parametros["Maximo_eficiencia_mto"] = 100;
-                parametros["tiempo_entre_preventivos"] = 8760;
-                parametros["paro_Reduccion_si_Preventivo"] = 50;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_eficiencia_mto", "Uniforme"},
+                    {"preventivo", "Activado"},
+                    {"tipo_de_preventivo", "Fijo por tiempo"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"Maximo_paro", 136.0},
+                    {"Minimo_paro", 1.0},
+                    {"ley_paro_param2", 15.073},
+                    {"ley_paro_param1", 0.588},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                    {"Minimo_eficiencia_mto", 90.0},
+                    {"Maximo_eficiencia_mto", 100.0},
+                    {"tiempo_entre_preventivos", 8760.0},
+                    {"paro_Reduccion_si_Preventivo", 50.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2109,29 +2114,30 @@ namespace SIM
 
             if (comboBox8.Text == "Caso9")
             {
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Weibull2P";
-                nombres["ley_recu"] = "Línea recta";
-                nombres["ley_eficiencia_mto"] = "Uniforme";
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Por Disponibilidad";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["Maximo_paro"] = 136;
-                parametros["Minimo_paro"] = 1;
-                parametros["ley_paro_param2"] = 15.073;
-                parametros["ley_paro_param1"] = 0.588;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
-                parametros["Minimo_eficiencia_mto"] = 90;
-                parametros["Maximo_eficiencia_mto"] = 100;
-                parametros["disponibilidad_minima_admisible"] = 30;
-                parametros["paro_Reduccion_si_Preventivo"] = 50;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Weibull2P"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_eficiencia_mto", "Uniforme"},
+                    {"preventivo", "Activado"},
+                    {"tipo_de_preventivo", "Por Disponibilidad"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"Maximo_paro", 136.0},
+                    {"Minimo_paro", 1.0},
+                    {"ley_paro_param2", 15.073},
+                    {"ley_paro_param1", 0.588},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                    {"Minimo_eficiencia_mto", 90.0},
+                    {"Maximo_eficiencia_mto", 100.0},
+                    {"disponibilidad_minima_admisible", 30.0},
+                    {"paro_Reduccion_si_Preventivo", 50.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2139,42 +2145,43 @@ namespace SIM
 
             if (comboBox8.Text == "Caso10")
             {
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Desglose de Fallos";
-                nombres["ley_recu"] = "Línea recta";
-                nombres["ley_eficiencia_mto"] = "Uniforme";
-                nombres["preventivo"] = "Activado";
-                nombres["tipo_de_preventivo"] = "Por Disponibilidad";
-                nombres["ley_paro_prep"] = "Uniforme";
-                nombres["ley_paro_repa"] = "Uniforme";
-                nombres["ley_coste"] = "Desglose de Costes";
-                nombres["ley_coste_prep"] = "Fijo";
-                nombres["ley_coste_repa"] = "Fijo";
-
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.0001526;
-                parametros["Minimo_func"] = 2588;
-                parametros["Maximo_func"] = 400000;
-                parametros["Minimo_paro_prep"] = 5;
-                parametros["Maximo_paro_prep"] = 10;
-                parametros["paro_prep_Reduccion_si_Preventivo"] = 50;
-                parametros["Maximo_paro_repa"] = 25;
-                parametros["Y2_recu"] = 0.6;
-                parametros["X2_recu"] = 87600;
-                parametros["Y1_recu"] = 1;
-                parametros["X1_recu"] = 0;
-                parametros["Minimo_eficiencia_mto"] = 90;
-                parametros["Maximo_eficiencia_mto"] = 100;
-                parametros["disponibilidad_minima_admisible"] = 30;
-                parametros["paro_Reduccion_si_Preventivo"] = 50;
-                parametros["Minimo_paro_repa"] = 15;
-                parametros["paro_repa_Reduccion_si_Preventivo"] = 30;
-                parametros["ley_coste_prep_param1"] = 16;
-                parametros["coste_prep_Perdida_Prod_por_Ud_tiempo"] = 5;
-                parametros["coste_prep_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_coste_repa_param1"] = 16;
-                parametros["coste_repa_Perdida_Prod_por_Ud_tiempo"] = 5;
-                parametros["coste_repa_Reduccion_si_Preventivo"] = 30;
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Desglose de Fallos"},
+                    {"ley_recu", "Línea recta"},
+                    {"ley_eficiencia_mto", "Uniforme"},
+                    {"preventivo", "Activado"},
+                    {"tipo_de_preventivo", "Por Disponibilidad"},
+                    {"ley_paro_prep", "Uniforme"},
+                    {"ley_paro_repa", "Uniforme"},
+                    {"ley_coste", "Desglose de Costes"},
+                    {"ley_coste_prep", "Fijo"},
+                    {"ley_coste_repa", "Fijo"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.0001526},
+                    {"Minimo_func", 2588.0},
+                    {"Maximo_func", 400000.0},
+                    {"Minimo_paro_prep", 5.0},
+                    {"Maximo_paro_prep", 10.0},
+                    {"paro_prep_Reduccion_si_Preventivo", 50.0},
+                    {"Maximo_paro_repa", 25.0},
+                    {"Y2_recu", 0.6},
+                    {"X2_recu", 87600.0},
+                    {"Y1_recu", 1.0},
+                    {"X1_recu", 0.0},
+                    {"Minimo_eficiencia_mto", 90.0},
+                    {"Maximo_eficiencia_mto", 100.0},
+                    {"disponibilidad_minima_admisible", 30.0},
+                    {"paro_Reduccion_si_Preventivo", 50.0},
+                    {"Minimo_paro_repa", 15.0},
+                    {"paro_repa_Reduccion_si_Preventivo", 30.0},
+                    {"ley_coste_prep_param1", 16.0},
+                    {"coste_prep_Perdida_Prod_por_Ud_tiempo", 5.0},
+                    {"coste_prep_Reduccion_si_Preventivo", 50.0},
+                    {"ley_coste_repa_param1", 16.0},
+                    {"coste_repa_Perdida_Prod_por_Ud_tiempo", 5.0},
+                    {"coste_repa_Reduccion_si_Preventivo", 30.0},
+                };
 
                 textBox11.Enabled = true;
                 textBox10.Text = "87600";
@@ -2186,24 +2193,25 @@ namespace SIM
                 textBox11.Enabled = true;
                 textBox10.Text = "20000";
 
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Normal";
-                nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-                nombres["ley_coste"] = "Ninguna Ley";
-                nombres["preventivo"] = "No activado";
-                nombres["ley_eficiencia_mto"] = "Ninguna Ley";
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Normal"},
+                    {"ley_recu", "Siempre a Nuevo (GAN)"},
+                    {"ley_coste", "Ninguna Ley"},
+                    {"preventivo", "No activado"},
+                    {"ley_eficiencia_mto", "Ninguna Ley"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.001},
+                    {"Minimo_func", 100.0},
+                    {"Maximo_func", 10000.0},
+                    {"ley_paro_param1", 200.0},
+                    {"ley_paro_param2", 20.0},
+                    {"Minimo_paro", 100.0},
+                    {"Maximo_paro", 10000.0},
+                    {"paro_Reduccion_si_Preventivo", 20.0},
+                };
 
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.001;
-                parametros["Minimo_func"] = 100;
-                parametros["Maximo_func"] = 10000;
-                parametros["ley_paro_param1"] = 200;
-                parametros["ley_paro_param2"] = 20;
-                parametros["Minimo_paro"] = 100;
-                parametros["Maximo_paro"] = 10000;
-                parametros["paro_Reduccion_si_Preventivo"] = 20;
-
-                foreach (string key in nombres.Keys)
+                /*foreach (string key in nombres.Keys)
                 {
                     textBox11.Text += "\r\n" + key + " = " + nombres[key].ToString();
                 }
@@ -2213,7 +2221,12 @@ namespace SIM
                 foreach (string key in parametros.Keys)
                 {
                     textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
-                }  
+                }*/
+
+                foreach (string key in _parameters.Keys)
+                {
+                    textBox11.Text += "\r\n" + key + " = " + _parameters[key].ToString();
+                }
 
             }
 
@@ -2222,58 +2235,59 @@ namespace SIM
                 textBox11.Enabled = true;
                 textBox10.Text = "50000";
 
-                nombres["ley_func"] = "Exponencial";
-                nombres["ley_paro"] = "Desglose de Fallos";
-                nombres["ley_recu"] = "Siempre a Nuevo (GAN)";
-                nombres["ley_coste"] = "Ninguna Ley";
-                nombres["preventivo"] = "No activado";
-                nombres["ley_eficiencia_mto"] = "Ninguna Ley";
-                nombres["ley_paro_recon"] = "Fijo";
-                nombres["ley_paro_diag"] = "Uniforme";
-                nombres["ley_paro_prep"] = "Exponencial";
-                nombres["ley_paro_desm"] = "Weibull2P";
-                nombres["ley_paro_repa"] = "Normal";
-                nombres["ley_paro_ensam"] = "Línea recta";
-                nombres["ley_paro_verif"] = "Fijo";
-                nombres["ley_paro_serv"] = "Uniforme";
+                parameters = new Hashtable {
+                    {"ley_func", "Exponencial"},
+                    {"ley_paro", "Desglose de Fallos"},
+                    {"ley_recu", "Siempre a Nuevo (GAN)"},
+                    {"ley_coste", "Ninguna Ley"},
+                    {"preventivo", "No activado"},
+                    {"ley_eficiencia_mto", "Ninguna Ley"},
+                    {"ley_paro_recon", "Fijo"},
+                    {"ley_paro_diag", "Uniforme"},
+                    {"ley_paro_prep", "Exponencial"},
+                    {"ley_paro_desm", "Weibull2P"},
+                    {"ley_paro_repa", "Normal"},
+                    {"ley_paro_ensam", "Línea recta"},
+                    {"ley_paro_verif", "Fijo"},
+                    {"ley_paro_serv", "Uniforme"},
+                    {"ley_func_param1", 0.0},
+                    {"ley_func_param2", 0.001},
+                    {"Minimo_func", 100.0},
+                    {"Maximo_func", 10000.0},
+                    {"Maximo_paro_diag", 40.0},
+                    {"Minimo_paro_diag", 20.0},
+                    {"paro_recon_Reduccion_si_Preventivo", 50.0},
+                    {"ley_paro_recon_param1", 30.0},
+                    {"paro_Reduccion_si_Preventivo", 20.0},
+                    {"paro_diag_Reduccion_si_Preventivo", 50.0},
+                    {"ley_paro_prep_param1", 10.0},
+                    {"ley_paro_prep_param2", 0.01},
+                    {"Minimo_paro_prep", 10.0},
+                    {"Maximo_paro_prep", 1000.0},
+                    {"paro_prep_Reduccion_si_Preventivo", 50.0},
+                    {"ley_paro_desm_param1", 1.5},
+                    {"ley_paro_desm_param2", 400.0},
+                    {"Minimo_paro_desm", 50.0},
+                    {"Maximo_paro_desm", 700.0},
+                    {"paro_desm_Reduccion_si_Preventivo", 50.0},
+                    {"ley_paro_repa_param1", 30.0},
+                    {"ley_paro_repa_param2", 3.0},
+                    {"Minimo_paro_repa", 15.0},
+                    {"Maximo_paro_repa", 45.0},
+                    {"paro_repa_Reduccion_si_Preventivo", 50.0},
+                    {"X1_paro_ensam", 0.0},
+                    {"Y1_paro_ensam", 20.0},
+                    {"X2_paro_ensam", 60000.0},
+                    {"Y2_paro_ensam", 50.0},
+                    {"paro_ensam_Reduccion_si_Preventivo", 50.0},
+                    {"ley_paro_verif_param1", 30.0},
+                    {"paro_verif_Reduccion_si_Preventivo", 50.0},
+                    {"Minimo_paro_serv", 20.0},
+                    {"Maximo_paro_serv", 40.0},
+                    {"paro_serv_Reduccion_si_Preventivo", 50.0},
+                };
 
-                parametros["ley_func_param1"] = 0;
-                parametros["ley_func_param2"] = 0.001;
-                parametros["Minimo_func"] = 100;
-                parametros["Maximo_func"] = 10000;
-                parametros["Maximo_paro_diag"] = 40;
-                parametros["Minimo_paro_diag"] = 20;
-                parametros["paro_recon_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_paro_recon_param1"] = 30;
-                parametros["paro_Reduccion_si_Preventivo"] = 20;
-                parametros["paro_diag_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_paro_prep_param1"] = 10;
-                parametros["ley_paro_prep_param2"] = 0.01;
-                parametros["Minimo_paro_prep"] = 10;
-                parametros["Maximo_paro_prep"] = 1000;
-                parametros["paro_prep_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_paro_desm_param1"] = 1.5;
-                parametros["ley_paro_desm_param2"] = 400;
-                parametros["Minimo_paro_desm"] = 50;
-                parametros["Maximo_paro_desm"] = 700;
-                parametros["paro_desm_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_paro_repa_param1"] = 30;
-                parametros["ley_paro_repa_param2"] = 3;
-                parametros["Minimo_paro_repa"] = 15;
-                parametros["Maximo_paro_repa"] = 45;
-                parametros["paro_repa_Reduccion_si_Preventivo"] = 50;
-                parametros["X1_paro_ensam"] = 0;
-                parametros["Y1_paro_ensam"] = 20;
-                parametros["X2_paro_ensam"] = 60000;
-                parametros["Y2_paro_ensam"] = 50;
-                parametros["paro_ensam_Reduccion_si_Preventivo"] = 50;
-                parametros["ley_paro_verif_param1"] = 30;
-                parametros["paro_verif_Reduccion_si_Preventivo"] = 50;
-                parametros["Minimo_paro_serv"] = 20;
-                parametros["Maximo_paro_serv"] = 40;
-                parametros["paro_serv_Reduccion_si_Preventivo"] = 50;
-
-                foreach (string key in nombres.Keys)
+                /*foreach (string key in nombres.Keys)
                 {
                     textBox11.Text += "\r\n" + key + " = " + nombres[key].ToString();
                 }
@@ -2283,7 +2297,11 @@ namespace SIM
                 foreach (string key in parametros.Keys)
                 {
                     textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
-                }  
+                }*/
+                foreach (string key in _parameters.Keys)
+                {
+                    textBox11.Text += "\r\n" + key + " = " + _parameters[key].ToString();
+                }
             }
             StartSilentMode();
             DefaultParameters();
@@ -2770,18 +2788,18 @@ namespace SIM
         {
             double valor_generado = 0;
             string auxi1;
-            if (nombres.ContainsKey(tipo_ley))
+            if (_parameters.ContainsKey(tipo_ley))
             {
-                auxi1 = nombres[tipo_ley];
+                auxi1 = (string)_parameters[tipo_ley];
                 if (auxi1 == "Ninguna Ley") valor_generado = 0;
-                if (auxi1 == "Fijo por tiempo") valor_generado = parametros[param1] * tiempo;
-                if (auxi1 == "Fijo por intervención") valor_generado = parametros[param1];
-                if (auxi1 == "Fijo") valor_generado = parametros[param1];
-                if (auxi1 == "Uniforme") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme(parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Exponencial") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial(parametros[param1], 1 / parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Weibull2P") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Normal") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Normal(parametros[param1], parametros[param2], parametros[minimo], parametros[maximo], r) * tiempo;
-                if (auxi1 == "Línea recta") valor_generado = parametros[Y1] + (parametros[Y2] - parametros[Y1]) * (variable - parametros[X1]) / (parametros[X2] - parametros[X1]) * tiempo;
+                if (auxi1 == "Fijo por tiempo") valor_generado = (double)_parameters[param1] * tiempo;
+                if (auxi1 == "Fijo por intervención") valor_generado = (double)_parameters[param1];
+                if (auxi1 == "Fijo") valor_generado = (double)_parameters[param1];
+                if (auxi1 == "Uniforme") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Uniforme((double)_parameters[minimo], (double)_parameters[maximo], r) * tiempo;
+                if (auxi1 == "Exponencial") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Exponencial((double)_parameters[param1], 1 / (double)_parameters[param2], (double)_parameters[minimo], (double)_parameters[maximo], r) * tiempo;
+                if (auxi1 == "Weibull2P") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Weibull_2P((double)_parameters[param1], (double)_parameters[param2], (double)_parameters[minimo], (double)_parameters[maximo], r) * tiempo;
+                if (auxi1 == "Normal") valor_generado = GeneradoresDeAleatorios.Generador_Aleatorio_Normal((double)_parameters[param1], (double)_parameters[param2], (double)_parameters[minimo], (double)_parameters[maximo], r) * tiempo;
+                if (auxi1 == "Línea recta") valor_generado = (double)_parameters[Y1] + ((double)_parameters[Y2] - (double)_parameters[Y1]) * (variable - (double)_parameters[X1]) / ((double)_parameters[X2] - (double)_parameters[X1]) * tiempo;
             }
 
             return valor_generado;

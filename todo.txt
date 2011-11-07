@@ -1,4 +1,4 @@
-Modificaciones interfaz
+﻿Modificaciones interfaz
 
 x Cambiar interfaz según dibujo. 
 x Valor por defecto en los selectbox.
@@ -11,7 +11,7 @@ x Crear hashtable widgets (["ley_func", comboBoxLeyFunc])
 x Crear método para modificar el params. AddToParams("ley_func", "Exponencial"), añade al params y además actualiza el value del widget correspondiente.
 x Añadir botón al lado de los combo cuando la opción elegida muestre pantalla flotante.
 x En las pantallas flotantes poner valor en los widgets si en el params lo tiene.
-- Cambiar diccionarios nombres y parametos por un hashtable params.
+x Cambiar diccionarios nombres y parametos por un hashtable params.
 - Mover cálculos del simular a otra clase. Crear clase FuncionaFallaAmpliado y método simular().
 - Corregir nombres de diccionarios, inputs y métodos. (refactorizar)
 
@@ -31,3 +31,6 @@ Iván
 - 10h (04/11/2011)
 - 4h (06/11/2011)
 - 1h (07/11/2011)
+
+Fede
+- 4h (07/11/2011)
