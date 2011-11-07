@@ -59,7 +59,7 @@ namespace SIM
         private bool _silentMode;
 
 
-        // Constructor
+        /* Constructor */
         public FormFuncionaFallaAmpliado()
         {
             InitializeComponent();
@@ -91,8 +91,7 @@ namespace SIM
                 {"ley_coste_verif", comboBox_C_Verif},
                 {"ley_coste_serv", comboBox_C_Serv},
                 {"grafica", comboBox7},
-                {"caso", comboBox8},
-                {"combo9", comboBox9}
+                {"caso", comboBox8}
             };
 
             _defaultValues = new Hashtable {
@@ -146,47 +145,146 @@ namespace SIM
             };
         }
 
-        // Load event
+        /* Load */
         private void FormFuncionaFallaAmpliado_Load(object sender, EventArgs e)
         {
             reset();
         }
 
+        /* Silent mode */
+
+        private void StartSilentMode()
+        {
+            SilentMode = true;
+        }
+
+        private void StopSilentMode()
+        {
+            SilentMode = false;
+        }
+
+        private bool SilentMode
+        {
+            get
+            {
+                return this._silentMode;
+            }
+            set
+            {
+                this._silentMode = value;
+            }
+        }
+
+        /* Default values */
+
+        private void DefaultParameters()
+        {
+            RemoveParameters(ParameterNames());
+            AddParameters(_defaultValues);
+        }
+
+        /* Reset */
+
+        private void reset()
+        {
+            StartSilentMode();
+            DefaultParameters();
+            StopSilentMode();
+
+            // TextBox de resultados
+            textBox5.Text = "";
+            textBox5.Enabled = false;
+
+            // Log
+            textBox11.Text = "";
+            textBox11.Enabled = false;
+
+            // Tiempo a simular y repeticiones de la simulación
+            textBox10.Text = "";
+            textBox10.Enabled = true;
+            button4.Enabled = true;
+
+            // Progressbar y selección de gráfica
+            progressBar1.Visible = false;
+            ResetComboBox7();
+
+            // Selección de casos predefinidos
+            comboBox8.Text = "Casos prácticos predefinidos";
+        }
+
+        /* Reset selección de gráfica */
+
+        private void ResetComboBox7()
+        {
+            comboBox7.Visible = false;
+            comboBox7.Text = "Elegir gráfico";
+        }
+
+        /* Tratamiento de los parámetros */
+
+        private List<String> ParameterNames()
+        {
+            List<String> pnames = new List<String> { };
+            foreach (string name in _parameters.Keys)
+            {
+                pnames.Add(name);
+            }
+            return pnames;
+        }
+
+        private void AddParameters(Hashtable parameters)
+        {
+            foreach (DictionaryEntry parameter in parameters)
+            {
+                _parameters.Remove(parameter.Key);
+                _parameters.Add(parameter.Key, parameter.Value);
+                if (_widgets.ContainsKey(parameter.Key))
+                    SetWidgetValue(_widgets[parameter.Key], (string)parameter.Value);
+            }
+        }
+
+        private void RemoveParameters(List<String> parameters)
+        {
+            foreach (string parameter in parameters)
+            {
+                _parameters.Remove(parameter);
+                if (_widgets.ContainsKey(parameter))
+                    SetWidgetValue(_widgets[parameter], "");
+            }
+        }
+
+        private void SetWidgetValue(Object widget, string value)
+        {
+            Type type = widget.GetType();
+            switch (type.ToString())
+            {
+                case "System.Windows.Forms.ComboBox":
+                    ComboBox comboObj = (ComboBox)widget;
+                    comboObj.Text = value;
+                    break;
+                case "System.Windows.Forms.TextBox":
+                    TextBox textObj = (TextBox)widget;
+                    textObj.Text = value;
+                    break;
+            }
+        }
+
 
         /** Buttons **/
 
-        // Botón cerrar
+        /* Botón cerrar */
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
         }
         
-        // Botón reset
+        /* Botón reset */
         private void button_Reset_Click(object sender, EventArgs e)
         {
             reset();
         }
 
-        // Botón PARA VER LOS PARAMETROS ESCOGIDOS 
-        private void button_Parametros_Click(object sender, EventArgs e)
-        {
-
-            textBox11.Enabled = true;
-            foreach (string key in _parameters.Keys)
-            {
-                textBox11.Text += "\r\n" + "_parameters[" + key + "] = " + " " + _parameters[key].ToString() + ";";
-            }
-
-            /*
-            textBox11.Text += "\r\n";
-            foreach (string key in parametros.Keys)
-            {
-                textBox11.Text += "\r\n" + "parametros[¡" + key + "¡] = " + parametros[key].ToString("0.#######") + ";";
-            }*/
-
-        }
-
-        // Botón simular
+        /* Botón simular */
         private void button4_Click(object sender, EventArgs e)
         {
             // Se resetea selector de gráfica
@@ -993,7 +1091,151 @@ namespace SIM
 
         }
 
-        // ?? CARGAR EJEMPLO
+        /* Botón log */ 
+        private void button_Parametros_Click(object sender, EventArgs e)
+        {
+
+            textBox11.Enabled = true;
+            foreach (string key in _parameters.Keys)
+            {
+                textBox11.Text += "\r\n" + "_parameters[" + key + "] = " + " " + _parameters[key].ToString() + ";";
+            }
+
+            /*
+            textBox11.Text += "\r\n";
+            foreach (string key in parametros.Keys)
+            {
+                textBox11.Text += "\r\n" + "parametros[¡" + key + "¡] = " + parametros[key].ToString("0.#######") + ";";
+            }*/
+
+        }
+        
+        /* Botón limpiar log */
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox11.Text = "";
+        }
+
+
+        /* Subform buttons */
+
+        private void buttonLeyfunc_Click(object sender, EventArgs e)
+        {
+            comboBox1Actions(updateParams: false);
+        }
+
+        private void buttonLeyparo_Click(object sender, EventArgs e)
+        {
+            comboBox2Actions(updateParams: false);
+        }
+
+        private void buttonLeyrecu_Click(object sender, EventArgs e)
+        {
+            comboBox3Actions(updateParams: false);
+        }
+
+        private void buttonLeycoste_Click(object sender, EventArgs e)
+        {
+            comboBox4Actions(updateParams: false);
+        }
+
+        private void buttonPreventivo_Click(object sender, EventArgs e)
+        {
+            comboBox5Actions(updateParams: false);
+        }
+
+        private void buttonLeyeficienciamto_Click(object sender, EventArgs e)
+        {
+            comboBox6Actions(updateParams: false);
+        }
+
+        /* Subform buttons (desgloce tiempos) */
+
+        private void buttonLeyparorecon_Click(object sender, EventArgs e)
+        {
+            comboBox_T_RecActions(updateParams: false);
+        }
+
+        private void buttonLeyparodiag_Click(object sender, EventArgs e)
+        {
+            comboBox_T_DiagActions(updateParams: false);
+        }
+
+        private void buttonLeyparoprep_Click(object sender, EventArgs e)
+        {
+            comboBox_T_PrepActions(updateParams: false);
+        }
+
+        private void buttonLeyparodesm_Click(object sender, EventArgs e)
+        {
+            comboBox_T_DesmActions(updateParams: false);
+        }
+
+        private void buttonLeyparorepa_Click(object sender, EventArgs e)
+        {
+            comboBox_T_RepActions(updateParams: false);
+        }
+
+        private void buttonLeyparoensam_Click(object sender, EventArgs e)
+        {
+            comboBox_T_EnsamActions(updateParams: false);
+        }
+
+        private void buttonLeyparoverif_Click(object sender, EventArgs e)
+        {
+            comboBox_T_VerifActions(updateParams: false);
+        }
+
+        private void buttonLeyparoserv_Click(object sender, EventArgs e)
+        {
+            comboBox_T_ServActions(updateParams: false);
+        }
+
+        /* Subform buttons (desgloce costes)*/
+
+        private void buttonLeycosterecon_Click(object sender, EventArgs e)
+        {
+            comboBox_C_RecActions(updateParams: false);
+        }
+
+        private void buttonLeycostediag_Click(object sender, EventArgs e)
+        {
+            comboBox_C_DiagActions(updateParams: false);
+        }
+
+        private void buttonLeycosteprep_Click(object sender, EventArgs e)
+        {
+            comboBox_C_PrepActions(updateParams: false);
+        }
+
+        private void buttonLeycostedesm_Click(object sender, EventArgs e)
+        {
+            comboBox_C_DesmActions(updateParams: false);
+        }
+
+        private void buttonLeycosterepa_Click(object sender, EventArgs e)
+        {
+            comboBox_C_RepActions(updateParams: false);
+        }
+
+        private void buttonLeycosteensam_Click(object sender, EventArgs e)
+        {
+            comboBox_C_EnsamActions(updateParams: false);
+        }
+
+        private void buttonLeycosteverif_Click(object sender, EventArgs e)
+        {
+            comboBox_C_VerifActions(updateParams: false);
+        }
+
+        private void buttonLeycosteserv_Click(object sender, EventArgs e)
+        {
+            comboBox_C_ServActions(updateParams: false);
+        }
+
+
+        // ?? CARGAR EJEMPLO 
+        //TODO Quitar
         private void button_Ejemplo_Click(object sender, EventArgs e)
         {
             nombres["ley_func"] = "Exponencial";
@@ -1028,14 +1270,8 @@ namespace SIM
                 textBox11.Text += "\r\n" + key + " = " + parametros[key].ToString();
             }
         }
-
-        // Botón resetear log
-        private void button3_Click(object sender, EventArgs e)
-        {
-            textBox11.Text = "";
-        }
-
         //??
+        // TODO Quitar
         private void button2_Click(object sender, EventArgs e)
         {
             nombres["ley_func"] = "Exponencial";
@@ -1106,43 +1342,10 @@ namespace SIM
             }
         }
 
-        // Subform buttons
-        private void buttonLeyfunc_Click(object sender, EventArgs e)
-        {
-            comboBox1Actions(updateParams: false);
-        }
-
-        private void buttonLeyparo_Click(object sender, EventArgs e)
-        {
-            comboBox2Actions(updateParams: false);
-        }
-
-        private void buttonLeyrecu_Click(object sender, EventArgs e)
-        {
-            comboBox3Actions(updateParams: false);
-        }
-
-        private void buttonLeycoste_Click(object sender, EventArgs e)
-        {
-            comboBox4Actions(updateParams: false);
-        }
-
-        private void buttonPreventivo_Click(object sender, EventArgs e)
-        {
-            comboBox5Actions(updateParams: false);
-        }
-
-        private void buttonLeyeficienciamto_Click(object sender, EventArgs e)
-        {
-            comboBox6Actions(updateParams: false);
-        }
-
-
         /** ComboBoxes **/
 
-        // Comboboxes del formulario principal
+        /* Comboboxes del formulario principal */
 
-        //Entradas de usuario sobre la Ley de Funcionamiento
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox1Actions();
@@ -1158,7 +1361,6 @@ namespace SIM
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
-        //Entradas de usuario sobre la Ley de Parada
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox2Actions();
@@ -1176,7 +1378,6 @@ namespace SIM
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
-        //Captura de indicaciones de usuario sobre ley de reparación/recuperacion
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox3Actions();
@@ -1192,7 +1393,6 @@ namespace SIM
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
-        //Captura de indicaciones de usuario sobre ley de COSTES
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox4Actions();
@@ -1241,193 +1441,252 @@ namespace SIM
             ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
+        /* ComboBoxes desgloce de tiempos */
 
-        //SELECCION DE LAS OPCIONES DE DESGLOSE DE TIEMPO DE FALLO/PARADA
         private void comboBox_T_Rec_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox_T_RecActions();   
         }
 
-        private void comboBox_T_RecActions()
+        private void comboBox_T_RecActions(bool updateParams = true)
         {
-            //string Ambito = "PREPARACION: ";
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Reconocimiento";
             string sufijo2 = "paro_recon";
             string nombre_de_ley = "ley_paro_recon";
             string nombre_de_campo_y_combo_Box = comboBox_T_Rec.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);        
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);        
         }
 
         private void comboBox_T_Diag_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "DIAGNOSTICO: ";
+            comboBox_T_DiagActions();
+        }
+
+        private void comboBox_T_DiagActions(bool updateParams = true)
+        { 
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Diagnostico";
             string sufijo2 = "paro_diag";
             string nombre_de_ley = "ley_paro_diag";
             string nombre_de_campo_y_combo_Box = comboBox_T_Diag.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_T_Prep_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "PREPARACIÓN: ";
+            comboBox_T_PrepActions();
+        }
+
+        private void comboBox_T_PrepActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Preparacion";
             string sufijo2 = "paro_prep";
             string nombre_de_ley = "ley_paro_prep";
             string nombre_de_campo_y_combo_Box = comboBox_T_Prep.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);        
         }
 
         private void comboBox_T_Desm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "DESMANTENLAMIENTO: ";
+            comboBox_T_DesmActions();
+        }
+
+        private void comboBox_T_DesmActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Desmantelamiento";
             string sufijo2 = "paro_desm";
             string nombre_de_ley = "ley_paro_desm";
             string nombre_de_campo_y_combo_Box = comboBox_T_Desm.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);        
         }
 
         private void comboBox_T_Rep_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "REPARACIÓN: ";
+            comboBox_T_RepActions();
+        }
+        
+        private void comboBox_T_RepActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Reparacion";
             string sufijo2 = "paro_repa";
             string nombre_de_ley = "ley_paro_repa";
             string nombre_de_campo_y_combo_Box = comboBox_T_Rep.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);         
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
-
+       
         private void comboBox_T_Ensam_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "ENSAMBLAJE: ";
+            comboBox_T_EnsamActions();
+        }
+        
+        private void comboBox_T_EnsamActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Ensamblaje";
             string sufijo2 = "paro_ensam";
             string nombre_de_ley = "ley_paro_ensam";
             string nombre_de_campo_y_combo_Box = comboBox_T_Ensam.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);         
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_T_Verif_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "VERIFICACIÓN: ";
+            comboBox_T_VerifActions();
+        }
+
+        private void comboBox_T_VerifActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Verificacion";
             string sufijo2 = "paro_verif";
             string nombre_de_ley = "ley_paro_verif";
             string nombre_de_campo_y_combo_Box = comboBox_T_Verif.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);            
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams); 
         }
 
         private void comboBox_T_Serv_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "PUESTA EN SERVICIO: ";
+            comboBox_T_ServActions();       
+        }
+        
+        private void comboBox_T_ServActions(bool updateParams = true)
+        {
             string Ambito = "DESGLOSE DE FALLO/PARADA: ";
             string palabra_clave = "Puesta en Servicio";
             string sufijo2 = "paro_serv";
             string nombre_de_ley = "ley_paro_serv";
             string nombre_de_campo_y_combo_Box = comboBox_T_Serv.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);       
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
-
         
-        //SELECCION DE LAS OPCIONES DE DESGLOSE DE COSTE
+        /* ComboBoxes desgloce de costes */
+
         private void comboBox_C_Rec_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE RECONOCIMIENTO: ";
+            comboBox_C_RecActions();
+        }
+
+        private void comboBox_C_RecActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Reconocimiento";
             string sufijo2 = "coste_recon";
             string nombre_de_ley = "ley_coste_recon";
             string nombre_de_campo_y_combo_Box = comboBox_C_Rec.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);            
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_C_Diag_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE DIAGNÓSTICO: ";
+            comboBox_C_DiagActions();     
+        }
+
+        private void comboBox_C_DiagActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Diagnostico";
             string sufijo2 = "coste_diag";
             string nombre_de_ley = "ley_coste_diag";
             string nombre_de_campo_y_combo_Box = comboBox_C_Diag.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);      
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams); 
         }
 
         private void comboBox_C_Prep_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE PREPARACIÓN: ";
+            comboBox_C_PrepActions();
+        }
+
+        private void comboBox_C_PrepActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Preparacion";
             string sufijo2 = "coste_prep";
             string nombre_de_ley = "ley_coste_prep";
             string nombre_de_campo_y_combo_Box = comboBox_C_Prep.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_C_Desm_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE DESMANTELAMIENTO: ";
+            comboBox_C_DesmActions();            
+        }
+
+        private void comboBox_C_DesmActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Desmantelamiento";
             string sufijo2 = "coste_desm";
             string nombre_de_ley = "ley_coste_desm";
             string nombre_de_campo_y_combo_Box = comboBox_C_Desm.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);            
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_C_Rep_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE REPARACIÓN/REEMPLAZO: ";
+            comboBox_C_RepActions();           
+        }
+
+        private void comboBox_C_RepActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Reparacion";
             string sufijo2 = "coste_repa";
             string nombre_de_ley = "ley_coste_repa";
             string nombre_de_campo_y_combo_Box = comboBox_C_Rep.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);           
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
 
         private void comboBox_C_Ensam_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE ENSAMBLAJE: ";
+            comboBox_C_EnsamActions();         
+        }
+
+        private void comboBox_C_EnsamActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Ensamblaje";
             string sufijo2 = "coste_ensam";
             string nombre_de_ley = "ley_coste_ensam";
             string nombre_de_campo_y_combo_Box = comboBox_C_Ensam.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);          
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams); 
         }
 
         private void comboBox_C_Verif_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE VERIFICACIÓN: ";
+            comboBox_C_VerifActions();          
+        }
+
+        private void comboBox_C_VerifActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Verificacion";
             string sufijo2 = "coste_verif";
             string nombre_de_ley = "ley_coste_verif";
             string nombre_de_campo_y_combo_Box = comboBox_C_Verif.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);           
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams); 
         }
 
         private void comboBox_C_Serv_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //string Ambito = "COSTE DE PUESTA EN SERVICIO: ";
+            comboBox_C_ServActions();
+        }
+
+        private void comboBox_C_ServActions(bool updateParams = true)
+        {
             string Ambito = "COSTE DESGLOSADO: ";
             string palabra_clave = "Coste de Puesta_en_servicio";
             string sufijo2 = "coste_serv";
             string nombre_de_ley = "ley_coste_serv";
             string nombre_de_campo_y_combo_Box = comboBox_C_Serv.Text;
-            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box);
+            ElegirLeySolicitarDatos(Ambito, palabra_clave, sufijo2, nombre_de_ley, nombre_de_campo_y_combo_Box, updateParams);
         }
-
         
-        // Selección de gráfica
+        /* Selección de gráfica */
+
         private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBox7.Text == "Disponibilidad")
@@ -1652,8 +1911,8 @@ namespace SIM
 
         }
 
+        /* Selección de casos predefinidos */
 
-        // Selección de casos
         private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
         {
             Hashtable parameters = new Hashtable { };
@@ -2033,79 +2292,8 @@ namespace SIM
         }
 
 
-        /** Métodos privados **/
+        /* Acciones sobre widgets (mostrar/ocultar) */
 
-
-        private void StartSilentMode()
-        {
-            SilentMode = true;
-        }
-
-        private void StopSilentMode()
-        {
-            SilentMode = false;
-        }
-
-        private bool SilentMode
-        {
-            get 
-            {
-                return this._silentMode;
-            }
-            set
-            {
-                this._silentMode = value;
-            }
-        }
-        
-        // Rellena los inputs en función de los valores de nombres y parametros
-        private void DefaultParameters()
-        {
-            RemoveParameters(ParameterNames());
-            AddParameters(_defaultValues);
-        }
-
-        // Reset
-        private void reset()
-        {
-            StartSilentMode();
-            DefaultParameters();
-            StopSilentMode();
-
-            List<ComboBox> comboBoxes = new List<ComboBox> { comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6 };
-            foreach (ComboBox comboBox in comboBoxes) {
-                comboBox.Enabled = true;
-            }
-
-            //TextBox de resultados
-            textBox5.Text = "";
-            textBox5.Enabled = false;
-
-            //TextBox de valores seleccionados
-            textBox11.Text = "";
-            textBox11.Enabled = false;
-
-            //Tiempo a simular y repeticiones de la simulación
-            textBox10.Text = "";
-            textBox10.Enabled = true;
-            button4.Enabled = true;
-
-            // Progressbar y selección de gráfica
-            progressBar1.Visible = false;
-            ResetComboBox7();
-            
-            // Selección de casos predefinidos
-            comboBox8.Text = "Casos prácticos predefinidos";
-        }
-
-        // Reset selección de gráfica
-        private void ResetComboBox7()
-        {
-            comboBox7.Visible = false;
-            comboBox7.Text = "Elegir gráfico";
-        }
-
-        // Habilitar/deshabilitar groupboxes
         private void DeshabilitarComboBoxDesgloseTiempoFallo()
         {
             groupBoxDesgloceTiempos.Enabled = false;
@@ -2169,7 +2357,8 @@ namespace SIM
         }
 
 
-        // Se asigna valores a nombres y parametros
+        /* Tratamiento de eventos */
+
         private void ElegirLeySolicitarDatos(string Ambito, string palabra_clave, string sufijo2, string nombre_de_ley, string nombre_de_campo_y_combo_Box, bool updateParams = true)
         {
             List<String> parametersToRemove;
@@ -2182,6 +2371,7 @@ namespace SIM
                 sufijo2 + "_Mantenimiento_Ud_Tiempo",
                 sufijo2 + "_Perdida_Prod_por_Ud_tiempo",
                 sufijo2 + "_MantenimientoCadaIntervencion",
+                sufijo2 + "_Reduccion_si_Preventivo",
                 "X1_" + sufijo2,
                 "Y1_" + sufijo2,
                 "X2_" + sufijo2,
@@ -2489,7 +2679,6 @@ namespace SIM
             objButton.Enabled = subform.Keys.Count != 0 ? true : false;            
         }
 
-        
         private void Subform(string title, string ambito, string ley, Hashtable fields) 
         {
             FormDatos1 form = new FormDatos1();
@@ -2505,60 +2694,8 @@ namespace SIM
             }
         }
         
-/*
-        // Popup de los comboBoxes
-        //TODO List<string>[] fields --> {{label, id, valor}, {}}
-        private void SolicitarDatos(FormDatos1 frm, string Ambito_Op, string Ley, string titulo_del_Formulario, string Rotulo_del_Parametro1,
-                                    string Rotulo_del_Parametro2, string Rotulo_del_Parametro3,
-                                    string Rotulo_del_Parametro4, string Rotulo_del_Parametro5,
-                                    string Nombre_Parametro1, string Nombre_Parametro2,
-                                    string Nombre_Parametro3, string Nombre_Parametro4, string Nombre_Parametro5, string Rotulo_del_Parametro6, string Nombre_Parametro6)
-        {
-            //Dar contenidos a las variables del formulario de captura de indicaciones de usuario
-            frm.TituloDelFormulario = titulo_del_Formulario;
-            frm.parameters = _parameters;
-            frm.Text = Ambito_Op;
-            //TODO frm.fields = fields; 
-            frm.Rotulo_Parametro1 = Rotulo_del_Parametro1;
-            frm.Rotulo_Parametro2 = Rotulo_del_Parametro2;
-            frm.Rotulo_Parametro3 = Rotulo_del_Parametro3;
-            frm.Rotulo_Parametro4 = Rotulo_del_Parametro4;
-            frm.Rotulo_Parametro5 = Rotulo_del_Parametro5;
-            frm.Rotulo_Parametro6 = Rotulo_del_Parametro6;
 
-            //Llamar al formulario de captura de indicaciones de usuario
-            frm.ShowDialog();
-
-            //dar valores a las variables de este formulario en base a las indicaciones de usuario
-            if (frm.DialogResult == DialogResult.OK)
-            {
-                limpiar_diccionarios(); //¿sobra?
-
-                if (Rotulo_del_Parametro1 != "") _parameters[Nombre_Parametro1] = Convert.ToDouble(frm.parametro1);
-                if (Rotulo_del_Parametro2 != "") _parameters[Nombre_Parametro2] = Convert.ToDouble(frm.parametro2);
-                if (Rotulo_del_Parametro3 != "") _parameters[Nombre_Parametro3] = Convert.ToDouble(frm.parametro3);
-                if (Rotulo_del_Parametro4 != "") _parameters[Nombre_Parametro4] = Convert.ToDouble(frm.parametro4);
-                if (Rotulo_del_Parametro5 != "") _parameters[Nombre_Parametro5] = Convert.ToDouble(frm.parametro5);
-                if (Rotulo_del_Parametro6 != "") _parameters[Nombre_Parametro6] = Convert.ToDouble(frm.parametro6);
-
-
-                //Alimentar el Textbox de las opciones elegidas por el usuario
-                if ((Rotulo_del_Parametro1 != "") || (Rotulo_del_Parametro2 != "") || (Rotulo_del_Parametro3 != "") || (Rotulo_del_Parametro4 != "") || (Rotulo_del_Parametro5 != "") || (Rotulo_del_Parametro6 != ""))
-                {
-                    textBox11.Enabled = true;
-                    textBox11.Text += "\r\n" + "\b " + Ambito_Op + titulo_del_Formulario + "\r\n";
-                    if (Rotulo_del_Parametro1 != "") textBox11.Text += "   " + Rotulo_del_Parametro1 + "= " + Convert.ToString(_parameters[Nombre_Parametro1]) + "\r\n";
-                    if (Rotulo_del_Parametro2 != "") textBox11.Text += "   " + Rotulo_del_Parametro2 + "= " + Convert.ToString(_parameters[Nombre_Parametro2]) + "\r\n";
-                    if (Rotulo_del_Parametro3 != "") textBox11.Text += "   " + Rotulo_del_Parametro3 + "= " + Convert.ToString(_parameters[Nombre_Parametro3]) + "\r\n";
-                    if (Rotulo_del_Parametro4 != "") textBox11.Text += "   " + Rotulo_del_Parametro4 + "= " + Convert.ToString(_parameters[Nombre_Parametro4]) + "\r\n";
-                    if (Rotulo_del_Parametro5 != "") textBox11.Text += "   " + Rotulo_del_Parametro5 + "= " + Convert.ToString(_parameters[Nombre_Parametro5]) + "\r\n";
-                    if (Rotulo_del_Parametro6 != "") textBox11.Text += "   " + Rotulo_del_Parametro6 + "= " + Convert.ToString(_parameters[Nombre_Parametro6]) + "\r\n";
-                    textBox11.Text += "             " + "\r\n";
-                }
-
-            }
-        }
-        */
+        /* Otros */
 
         // Limpiar diccionarios
         /// <summary>
@@ -2650,8 +2787,8 @@ namespace SIM
             return valor_generado;
         }
 
-
         /*** Eventos para el formateo de datos ****/
+
         private void NumerosConComa(object sender, KeyPressEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -2661,6 +2798,7 @@ namespace SIM
                 FormateoDatos.numOcoma(e, tb);
             }
         }
+        
         private void NumerosSinComa(object sender, KeyPressEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -2671,54 +2809,6 @@ namespace SIM
             }
         }
      
-        private List<String> ParameterNames()
-        {
-            List<String> pnames = new List<String> { };
-            foreach (string name in _parameters.Keys)
-            {
-                pnames.Add(name);
-            }
-            return pnames;
-        }
-
-        private void AddParameters(Hashtable parameters)
-        {
-            foreach (DictionaryEntry parameter in parameters)
-            {
-                _parameters.Remove(parameter.Key);
-                _parameters.Add(parameter.Key, parameter.Value);
-                if(_widgets.ContainsKey(parameter.Key))
-                    SetWidgetValue(_widgets[parameter.Key], (string)parameter.Value);
-            }
-        }
-
-        private void RemoveParameters(List<String> parameters)
-        { 
-            foreach (string parameter in parameters)
-            {
-                _parameters.Remove(parameter);
-                if (_widgets.ContainsKey(parameter))
-                    SetWidgetValue(_widgets[parameter], "");
-            }
-        }
-
-        private void SetWidgetValue(Object widget, string value)
-        {
-            Type type = widget.GetType();
-            switch (type.ToString())
-            {
-                case "System.Windows.Forms.ComboBox":
-                    ComboBox comboObj = (ComboBox)widget;
-                    comboObj.Text = value;
-                    break;
-                case "System.Windows.Forms.TextBox":
-                    TextBox textObj = (TextBox)widget;
-                    textObj.Text = value;
-                    break;
-            }
-        }
-
-
     }
 }
 
